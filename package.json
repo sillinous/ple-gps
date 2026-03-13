@@ -1,0 +1,37 @@
+{
+  "name": "ple-gps",
+  "version": "1.0.0",
+  "description": "Post-Labor Economics — Governance Process Standard. A universal process taxonomy for designing, operating, and improving governance institutions in a post-labor economic context.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.4.2"
+  },
+  "keywords": [
+    "post-labor-economics",
+    "governance",
+    "process-framework",
+    "APQC",
+    "PCF",
+    "institutional-design",
+    "public-goods",
+    "participatory-democracy",
+    "AI-governance",
+    "human-flourishing"
+  ],
+  "author": "The Foundation for Global Progress",
+  "license": "CC-BY-SA-4.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sillinous/ple-gps.git"
+  }
+}
