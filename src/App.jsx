@@ -151,10 +151,42 @@ function App() {
         e.preventDefault();
         setSearchOpen(prev => !prev);
       }
+      // Arrow key navigation on detail views
+      if (view === "detail" && selectedCat && !searchOpen) {
+        const idx = CATEGORIES.findIndex(c => c.id === selectedCat);
+        if (e.key === "ArrowLeft" && idx > 0) {
+          e.preventDefault();
+          navigateTo("detail", CATEGORIES[idx - 1].id);
+        }
+        if (e.key === "ArrowRight" && idx < CATEGORIES.length - 1) {
+          e.preventDefault();
+          navigateTo("detail", CATEGORIES[idx + 1].id);
+        }
+        if (e.key === "Escape") {
+          navigateTo("categories");
+        }
+      }
+      if (view === "group" && selectedCat && selectedGroup && !searchOpen) {
+        const c = CATEGORIES.find(x => x.id === selectedCat);
+        if (c) {
+          const gIdx = c.groups.findIndex(g => g.id === selectedGroup);
+          if (e.key === "ArrowLeft" && gIdx > 0) {
+            e.preventDefault();
+            navigateTo("group", selectedCat, c.groups[gIdx - 1].id);
+          }
+          if (e.key === "ArrowRight" && gIdx < c.groups.length - 1) {
+            e.preventDefault();
+            navigateTo("group", selectedCat, c.groups[gIdx + 1].id);
+          }
+          if (e.key === "Escape") {
+            navigateTo("detail", selectedCat);
+          }
+        }
+      }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, []);
+  }, [view, selectedCat, selectedGroup, searchOpen]);
 
   useEffect(() => {
     setAnimateIn(true);
@@ -505,12 +537,34 @@ function App() {
         )}
 
         {/* CATEGORY DETAIL */}
-        {view === "detail" && cat && !grp && (
+        {view === "detail" && cat && !grp && (() => {
+          const catIdx = CATEGORIES.findIndex(c => c.id === cat.id);
+          const prevCat = catIdx > 0 ? CATEGORIES[catIdx - 1] : null;
+          const nextCat = catIdx < CATEGORIES.length - 1 ? CATEGORIES[catIdx + 1] : null;
+          return (
           <div className="fade-in">
-            <div className="breadcrumb">
-              <span onClick={() => navigateTo("overview")}>PLE-GPS</span>
-              <span style={{ color:"#57534e" }}>/</span>
-              <span style={{ color:"#f5f0eb" }}>{cat.id} {cat.label}</span>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+              <div className="breadcrumb" style={{ marginBottom:0 }}>
+                <span onClick={() => navigateTo("overview")}>PLE-GPS</span>
+                <span style={{ color:"#57534e" }}>/</span>
+                <span style={{ color:"#f5f0eb" }}>{cat.id} {cat.label}</span>
+              </div>
+              <div style={{ display:"flex", gap:4, alignItems:"center" }}>
+                {prevCat && (
+                  <span onClick={() => navigateTo("detail", prevCat.id)} style={{ cursor:"pointer", padding:"4px 10px", borderRadius:4, background:"rgba(120,113,108,0.06)", color:"#78716c", fontSize:11, display:"flex", alignItems:"center", gap:4, transition:"all 0.15s" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "rgba(245,158,11,0.08)"}
+                    onMouseLeave={e => e.currentTarget.style.background = "rgba(120,113,108,0.06)"}>
+                    ← {prevCat.id}
+                  </span>
+                )}
+                {nextCat && (
+                  <span onClick={() => navigateTo("detail", nextCat.id)} style={{ cursor:"pointer", padding:"4px 10px", borderRadius:4, background:"rgba(120,113,108,0.06)", color:"#78716c", fontSize:11, display:"flex", alignItems:"center", gap:4, transition:"all 0.15s" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "rgba(245,158,11,0.08)"}
+                    onMouseLeave={e => e.currentTarget.style.background = "rgba(120,113,108,0.06)"}>
+                    {nextCat.id} →
+                  </span>
+                )}
+              </div>
             </div>
 
             <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:16 }}>
@@ -632,18 +686,60 @@ function App() {
                 )}
               </div>
             ))}
+
+            {/* Position indicator and keyboard hint */}
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:20, paddingTop:14, borderTop:"1px solid rgba(245,158,11,0.04)" }}>
+              <div style={{ display:"flex", gap:3 }}>
+                {CATEGORIES.map((c, i) => (
+                  <div key={c.id}
+                    onClick={() => navigateTo("detail", c.id)}
+                    style={{
+                      width: c.id === cat.id ? 20 : 8, height:8, borderRadius:4, cursor:"pointer",
+                      background: c.id === cat.id ? cat.color : "rgba(120,113,108,0.15)",
+                      transition:"all 0.2s"
+                    }}
+                    title={c.id + " " + c.label} />
+                ))}
+              </div>
+              <div style={{ fontSize:10, color:"#57534e", display:"flex", gap:12 }}>
+                <span>← → Navigate categories</span>
+                <span>Esc → Back</span>
+              </div>
+            </div>
           </div>
-        )}
+        );})()}
 
         {/* GROUP DETAIL */}
-        {view === "group" && cat && grp && (
+        {view === "group" && cat && grp && (() => {
+          const grpIdx = cat.groups.findIndex(g => g.id === grp.id);
+          const prevGrp = grpIdx > 0 ? cat.groups[grpIdx - 1] : null;
+          const nextGrp = grpIdx < cat.groups.length - 1 ? cat.groups[grpIdx + 1] : null;
+          return (
           <div className="fade-in">
-            <div className="breadcrumb">
-              <span onClick={() => navigateTo("overview")}>PLE-GPS</span>
-              <span style={{ color:"#57534e" }}>/</span>
-              <span onClick={() => navigateTo("detail", cat.id)}>{cat.id} {cat.label}</span>
-              <span style={{ color:"#57534e" }}>/</span>
-              <span style={{ color:"#f5f0eb" }}>{grp.id} {grp.label}</span>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+              <div className="breadcrumb" style={{ marginBottom:0 }}>
+                <span onClick={() => navigateTo("overview")}>PLE-GPS</span>
+                <span style={{ color:"#57534e" }}>/</span>
+                <span onClick={() => navigateTo("detail", cat.id)}>{cat.id} {cat.label}</span>
+                <span style={{ color:"#57534e" }}>/</span>
+                <span style={{ color:"#f5f0eb" }}>{grp.id} {grp.label}</span>
+              </div>
+              <div style={{ display:"flex", gap:4, alignItems:"center" }}>
+                {prevGrp && (
+                  <span onClick={() => navigateTo("group", cat.id, prevGrp.id)} style={{ cursor:"pointer", padding:"4px 10px", borderRadius:4, background:"rgba(120,113,108,0.06)", color:"#78716c", fontSize:11, transition:"all 0.15s" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "rgba(245,158,11,0.08)"}
+                    onMouseLeave={e => e.currentTarget.style.background = "rgba(120,113,108,0.06)"}>
+                    ← {prevGrp.id}
+                  </span>
+                )}
+                {nextGrp && (
+                  <span onClick={() => navigateTo("group", cat.id, nextGrp.id)} style={{ cursor:"pointer", padding:"4px 10px", borderRadius:4, background:"rgba(120,113,108,0.06)", color:"#78716c", fontSize:11, transition:"all 0.15s" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "rgba(245,158,11,0.08)"}
+                    onMouseLeave={e => e.currentTarget.style.background = "rgba(120,113,108,0.06)"}>
+                    {nextGrp.id} →
+                  </span>
+                )}
+              </div>
             </div>
 
             <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
@@ -703,8 +799,14 @@ function App() {
                 </div>
               </div>
             )}
+
+            {/* Keyboard hint */}
+            <div style={{ marginTop:20, fontSize:10, color:"#57534e", display:"flex", gap:12 }}>
+              <span>← → Navigate groups</span>
+              <span>Esc → Back to category</span>
+            </div>
           </div>
-        )}
+        );})()}
 
         {/* TRANSLATION TABLE */}
         {view === "translation" && (
