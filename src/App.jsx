@@ -1,5 +1,28 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { CATEGORIES, VALUE_LOOPS, MATURITY_LEVELS, MATURITY_TARGETS, MATURITY_DIMENSIONS, IMPROVEMENT_ROADMAP, MATURITY_BAND_COLORS, TRANSLATION } from "./data.js";
+import { CATEGORIES, VALUE_LOOPS, MATURITY_LEVELS, MATURITY_TARGETS, MATURITY_DIMENSIONS, IMPROVEMENT_ROADMAP, MATURITY_BAND_COLORS, TRANSLATION, INTEGRATION_FLOWS, FLOW_TYPES } from "./data.js";
+import RadarChart from "./components/RadarChart.jsx";
+import IntegrationMap from "./components/IntegrationMap.jsx";
+import SearchBar from "./components/Search.jsx";
+
+// Persistence helpers
+const STORAGE_KEY = "ple-gps-assessment";
+function saveAssessment(name, scores) {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    data[name] = { scores, updatedAt: new Date().toISOString() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) { console.warn("Save failed:", e); }
+}
+function loadAssessments() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; }
+}
+function exportAssessment(name, scores) {
+  const blob = new Blob([JSON.stringify({ name, scores, exportedAt: new Date().toISOString(), framework: "PLE-GPS v1.0" }, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `ple-gps-assessment-${name.replace(/\s+/g, "-").toLowerCase()}.json`;
+  a.click(); URL.revokeObjectURL(url);
+}
 
 function App() {
   const [view, setView] = useState("overview");
@@ -11,7 +34,41 @@ function App() {
   const [maturityScores, setMaturityScores] = useState({});
   const [maturityFocus, setMaturityFocus] = useState(null);
   const [maturityTab, setMaturityTab] = useState("assess");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [assessmentName, setAssessmentName] = useState("Default");
+  const [showSaveMenu, setShowSaveMenu] = useState(false);
+  const fileInputRef = useRef(null);
   const mainRef = useRef(null);
+
+  // Load saved scores on mount
+  useEffect(() => {
+    const saved = loadAssessments();
+    const names = Object.keys(saved);
+    if (names.length > 0) {
+      const last = names[names.length - 1];
+      setAssessmentName(last);
+      setMaturityScores(saved[last].scores || {});
+    }
+  }, []);
+
+  // Auto-save on score change
+  useEffect(() => {
+    if (Object.keys(maturityScores).length > 0) {
+      saveAssessment(assessmentName, maturityScores);
+    }
+  }, [maturityScores, assessmentName]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(prev => !prev);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   useEffect(() => {
     setAnimateIn(true);
@@ -81,6 +138,34 @@ function App() {
 
   const bandColor = (v) => MATURITY_BAND_COLORS[Math.round(v)] || MATURITY_BAND_COLORS[0];
 
+  const handleImport = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (data.scores) {
+          setMaturityScores(data.scores);
+          if (data.name) setAssessmentName(data.name);
+        }
+      } catch (err) { alert("Invalid assessment file."); }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
+  const handleSearchNavigate = (catId, grpId) => {
+    if (grpId) navigateTo("group", catId, grpId);
+    else navigateTo("detail", catId);
+  };
+
+  const getCatDimScores = (catId) => {
+    const result = {};
+    MATURITY_DIMENSIONS.forEach(d => { result[d.key] = getScore(catId, d.key); });
+    return result;
+  };
+
   return (
     <div style={{
       minHeight: "100vh", background: "#0c0a09", color: "#f5f0eb",
@@ -129,12 +214,16 @@ function App() {
           <span style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:"22px", fontWeight:700, color:"#f59e0b", letterSpacing:"-0.01em" }}>PLE-GPS</span>
           <span style={{ fontSize:"11px", color:"#57534e", fontFamily:"'JetBrains Mono', monospace", letterSpacing:"0.04em" }}>GOVERNANCE PROCESS STANDARD v1.0</span>
         </div>
-        <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-          {[["overview","Framework"],["categories","Categories"],["translation","Translation"],["loops","Value Loops"],["maturity","Maturity"]].map(([v,l]) => (
+        <div style={{ display:"flex", gap:6, flexWrap:"wrap", alignItems:"center" }}>
+          {[["overview","Framework"],["categories","Categories"],["integration","Integration Map"],["translation","Translation"],["loops","Value Loops"],["maturity","Maturity"]].map(([v,l]) => (
             <div key={v} className={`nav-pill ${view===v?"active":""}`} onClick={() => navigateTo(v)}>
               {l}
             </div>
           ))}
+          <div className="nav-pill" onClick={() => setSearchOpen(true)} style={{ display:"flex", alignItems:"center", gap:5 }}>
+            <span style={{ fontSize:13 }}>⌕</span>
+            <span style={{ color:"#57534e", fontSize:10, fontFamily:"'JetBrains Mono', monospace" }}>⌘K</span>
+          </div>
         </div>
       </div>
 
@@ -370,6 +459,15 @@ function App() {
           </div>
         )}
 
+        {/* INTEGRATION MAP */}
+        {view === "integration" && (
+          <div className="fade-in">
+            <h2 style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, marginBottom:6 }}>Cross-Process Integration Map</h2>
+            <p style={{ color:"#a8a29e", marginBottom:20, fontSize:14, maxWidth:620 }}>Every significant process handoff, data flow, trigger, and dependency between the 16 categories. This is the intelligence layer — no process exists in isolation.</p>
+            <IntegrationMap onCategoryClick={(id) => navigateTo("detail", id)} />
+          </div>
+        )}
+
         {/* VALUE LOOPS */}
         {view === "loops" && (
           <div className="fade-in">
@@ -415,16 +513,32 @@ function App() {
                 <p style={{ color:"#a8a29e", fontSize:13, maxWidth:520 }}>Score your institution across 5 dimensions for each of the 16 process categories. Click cells to rate 1–5. The tool computes gaps against recommended targets and generates improvement priorities.</p>
               </div>
               {getTotalScored() > 0 && (
-                <button onClick={() => { setMaturityScores({}); setMaturityFocus(null); }}
-                  style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.2)", borderRadius:4, padding:"6px 14px", color:"#ef4444", fontSize:11, fontWeight:600, cursor:"pointer", letterSpacing:"0.03em" }}>
-                  Reset All Scores
-                </button>
+                <div style={{ display:"flex", gap:6, flexWrap:"wrap", alignItems:"center" }}>
+                  <input
+                    value={assessmentName}
+                    onChange={e => setAssessmentName(e.target.value)}
+                    style={{ background:"rgba(120,113,108,0.08)", border:"1px solid rgba(245,158,11,0.1)", borderRadius:4, padding:"5px 10px", color:"#f5f0eb", fontSize:11, fontFamily:"'Outfit', sans-serif", width:140, outline:"none" }}
+                    placeholder="Assessment name"
+                  />
+                  <button onClick={() => exportAssessment(assessmentName, maturityScores)}
+                    style={{ background:"rgba(16,185,129,0.08)", border:"1px solid rgba(16,185,129,0.2)", borderRadius:4, padding:"5px 12px", color:"#10b981", fontSize:11, fontWeight:600, cursor:"pointer" }}>
+                    Export
+                  </button>
+                  <button onClick={() => fileInputRef.current?.click()}
+                    style={{ background:"rgba(99,102,241,0.08)", border:"1px solid rgba(99,102,241,0.2)", borderRadius:4, padding:"5px 12px", color:"#6366f1", fontSize:11, fontWeight:600, cursor:"pointer" }}>
+                    Import
+                  </button>
+                  <button onClick={() => { setMaturityScores({}); setMaturityFocus(null); }}
+                    style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.2)", borderRadius:4, padding:"5px 12px", color:"#ef4444", fontSize:11, fontWeight:600, cursor:"pointer" }}>
+                    Reset
+                  </button>
+                </div>
               )}
             </div>
 
             {/* Sub-navigation */}
-            <div style={{ display:"flex", gap:4, marginBottom:20, borderBottom:"1px solid rgba(245,158,11,0.06)", paddingBottom:10 }}>
-              {[["assess","Assessment Grid"],["gaps","Gap Analysis"],["roadmap","Improvement Roadmap"],["reference","Level Reference"]].map(([k,l]) => (
+            <div style={{ display:"flex", gap:4, marginBottom:20, borderBottom:"1px solid rgba(245,158,11,0.06)", paddingBottom:10, flexWrap:"wrap" }}>
+              {[["assess","Assessment Grid"],["visual","Visual Profile"],["gaps","Gap Analysis"],["roadmap","Improvement Roadmap"],["reference","Level Reference"]].map(([k,l]) => (
                 <div key={k} onClick={() => setMaturityTab(k)} className={`nav-pill ${maturityTab === k ? "active" : ""}`}>{l}</div>
               ))}
             </div>
@@ -462,6 +576,40 @@ function App() {
                     ) : <div style={{ fontSize:13, color:"#57534e" }}>—</div>;
                   })()}
                 </div>
+              </div>
+            )}
+
+            {/* Radar charts when scores exist */}
+            {getTotalScored() >= MATURITY_DIMENSIONS.length && (
+              <div className="fade-in" style={{ display:"flex", gap:16, marginBottom:20, flexWrap:"wrap", justifyContent:"center" }}>
+                <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"16px 20px" }}>
+                  <div style={{ fontSize:10, color:"#57534e", textTransform:"uppercase", letterSpacing:"0.06em", fontWeight:600, marginBottom:8, textAlign:"center" }}>Institutional Profile</div>
+                  <RadarChart
+                    scores={(() => {
+                      const avg = {};
+                      MATURITY_DIMENSIONS.forEach(d => { avg[d.key] = getDimAvg(d.key); });
+                      return avg;
+                    })()}
+                    label="Average across all categories"
+                  />
+                </div>
+                {maturityFocus && (() => {
+                  const fc = CATEGORIES.find(c => c.id === maturityFocus);
+                  if (!fc) return null;
+                  const scores = getCatDimScores(fc.id);
+                  if (!Object.values(scores).some(v => v > 0)) return null;
+                  const target = MATURITY_TARGETS[fc.id] || 3;
+                  const targetScores = {};
+                  MATURITY_DIMENSIONS.forEach(d => { targetScores[d.key] = target; });
+                  return (
+                    <div style={{ background:"#141210", border:`1px solid ${fc.color}20`, borderRadius:6, padding:"16px 20px" }}>
+                      <div style={{ fontSize:10, color: fc.color, textTransform:"uppercase", letterSpacing:"0.06em", fontWeight:600, marginBottom:8, textAlign:"center" }}>
+                        {fc.icon} {fc.id} {fc.label}
+                      </div>
+                      <RadarChart scores={scores} targetScores={targetScores} label={`Target: ${target} (dashed)`} />
+                    </div>
+                  );
+                })()}
               </div>
             )}
 
@@ -625,6 +773,98 @@ function App() {
                     </div>
                   );
                 })()}
+              </div>
+            )}
+
+            {/* TAB: Visual Profile */}
+            {maturityTab === "visual" && (
+              <div className="fade-in">
+                {getTotalScored() === 0 ? (
+                  <div style={{ textAlign:"center", padding:"48px 24px", color:"#57534e" }}>
+                    <div style={{ fontSize:24, marginBottom:8 }}>◈</div>
+                    <div style={{ fontSize:14, marginBottom:4 }}>No scores yet</div>
+                    <div style={{ fontSize:12 }}>Use the Assessment Grid tab to score your institution first. Radar charts will appear here.</div>
+                  </div>
+                ) : (
+                  <>
+                    {/* Overall institutional radar */}
+                    <div style={{ display:"flex", gap:16, flexWrap:"wrap", justifyContent:"center", marginBottom:24 }}>
+                      <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.08)", borderRadius:6, padding:"20px 24px" }}>
+                        <div style={{ fontSize:11, color:"#f59e0b", textTransform:"uppercase", letterSpacing:"0.06em", fontWeight:600, marginBottom:8, textAlign:"center" }}>Overall Institutional Profile</div>
+                        <RadarChart
+                          scores={(() => { const avg = {}; MATURITY_DIMENSIONS.forEach(d => { avg[d.key] = getDimAvg(d.key); }); return avg; })()}
+                          label={`Overall: ${getOverallAvg().toFixed(1)} — ${bandColor(getOverallAvg()).label}`}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Per-domain breakdown */}
+                    {["civic", "support", "ple"].map(domain => {
+                      const domCats = CATEGORIES.filter(c => c.domain === domain && getCatAvg(c.id) > 0);
+                      if (domCats.length === 0) return null;
+                      return (
+                        <div key={domain} style={{ marginBottom:28 }}>
+                          <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
+                            <div style={{ width:8, height:8, borderRadius:2, background: domainColor(domain) }} />
+                            <span style={{ fontSize:11, color: domainColor(domain), letterSpacing:"0.08em", textTransform:"uppercase", fontWeight:600 }}>
+                              {domainLabel(domain)}
+                            </span>
+                          </div>
+                          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:10 }}>
+                            {domCats.map(c => {
+                              const scores = getCatDimScores(c.id);
+                              const target = MATURITY_TARGETS[c.id] || 3;
+                              const targetScores = {};
+                              MATURITY_DIMENSIONS.forEach(d => { targetScores[d.key] = target; });
+                              const avg = getCatAvg(c.id);
+                              const gap = getGap(c.id);
+                              const gapInfo = getGapLabel(gap);
+                              return (
+                                <div key={c.id} style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"14px 16px", cursor:"pointer", transition:"border-color 0.2s" }}
+                                  onClick={() => { setMaturityFocus(c.id); setMaturityTab("assess"); }}
+                                  onMouseEnter={e => e.currentTarget.style.borderColor = `${c.color}30`}
+                                  onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(245,158,11,0.06)"}>
+                                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:6 }}>
+                                    <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                                      <span style={{ color: c.color, fontSize:13 }}>{c.icon}</span>
+                                      <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:10, color:"#78716c" }}>{c.id}</span>
+                                    </div>
+                                    <span style={{ fontSize:9, padding:"2px 6px", borderRadius:3, background: `${gapInfo.color}15`, color: gapInfo.color, fontWeight:600 }}>{gapInfo.label}</span>
+                                  </div>
+                                  <RadarChart scores={scores} targetScores={targetScores} />
+                                  <div style={{ textAlign:"center", marginTop:4 }}>
+                                    <div style={{ fontSize:12, fontWeight:600, color: bandColor(avg).text }}>{avg.toFixed(1)}</div>
+                                    <div style={{ fontSize:10, color:"#57534e", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.label}</div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {/* Dimension comparison bars */}
+                    <div style={{ marginTop:8 }}>
+                      <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:12 }}>Dimension Strength Comparison</div>
+                      {MATURITY_DIMENSIONS.map(d => {
+                        const avg = getDimAvg(d.key);
+                        if (avg === 0) return null;
+                        const bc = bandColor(avg);
+                        return (
+                          <div key={d.key} style={{ display:"flex", alignItems:"center", gap:12, marginBottom:8 }}>
+                            <span style={{ fontSize:12, color:"#78716c", width:90, flexShrink:0, textAlign:"right" }}>{d.label}</span>
+                            <div style={{ flex:1, height:20, background:"rgba(120,113,108,0.06)", borderRadius:4, overflow:"hidden", position:"relative" }}>
+                              <div style={{ height:"100%", width:`${(avg / 5) * 100}%`, background: `${bc.text}30`, borderRadius:4, transition:"width 0.4s ease", display:"flex", alignItems:"center", justifyContent:"flex-end", paddingRight:8, minWidth:40 }}>
+                                <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:11, fontWeight:600, color: bc.text }}>{avg.toFixed(1)}</span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
@@ -851,6 +1091,12 @@ function App() {
         <span style={{ margin:"0 10px", color:"#363230" }}>·</span>
         <span style={{ fontStyle:"italic" }}>Design. Anything. EVERYTHING. Better.</span>
       </div>
+
+      {/* Search Overlay */}
+      <SearchBar isOpen={searchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} />
+
+      {/* Hidden file input for import */}
+      <input ref={fileInputRef} type="file" accept=".json" style={{ display:"none" }} onChange={handleImport} />
     </div>
   );
 }

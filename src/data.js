@@ -347,3 +347,45 @@ export const TRANSLATION = [
   ["Sales", "Access facilitation, enrollment, matching"],
   ["ROI", "Impact-to-resource ratio"],
 ];
+
+export const INTEGRATION_FLOWS = [
+  { from: "1.2", to: "2.1", label: "Strategy cascade", type: "governance" },
+  { from: "1.2", to: "3.2", label: "Revenue targets", type: "governance" },
+  { from: "1.2", to: "7.1", label: "Workforce requirements", type: "governance" },
+  { from: "1.2", to: "8.1", label: "Technology priorities", type: "governance" },
+  { from: "1.2", to: "9.1", label: "Financial targets", type: "governance" },
+  { from: "1.2", to: "14.0", label: "AI governance alignment", type: "governance" },
+  { from: "1.2", to: "13.4", label: "Transformation roadmap", type: "governance" },
+  { from: "3.1", to: "1.1", label: "Community intelligence", type: "feedback" },
+  { from: "3.1", to: "2.2", label: "Needs drive design", type: "information" },
+  { from: "3.6", to: "5.2", label: "Service demand", type: "trigger" },
+  { from: "3.6", to: "9.2", label: "Revenue trigger", type: "trigger" },
+  { from: "5.4", to: "6.3", label: "Support handoff", type: "trigger" },
+  { from: "5.4", to: "9.2", label: "Milestone billing", type: "trigger" },
+  { from: "6.3", to: "2.2", label: "Feedback loop", type: "feedback" },
+  { from: "6.3", to: "2.6", label: "Retention signal", type: "feedback" },
+  { from: "6.4", to: "1.1", label: "Strategic insight", type: "feedback" },
+  { from: "6.4", to: "3.1", label: "Customer intelligence", type: "feedback" },
+  { from: "7.2", to: "8.5", label: "Access provisioning", type: "trigger" },
+  { from: "7.2", to: "9.5", label: "Enrollment", type: "trigger" },
+  { from: "9.1", to: "ALL", label: "Budget governance", type: "governance" },
+  { from: "11.1", to: "1.2", label: "Risk-informed strategy", type: "feedback" },
+  { from: "11.3", to: "2.2", label: "Equity gaps drive design", type: "feedback" },
+  { from: "11.3", to: "3.4", label: "Barrier removal", type: "trigger" },
+  { from: "13.6", to: "ALL", label: "Improvement flow", type: "feedback" },
+  { from: "13.7", to: "1.3", label: "Performance signal", type: "feedback" },
+  { from: "13.7", to: "13.6", label: "CI targeting", type: "feedback" },
+  { from: "14.3", to: "14.1", label: "Governance update", type: "feedback" },
+  { from: "15.4", to: "1.1", label: "Flourishing informs vision", type: "feedback" },
+  { from: "15.4", to: "13.7", label: "Primary institutional metric", type: "information" },
+  { from: "16.0", to: "1.2", label: "Democratic mandate", type: "governance" },
+  { from: "16.3", to: "16.2", label: "Democratic health cycle", type: "feedback" },
+];
+
+export const FLOW_TYPES = {
+  governance: { color: "#f59e0b", label: "Governance" },
+  trigger: { color: "#10b981", label: "Trigger" },
+  information: { color: "#6366f1", label: "Information" },
+  feedback: { color: "#ec4899", label: "Feedback" },
+  resource: { color: "#8b5cf6", label: "Resource" }
+};
