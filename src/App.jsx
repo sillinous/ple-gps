@@ -427,7 +427,15 @@ function App() {
                     </div>
                   </div>
                   <div style={{ fontSize:14, fontWeight:600, marginBottom:4, lineHeight:1.3 }}>{c.label}</div>
-                  <div style={{ fontSize:11, color:"#78716c" }}>{c.groups.length} process groups</div>
+                  <div style={{ fontSize:11, color:"#78716c", display:"flex", gap:8 }}>
+                    <span>{c.groups.length} groups</span>
+                    <span style={{ color:"#363230" }}>·</span>
+                    <span>{c.groups.reduce((s,g) => s+(g.processes?.length||0), 0)} processes</span>
+                    {c.groups.reduce((s,g) => s+(g.kpis?.length||0), 0) > 0 && <>
+                      <span style={{ color:"#363230" }}>·</span>
+                      <span>{c.groups.reduce((s,g) => s+(g.kpis?.length||0), 0)} KPIs</span>
+                    </>}
+                  </div>
                 </div>
               ))}
             </div>
@@ -456,7 +464,9 @@ function App() {
                       <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color:"#57534e", width:40 }}>{c.id}</span>
                       <span style={{ fontWeight:500, flex:1 }}>{c.label}</span>
                       {bc && <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:11, padding:"2px 8px", borderRadius:3, background: bc.bg, color: bc.text, fontWeight:600 }}>{avg.toFixed(1)}</span>}
-                      <span style={{ fontSize:11, color:"#57534e" }}>{c.groups.length} groups →</span>
+                      <span style={{ fontSize:11, color:"#57534e", minWidth:100, textAlign:"right" }}>
+                        {c.groups.length}g · {c.groups.reduce((s,g) => s+(g.processes?.length||0), 0)}p →
+                      </span>
                     </div>
                   );
                 })}
@@ -485,6 +495,12 @@ function App() {
             <div style={{ display:"flex", gap:8, marginBottom:20, flexWrap:"wrap" }}>
               <span style={{ fontSize:10, padding:"3px 10px", borderRadius:3, background:`${domainColor(cat.domain)}15`, color: domainColor(cat.domain), fontWeight:600, letterSpacing:"0.04em", textTransform:"uppercase" }}>{domainLabel(cat.domain)}</span>
               {cat.domain === "ple" && <span style={{ fontSize:10, padding:"3px 10px", borderRadius:3, background:"rgba(239,68,68,0.1)", color:"#ef4444", fontWeight:600 }}>NEW CATEGORY</span>}
+              <span style={{ fontSize:10, padding:"3px 10px", borderRadius:3, background:"rgba(120,113,108,0.08)", color:"#78716c", fontWeight:500 }}>
+                {cat.groups.reduce((s,g) => s+(g.processes?.length||0), 0)} processes
+              </span>
+              <span style={{ fontSize:10, padding:"3px 10px", borderRadius:3, background:"rgba(99,102,241,0.08)", color:"#818cf8", fontWeight:500 }}>
+                {cat.groups.reduce((s,g) => s+(g.kpis?.length||0), 0)} KPIs
+              </span>
             </div>
 
             {/* Origin and Delta */}
@@ -571,7 +587,10 @@ function App() {
                     <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color: cat.color, fontWeight:500 }}>{g.id}</span>
                     <span style={{ fontWeight:500, fontSize:14 }}>{g.label}</span>
                   </div>
-                  <span style={{ color:"#57534e", fontSize:12 }}>→</span>
+                  <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                    <span style={{ color:"#57534e", fontSize:10, fontFamily:"'JetBrains Mono', monospace" }}>{(g.processes?.length || 0)}p</span>
+                    <span style={{ color:"#57534e", fontSize:12 }}>→</span>
+                  </div>
                 </div>
                 {g.purpose && <div style={{ padding:"0 18px 14px", fontSize:12, color:"#78716c", lineHeight:1.6 }}>{g.purpose}</div>}
                 {g.kpis && g.kpis.length > 0 && (
