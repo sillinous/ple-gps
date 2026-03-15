@@ -244,12 +244,17 @@ function App() {
 
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:10, marginBottom:32 }}>
               {[
-                { n:"16", l:"Process Categories", sub:"13 adapted + 3 new" },
-                { n:"60+", l:"Process Groups", sub:"L2 organizational functions" },
-                { n:"5", l:"Maturity Levels", sub:"Founding → Flourishing" },
-                { n:"6", l:"Value Loops", sub:"Circular improvement cycles" }
+                { n:"16", l:"Process Categories", sub:"13 adapted + 3 new", view:"categories" },
+                { n:"60+", l:"Process Groups", sub:"L2 organizational functions", view:"categories" },
+                { n:"31", l:"Integration Flows", sub:"Cross-process dependencies", view:"integration" },
+                { n:"5", l:"Maturity Levels", sub:"Founding → Flourishing", view:"maturity" },
+                { n:"6", l:"Value Loops", sub:"Circular improvement cycles", view:"loops" }
               ].map((s,i) => (
-                <div key={i} className={`fade-in stagger-${i+1}`} style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"20px 16px" }}>
+                <div key={i} className={`fade-in stagger-${i+1}`}
+                  onClick={() => navigateTo(s.view)}
+                  style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"20px 16px", cursor:"pointer", transition:"all 0.2s" }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(245,158,11,0.15)"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(245,158,11,0.06)"}>
                   <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:32, fontWeight:700, color:"#f59e0b", lineHeight:1 }}>{s.n}</div>
                   <div style={{ fontSize:13, fontWeight:600, marginTop:4, color:"#f5f0eb" }}>{s.l}</div>
                   <div style={{ fontSize:11, color:"#78716c", marginTop:2 }}>{s.sub}</div>
@@ -271,6 +276,28 @@ function App() {
               ))}
             </div>
 
+            {/* Assessment summary if scores exist */}
+            {getTotalScored() > 0 && (
+              <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.08)", borderRadius:6, padding:"16px 20px", marginBottom:20, cursor:"pointer" }}
+                onClick={() => navigateTo("maturity")}>
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:12 }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:16 }}>
+                    <div>
+                      <div style={{ fontSize:10, color:"#57534e", textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:2 }}>Your Assessment</div>
+                      <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, color: bandColor(getOverallAvg()).text, lineHeight:1 }}>{getOverallAvg().toFixed(1)}</div>
+                      <div style={{ fontSize:11, color: bandColor(getOverallAvg()).text }}>{bandColor(getOverallAvg()).label}</div>
+                    </div>
+                    <div style={{ height:40, width:1, background:"rgba(245,158,11,0.06)" }} />
+                    <div style={{ fontSize:12, color:"#78716c" }}>
+                      <div>{getTotalScored()} of {getTotalCells()} cells scored ({Math.round(getTotalScored()/getTotalCells()*100)}%)</div>
+                      <div>{CATEGORIES.filter(c => getGap(c.id) !== null && getGap(c.id) > 1).length} critical gaps</div>
+                    </div>
+                  </div>
+                  <span style={{ fontSize:12, color:"#f59e0b", fontWeight:500 }}>Open Assessment →</span>
+                </div>
+              </div>
+            )}
+
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(310px, 1fr))", gap:10 }}>
               {CATEGORIES.map((c,i) => (
                 <div key={c.id}
@@ -288,7 +315,14 @@ function App() {
                       <span style={{ fontSize:18, color: c.color, opacity:0.9 }}>{c.icon}</span>
                       <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color:"#78716c" }}>{c.id}</span>
                     </div>
-                    {c.domain === "ple" && <span style={{ fontSize:9, padding:"2px 7px", borderRadius:3, background:"rgba(239,68,68,0.12)", color:"#ef4444", fontWeight:600, letterSpacing:"0.05em" }}>NEW</span>}
+                    <div style={{ display:"flex", gap:4, alignItems:"center" }}>
+                      {getCatAvg(c.id) > 0 && (() => {
+                        const avg = getCatAvg(c.id);
+                        const bc = bandColor(avg);
+                        return <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:10, padding:"2px 6px", borderRadius:3, background: bc.bg, color: bc.text, fontWeight:600 }}>{avg.toFixed(1)}</span>;
+                      })()}
+                      {c.domain === "ple" && <span style={{ fontSize:9, padding:"2px 7px", borderRadius:3, background:"rgba(239,68,68,0.12)", color:"#ef4444", fontWeight:600, letterSpacing:"0.05em" }}>NEW</span>}
+                    </div>
                   </div>
                   <div style={{ fontSize:14, fontWeight:600, marginBottom:4, lineHeight:1.3 }}>{c.label}</div>
                   <div style={{ fontSize:11, color:"#78716c" }}>{c.groups.length} process groups</div>
@@ -310,15 +344,20 @@ function App() {
                     {domainLabel(domain)} {domain === "ple" ? "— New to PLE-GPS" : "Processes"}
                   </span>
                 </div>
-                {CATEGORIES.filter(c => c.domain === domain).map(c => (
-                  <div key={c.id} className="group-row" onClick={() => navigateTo("detail", c.id)}
-                    style={{ display:"flex", alignItems:"center", gap:14, borderRadius:4 }}>
-                    <span style={{ fontSize:18, color: c.color, width:28, textAlign:"center" }}>{c.icon}</span>
-                    <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color:"#57534e", width:40 }}>{c.id}</span>
-                    <span style={{ fontWeight:500, flex:1 }}>{c.label}</span>
-                    <span style={{ fontSize:11, color:"#57534e" }}>{c.groups.length} groups →</span>
-                  </div>
-                ))}
+                {CATEGORIES.filter(c => c.domain === domain).map(c => {
+                  const avg = getCatAvg(c.id);
+                  const bc = avg > 0 ? bandColor(avg) : null;
+                  return (
+                    <div key={c.id} className="group-row" onClick={() => navigateTo("detail", c.id)}
+                      style={{ display:"flex", alignItems:"center", gap:14, borderRadius:4 }}>
+                      <span style={{ fontSize:18, color: c.color, width:28, textAlign:"center" }}>{c.icon}</span>
+                      <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color:"#57534e", width:40 }}>{c.id}</span>
+                      <span style={{ fontWeight:500, flex:1 }}>{c.label}</span>
+                      {bc && <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:11, padding:"2px 8px", borderRadius:3, background: bc.bg, color: bc.text, fontWeight:600 }}>{avg.toFixed(1)}</span>}
+                      <span style={{ fontSize:11, color:"#57534e" }}>{c.groups.length} groups →</span>
+                    </div>
+                  );
+                })}
               </div>
             ))}
           </div>
@@ -352,6 +391,71 @@ function App() {
               <div style={{ fontSize:13, color:"#a8a29e", marginBottom:12 }}>{cat.origin}</div>
               <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:6 }}>What Changes in Post-Labor Context</div>
               <div style={{ fontSize:13, color:"#f5f0eb", lineHeight:1.7 }}>{cat.delta}</div>
+            </div>
+
+            {/* Maturity + Integration side-by-side */}
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:16 }}>
+              {/* Maturity snapshot */}
+              <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:16 }}>
+                <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>Maturity Snapshot</div>
+                {getCatAvg(cat.id) > 0 ? (
+                  <div style={{ display:"flex", alignItems:"center", gap:16 }}>
+                    <div style={{ flexShrink:0, width:120 }}>
+                      <RadarChart scores={getCatDimScores(cat.id)} targetScores={(() => { const t = {}; MATURITY_DIMENSIONS.forEach(d => { t[d.key] = MATURITY_TARGETS[cat.id] || 3; }); return t; })()} />
+                    </div>
+                    <div>
+                      <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:24, fontWeight:700, color: bandColor(getCatAvg(cat.id)).text }}>{getCatAvg(cat.id).toFixed(1)}</div>
+                      <div style={{ fontSize:11, color: bandColor(getCatAvg(cat.id)).text, marginBottom:6 }}>{bandColor(getCatAvg(cat.id)).label}</div>
+                      <div style={{ fontSize:11, color:"#78716c" }}>Target: {MATURITY_TARGETS[cat.id] || 3}</div>
+                      {(() => { const g = getGap(cat.id); const gi = getGapLabel(g); return g !== null ? <div style={{ fontSize:11, color: gi.color, marginTop:2, fontWeight:600 }}>{gi.label} ({g > 0 ? `−${g.toFixed(1)}` : `+${Math.abs(g).toFixed(1)}`})</div> : null; })()}
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ fontSize:12, color:"#57534e", padding:"12px 0" }}>
+                    Not yet scored. <span style={{ color:"#f59e0b", cursor:"pointer", textDecoration:"underline" }} onClick={() => navigateTo("maturity")}>Score in Maturity tab →</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Integration triggers */}
+              <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:16 }}>
+                <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>Integration Triggers</div>
+                {(() => {
+                  const catPrefix = cat.id.split(".")[0];
+                  const inbound = INTEGRATION_FLOWS.filter(f => { const to = f.to === "ALL" ? null : f.to.split(".")[0]; return to === catPrefix || f.to === "ALL"; });
+                  const outbound = INTEGRATION_FLOWS.filter(f => f.from.split(".")[0] === catPrefix);
+                  return (
+                    <div style={{ fontSize:12 }}>
+                      {outbound.length > 0 && (
+                        <div style={{ marginBottom:8 }}>
+                          <div style={{ fontSize:10, color:"#78716c", marginBottom:4 }}>Outbound ({outbound.length})</div>
+                          {outbound.map((f, i) => (
+                            <div key={i} style={{ display:"flex", alignItems:"center", gap:6, padding:"2px 0", color:"#a8a29e" }}>
+                              <div style={{ width:5, height:5, borderRadius:"50%", background: FLOW_TYPES[f.type]?.color || "#78716c", flexShrink:0 }} />
+                              <span>→ {f.to === "ALL" ? "All" : f.to}</span>
+                              <span style={{ color:"#57534e" }}>{f.label}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {inbound.length > 0 && (
+                        <div>
+                          <div style={{ fontSize:10, color:"#78716c", marginBottom:4 }}>Inbound ({inbound.length})</div>
+                          {inbound.slice(0, 5).map((f, i) => (
+                            <div key={i} style={{ display:"flex", alignItems:"center", gap:6, padding:"2px 0", color:"#a8a29e" }}>
+                              <div style={{ width:5, height:5, borderRadius:"50%", background: FLOW_TYPES[f.type]?.color || "#78716c", flexShrink:0 }} />
+                              <span>{f.from} →</span>
+                              <span style={{ color:"#57534e" }}>{f.label}</span>
+                            </div>
+                          ))}
+                          {inbound.length > 5 && <div style={{ color:"#57534e", fontSize:11, cursor:"pointer" }} onClick={() => navigateTo("integration")}>+{inbound.length - 5} more → view map</div>}
+                        </div>
+                      )}
+                      {inbound.length === 0 && outbound.length === 0 && <div style={{ color:"#57534e" }}>No direct integration flows mapped yet.</div>}
+                    </div>
+                  );
+                })()}
+              </div>
             </div>
 
             {/* Process Groups */}
@@ -397,7 +501,22 @@ function App() {
               <h2 style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:26, fontWeight:700 }}>{grp.label}</h2>
             </div>
 
-            {grp.purpose && <p style={{ color:"#a8a29e", fontSize:14, lineHeight:1.7, marginBottom:20, maxWidth:700 }}>{grp.purpose}</p>}
+            {grp.purpose && <p style={{ color:"#a8a29e", fontSize:14, lineHeight:1.7, marginBottom:12, maxWidth:700 }}>{grp.purpose}</p>}
+
+            {/* Category maturity context */}
+            {getCatAvg(cat.id) > 0 && (() => {
+              const avg = getCatAvg(cat.id);
+              const bc = bandColor(avg);
+              return (
+                <div style={{ display:"inline-flex", alignItems:"center", gap:8, background: bc.bg, borderRadius:4, padding:"6px 12px", marginBottom:20, fontSize:12 }}>
+                  <span style={{ color: bc.text, fontWeight:600 }}>Category maturity: {avg.toFixed(1)}</span>
+                  <span style={{ color:"#57534e" }}>·</span>
+                  <span style={{ color: bc.text }}>{bc.label}</span>
+                  <span style={{ color:"#57534e" }}>·</span>
+                  <span style={{ color:"#78716c" }}>Target: {MATURITY_TARGETS[cat.id] || 3}</span>
+                </div>
+              );
+            })()}
 
             {grp.processes && grp.processes.length > 0 && (
               <div style={{ marginBottom:24 }}>
