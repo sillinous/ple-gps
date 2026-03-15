@@ -787,3 +787,237 @@ export const FLOW_TYPES = {
   feedback: { color: "#ec4899", label: "Feedback" },
   resource: { color: "#8b5cf6", label: "Resource" }
 };
+
+// ═══════════════════════════════════════
+// INSTITUTIONAL TEMPLATES
+// ═══════════════════════════════════════
+// Pre-scored maturity profiles for common institution types.
+// Each template represents a realistic starting point.
+
+function makeScores(catScores) {
+  const out = {};
+  Object.entries(catScores).forEach(([catId, dims]) => {
+    ["design","performers","owner","infrastructure","metrics"].forEach((d, i) => {
+      out[`${catId}|${d}`] = Array.isArray(dims) ? dims[i] : dims;
+    });
+  });
+  return out;
+}
+
+export const INSTITUTIONAL_TEMPLATES = [
+  {
+    id: "municipal-transition",
+    name: "Municipal Government (PLE Transition)",
+    icon: "🏛",
+    desc: "A city or county government beginning to restructure around post-labor principles. Strong existing processes for resource delivery and compliance, but nascent flourishing infrastructure and minimal AI governance.",
+    color: "#6366f1",
+    focus: ["1.0","4.0","9.0","11.0"],
+    strengths: "Established bureaucratic processes, legal infrastructure, resource management",
+    gaps: "AI governance, flourishing measurement, participatory democracy beyond elections",
+    scores: makeScores({
+      "1.0":[3,2,3,2,2], "2.0":[2,2,2,2,1], "3.0":[3,2,3,3,2],
+      "4.0":[4,3,4,4,3], "5.0":[3,3,3,3,2], "6.0":[3,2,3,2,2],
+      "7.0":[2,2,2,2,1], "8.0":[3,2,3,3,2], "9.0":[4,3,4,4,4],
+      "10.0":[3,3,3,3,2], "11.0":[3,3,3,2,2], "12.0":[3,2,3,2,2],
+      "13.0":[2,2,2,2,2], "14.0":[1,1,1,1,1], "15.0":[1,1,1,1,1],
+      "16.0":[2,2,2,2,2]
+    })
+  },
+  {
+    id: "cooperative",
+    name: "Worker/Community Cooperative",
+    icon: "🤝",
+    desc: "A democratically-governed cooperative transitioning to post-labor operations. Strong democratic culture and community engagement, but limited technology infrastructure and formal process documentation.",
+    color: "#10b981",
+    focus: ["3.0","7.0","15.0","16.0"],
+    strengths: "Democratic governance culture, community trust, contributor engagement",
+    gaps: "Technology infrastructure, formal process documentation, scalable AI governance",
+    scores: makeScores({
+      "1.0":[2,2,3,1,1], "2.0":[2,2,2,1,1], "3.0":[3,3,3,2,2],
+      "4.0":[2,2,2,1,1], "5.0":[3,3,2,2,1], "6.0":[3,3,3,2,2],
+      "7.0":[3,3,3,2,2], "8.0":[1,1,1,1,1], "9.0":[2,2,2,2,2],
+      "10.0":[2,2,2,1,1], "11.0":[2,2,2,1,1], "12.0":[2,3,2,1,1],
+      "13.0":[1,1,1,1,1], "14.0":[1,1,1,1,1], "15.0":[2,2,2,1,1],
+      "16.0":[3,3,3,2,2]
+    })
+  },
+  {
+    id: "digital-commons",
+    name: "Digital Commons / Platform Cooperative",
+    icon: "🌐",
+    desc: "A digitally-native organization managing shared digital resources. Strong technology and data practices, but weak physical infrastructure and early-stage democratic governance.",
+    color: "#ec4899",
+    focus: ["2.0","8.0","14.0","13.0"],
+    strengths: "Technology infrastructure, data practices, distributed contributor model",
+    gaps: "Physical resource delivery, commons management, formal democratic processes",
+    scores: makeScores({
+      "1.0":[3,2,2,2,2], "2.0":[3,3,3,3,2], "3.0":[3,3,2,3,2],
+      "4.0":[1,1,1,1,1], "5.0":[3,3,2,3,2], "6.0":[2,2,2,2,1],
+      "7.0":[2,2,2,2,1], "8.0":[4,3,3,4,3], "9.0":[2,2,2,2,2],
+      "10.0":[1,1,1,1,1], "11.0":[2,2,2,2,2], "12.0":[2,2,1,2,1],
+      "13.0":[3,2,2,3,2], "14.0":[2,2,2,2,1], "15.0":[1,1,1,1,1],
+      "16.0":[2,2,2,2,1]
+    })
+  },
+  {
+    id: "ubi-administration",
+    name: "UBI Administration Body",
+    icon: "💰",
+    desc: "An institution specifically created to administer universal basic income. Strong resource management and access facilitation, but building other governance functions from scratch.",
+    color: "#f59e0b",
+    focus: ["3.0","4.0","9.0","11.0"],
+    strengths: "Resource distribution, enrollment systems, equity monitoring",
+    gaps: "Broad governance strategy, commons management, democratic depth beyond UBI decisions",
+    scores: makeScores({
+      "1.0":[2,2,2,2,1], "2.0":[2,1,1,1,1], "3.0":[4,3,3,4,3],
+      "4.0":[3,3,3,3,2], "5.0":[2,2,2,2,1], "6.0":[3,3,3,3,2],
+      "7.0":[1,1,1,1,1], "8.0":[3,2,2,3,2], "9.0":[4,4,4,4,3],
+      "10.0":[1,1,1,1,1], "11.0":[3,3,3,3,3], "12.0":[2,2,2,1,1],
+      "13.0":[2,2,2,2,1], "14.0":[2,1,1,2,1], "15.0":[1,1,1,1,1],
+      "16.0":[2,2,2,1,1]
+    })
+  },
+  {
+    id: "greenfield",
+    name: "Greenfield PLE Institution",
+    icon: "🌱",
+    desc: "A brand-new institution designed from scratch with post-labor principles. Everything at Level 1 — pure potential with no legacy constraints. The ideal starting point for PLE-native design.",
+    color: "#8b5cf6",
+    focus: ["1.0","14.0","15.0","16.0"],
+    strengths: "No legacy constraints, can design PLE-native from day one",
+    gaps: "Everything — but that's the point. Start with vision, democracy, and flourishing.",
+    scores: makeScores({
+      "1.0":[1,1,1,1,1], "2.0":[1,1,1,1,1], "3.0":[1,1,1,1,1],
+      "4.0":[1,1,1,1,1], "5.0":[1,1,1,1,1], "6.0":[1,1,1,1,1],
+      "7.0":[1,1,1,1,1], "8.0":[1,1,1,1,1], "9.0":[1,1,1,1,1],
+      "10.0":[1,1,1,1,1], "11.0":[1,1,1,1,1], "12.0":[1,1,1,1,1],
+      "13.0":[1,1,1,1,1], "14.0":[1,1,1,1,1], "15.0":[1,1,1,1,1],
+      "16.0":[1,1,1,1,1]
+    })
+  }
+];
+
+// ═══════════════════════════════════════
+// PROCESS PLAYBOOKS (PLE-Specific)
+// ═══════════════════════════════════════
+// Implementation guides for the novel PLE categories.
+
+export const PLAYBOOKS = {
+  "14.0": {
+    title: "Implementing Algorithmic Governance",
+    timeframe: "6–12 months to Level 2, 18–24 months to Level 3",
+    prerequisites: ["Category 8.0 at Level 2+", "Category 11.0 at Level 2+", "Category 16.0 at Level 2+"],
+    phases: [
+      { name: "Foundation (Months 1–3)", actions: [
+        "Inventory all AI/algorithmic systems currently in use or planned",
+        "Classify each by decision authority: advisory, semi-autonomous, fully autonomous",
+        "Draft AI governance charter with community input sessions",
+        "Establish interim AI oversight committee (5–7 members, majority community)",
+        "Define 'always human' decision categories (rights, irreversible, contested)"
+      ]},
+      { name: "Structure (Months 4–6)", actions: [
+        "Deploy bias monitoring on highest-impact AI system first",
+        "Establish AI incident response protocol and train first responders",
+        "Publish first AI Transparency Report to community",
+        "Create AI agent lifecycle gates: staging → shadow → monitored → production",
+        "Define kill switch protocols and conduct first drill"
+      ]},
+      { name: "Operationalize (Months 7–12)", actions: [
+        "Expand bias monitoring to all AI systems",
+        "Contract first external algorithmic audit",
+        "Launch community AI literacy program (understand, not operate)",
+        "Establish quarterly AI governance review with community observers",
+        "Begin measuring human-AI work allocation balance"
+      ]}
+    ],
+    failureModes: [
+      "Governance theater: oversight body exists but has no real authority",
+      "Speed trap: deploying AI faster than governance can evaluate",
+      "Expert capture: technical staff dominate governance body",
+      "Transparency gap: reports published but not in accessible language"
+    ],
+    firstThreeActions: [
+      "Inventory all AI systems (even spreadsheet macros and recommendation engines)",
+      "Appoint an interim AI governance lead with community accountability",
+      "Draft a one-page AI principles statement and get community feedback"
+    ]
+  },
+  "15.0": {
+    title: "Building Human Flourishing Infrastructure",
+    timeframe: "3–6 months for measurement foundation, 12–18 months for program portfolio",
+    prerequisites: ["Category 1.0 at Level 2+", "Category 7.0 at Level 2+", "Community trust baseline established"],
+    phases: [
+      { name: "Measure (Months 1–3)", actions: [
+        "Select or design flourishing measurement instrument (adapt PERMA+, WHO-5, or similar)",
+        "Define the 8 institutional dimensions and validate with community focus groups",
+        "Conduct baseline flourishing survey across all community segments",
+        "Disaggregate data by demographics to identify floor violations",
+        "Publish baseline Flourishing Report — the institution's first primary output metric"
+      ]},
+      { name: "Design (Months 4–8)", actions: [
+        "Map existing programs to flourishing dimensions they serve",
+        "Identify dimension gaps (typically: purpose, creative expression, intergenerational connection)",
+        "Co-design first purpose-exploration program with community members",
+        "Launch one social connection initiative per identified isolation risk group",
+        "Open or designate first community gathering space optimized for connection"
+      ]},
+      { name: "Scale (Months 9–18)", actions: [
+        "Establish purpose-discovery cohort program (8-week cycles)",
+        "Deploy AI-assisted contribution matching platform",
+        "Open maker spaces / creative labs in underserved areas",
+        "Launch community university with first 10 learning circles",
+        "Integrate flourishing metrics into ALL institutional decision-making"
+      ]}
+    ],
+    failureModes: [
+      "Measurement without action: collecting data but not changing programs",
+      "One-size-fits-all: same flourishing programs for every demographic",
+      "Forced participation: mandating 'flourishing activities' (violates autonomy dimension)",
+      "Purpose prescription: telling people what their purpose should be"
+    ],
+    firstThreeActions: [
+      "Run a 20-question flourishing survey with at least 30% community response",
+      "Publish the results publicly with honest analysis of gaps",
+      "Ask the community: 'What would help you thrive?' — then listen"
+    ]
+  },
+  "16.0": {
+    title: "Establishing Participatory Democracy",
+    timeframe: "3–6 months for constitutional foundation, ongoing deepening",
+    prerequisites: ["Community with defined membership/boundaries", "Willingness to share power genuinely", "Basic communication infrastructure"],
+    phases: [
+      { name: "Convene (Months 1–2)", actions: [
+        "Identify and invite constitutional convention delegates (representative of full community)",
+        "Establish convention ground rules: equal voice, structured deliberation, no predetermined outcomes",
+        "Conduct community listening sessions to gather governance priorities",
+        "Draft constitutional principles (not full constitution) with community input",
+        "Define minimum viable decision-making process for immediate use"
+      ]},
+      { name: "Constitute (Months 3–4)", actions: [
+        "Draft full institutional constitution based on principles and feedback",
+        "Define decision types and matching mechanisms (consensus/vote/delegate)",
+        "Establish representation standards and initial governance body composition",
+        "Define amendment process (supermajority + deliberation period)",
+        "Conduct ratification vote with >60% community participation target"
+      ]},
+      { name: "Operate (Months 5–12)", actions: [
+        "Hold first community assembly under new constitution",
+        "Elect/select first governance body per constitutional process",
+        "Establish governance calendar with regular decision cadence",
+        "Launch civic education program (governance literacy for all members)",
+        "Deploy capture detection indicators and first democratic health assessment"
+      ]}
+    ],
+    failureModes: [
+      "Founder lock-in: constitution reflects founders' views, not community's",
+      "Participation fatigue: too many decisions requiring full community vote",
+      "Capture by articulate minority: those who speak loudest set agenda",
+      "Democracy deficit: governance exists on paper but decisions made informally"
+    ],
+    firstThreeActions: [
+      "Define who is a member of this community (the demos in democracy)",
+      "Hold one open community assembly with structured facilitation",
+      "Ask: 'What decisions should require everyone's input?' — build from there"
+    ]
+  }
+};

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { CATEGORIES, VALUE_LOOPS, MATURITY_LEVELS, MATURITY_TARGETS, MATURITY_DIMENSIONS, IMPROVEMENT_ROADMAP, MATURITY_BAND_COLORS, TRANSLATION, INTEGRATION_FLOWS, FLOW_TYPES } from "./data.js";
+import { CATEGORIES, VALUE_LOOPS, MATURITY_LEVELS, MATURITY_TARGETS, MATURITY_DIMENSIONS, IMPROVEMENT_ROADMAP, MATURITY_BAND_COLORS, TRANSLATION, INTEGRATION_FLOWS, FLOW_TYPES, INSTITUTIONAL_TEMPLATES, PLAYBOOKS } from "./data.js";
 import RadarChart from "./components/RadarChart.jsx";
 import IntegrationMap from "./components/IntegrationMap.jsx";
 import SearchBar from "./components/Search.jsx";
@@ -123,6 +123,10 @@ function App() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [assessmentName, setAssessmentName] = useState("Default");
   const [showSaveMenu, setShowSaveMenu] = useState(false);
+  const [compareScores, setCompareScores] = useState(null);
+  const [compareName, setCompareName] = useState(null);
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [activePlaybook, setActivePlaybook] = useState(null);
   const fileInputRef = useRef(null);
   const mainRef = useRef(null);
 
@@ -588,7 +592,71 @@ function App() {
               <span style={{ fontSize:10, padding:"3px 10px", borderRadius:3, background:"rgba(99,102,241,0.08)", color:"#818cf8", fontWeight:500 }}>
                 {cat.groups.reduce((s,g) => s+(g.kpis?.length||0), 0)} KPIs
               </span>
+              {PLAYBOOKS[cat.id] && (
+                <span onClick={() => setActivePlaybook(activePlaybook === cat.id ? null : cat.id)}
+                  style={{ fontSize:10, padding:"3px 10px", borderRadius:3, background:"rgba(245,158,11,0.1)", color:"#f59e0b", fontWeight:600, cursor:"pointer", transition:"all 0.15s" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(245,158,11,0.15)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "rgba(245,158,11,0.1)"}>
+                  {activePlaybook === cat.id ? "▾ Hide Playbook" : "▸ Implementation Playbook"}
+                </span>
+              )}
             </div>
+
+            {/* Process Playbook */}
+            {activePlaybook === cat.id && PLAYBOOKS[cat.id] && (() => {
+              const pb = PLAYBOOKS[cat.id];
+              return (
+                <div className="fade-in" style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.12)", borderRadius:6, padding:20, marginBottom:16 }}>
+                  <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:20, fontWeight:700, marginBottom:4 }}>{pb.title}</div>
+                  <div style={{ fontSize:12, color:"#78716c", marginBottom:16 }}>{pb.timeframe}</div>
+
+                  {/* First 3 Actions */}
+                  <div style={{ background:"rgba(245,158,11,0.06)", border:"1px solid rgba(245,158,11,0.1)", borderRadius:6, padding:"14px 16px", marginBottom:16 }}>
+                    <div style={{ fontSize:11, color:"#f59e0b", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:8 }}>Start Here — First 3 Actions</div>
+                    {pb.firstThreeActions.map((a, i) => (
+                      <div key={i} style={{ display:"flex", gap:10, marginBottom:6, fontSize:13, lineHeight:1.5 }}>
+                        <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color:"#f59e0b", fontWeight:600, flexShrink:0 }}>{i+1}.</span>
+                        <span style={{ color:"#f5f0eb" }}>{a}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Prerequisites */}
+                  <div style={{ marginBottom:16 }}>
+                    <div style={{ fontSize:11, color:"#57534e", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:6 }}>Prerequisites</div>
+                    <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+                      {pb.prerequisites.map((p, i) => (
+                        <span key={i} style={{ fontSize:11, padding:"3px 10px", borderRadius:3, background:"rgba(99,102,241,0.08)", color:"#818cf8" }}>{p}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Phases */}
+                  {pb.phases.map((phase, pi) => (
+                    <div key={pi} style={{ marginBottom:16, paddingLeft:14, borderLeft:`2px solid ${cat.color}25` }}>
+                      <div style={{ fontSize:13, fontWeight:600, color: cat.color, marginBottom:8 }}>{phase.name}</div>
+                      {phase.actions.map((a, ai) => (
+                        <div key={ai} style={{ display:"flex", gap:8, marginBottom:4, fontSize:12, color:"#a8a29e", lineHeight:1.5 }}>
+                          <span style={{ color:"#57534e", flexShrink:0 }}>•</span>
+                          <span>{a}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+
+                  {/* Failure Modes */}
+                  <div style={{ background:"rgba(239,68,68,0.04)", border:"1px solid rgba(239,68,68,0.1)", borderRadius:6, padding:"12px 16px" }}>
+                    <div style={{ fontSize:11, color:"#ef4444", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:8 }}>Common Failure Modes</div>
+                    {pb.failureModes.map((f, i) => (
+                      <div key={i} style={{ fontSize:12, color:"#a8a29e", marginBottom:4, display:"flex", gap:8, lineHeight:1.5 }}>
+                        <span style={{ color:"#ef4444", flexShrink:0 }}>⚠</span>
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Origin and Delta */}
             <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:18, marginBottom:16 }}>
@@ -945,22 +1013,93 @@ function App() {
                     style={{ background:"rgba(16,185,129,0.08)", border:"1px solid rgba(16,185,129,0.2)", borderRadius:4, padding:"5px 12px", color:"#10b981", fontSize:11, fontWeight:600, cursor:"pointer" }}>
                     Export
                   </button>
+                  <button onClick={() => setCompareScores(compareScores ? null : "pick")}
+                    style={{ background: compareScores ? "rgba(139,92,246,0.15)" : "rgba(139,92,246,0.08)", border:"1px solid rgba(139,92,246,0.2)", borderRadius:4, padding:"5px 12px", color:"#8b5cf6", fontSize:11, fontWeight:600, cursor:"pointer" }}>
+                    {compareScores && compareScores !== "pick" ? `× ${compareName}` : "Compare"}
+                  </button>
                   <button onClick={() => fileInputRef.current?.click()}
                     style={{ background:"rgba(99,102,241,0.08)", border:"1px solid rgba(99,102,241,0.2)", borderRadius:4, padding:"5px 12px", color:"#6366f1", fontSize:11, fontWeight:600, cursor:"pointer" }}>
                     Import
                   </button>
-                  <button onClick={() => { setMaturityScores({}); setMaturityFocus(null); }}
+                  <button onClick={() => { setMaturityScores({}); setMaturityFocus(null); setCompareScores(null); }}
                     style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.2)", borderRadius:4, padding:"5px 12px", color:"#ef4444", fontSize:11, fontWeight:600, cursor:"pointer" }}>
                     Reset
                   </button>
                 </div>
               ) : (
-                <button onClick={handleLoadExample}
-                  style={{ background:"rgba(245,158,11,0.08)", border:"1px solid rgba(245,158,11,0.2)", borderRadius:4, padding:"6px 14px", color:"#f59e0b", fontSize:11, fontWeight:600, cursor:"pointer", letterSpacing:"0.03em" }}>
-                  Load Example Assessment
-                </button>
+                <div style={{ display:"flex", gap:6 }}>
+                  <button onClick={() => setShowTemplates(!showTemplates)}
+                    style={{ background:"rgba(245,158,11,0.08)", border:"1px solid rgba(245,158,11,0.2)", borderRadius:4, padding:"6px 14px", color:"#f59e0b", fontSize:11, fontWeight:600, cursor:"pointer", letterSpacing:"0.03em" }}>
+                    {showTemplates ? "Hide Templates" : "Start from Template"}
+                  </button>
+                  <button onClick={handleLoadExample}
+                    style={{ background:"rgba(120,113,108,0.06)", border:"1px solid rgba(120,113,108,0.12)", borderRadius:4, padding:"6px 14px", color:"#78716c", fontSize:11, fontWeight:600, cursor:"pointer" }}>
+                    Quick Example
+                  </button>
+                </div>
               )}
             </div>
+
+            {/* Template Picker */}
+            {showTemplates && getTotalScored() === 0 && (
+              <div className="fade-in" style={{ marginBottom:20 }}>
+                <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(280px, 1fr))", gap:10 }}>
+                  {INSTITUTIONAL_TEMPLATES.map(t => (
+                    <div key={t.id}
+                      onClick={() => {
+                        if (confirm(`Load "${t.name}" template? This sets realistic starting scores for this institution type.`)) {
+                          setMaturityScores({ ...t.scores });
+                          setAssessmentName(t.name);
+                          setShowTemplates(false);
+                        }
+                      }}
+                      style={{
+                        background:"#141210", border:`1px solid ${t.color}20`, borderRadius:6, padding:"16px 18px",
+                        cursor:"pointer", transition:"all 0.2s", borderLeftWidth:3, borderLeftStyle:"solid", borderLeftColor: t.color
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = `${t.color}40`; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = `${t.color}20`; e.currentTarget.style.transform = "translateY(0)"; }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
+                        <span style={{ fontSize:22 }}>{t.icon}</span>
+                        <div>
+                          <div style={{ fontSize:14, fontWeight:600, lineHeight:1.2 }}>{t.name}</div>
+                        </div>
+                      </div>
+                      <div style={{ fontSize:12, color:"#a8a29e", lineHeight:1.5, marginBottom:10 }}>{t.desc}</div>
+                      <div style={{ display:"flex", gap:4, flexWrap:"wrap", marginBottom:8 }}>
+                        {t.focus.map(f => {
+                          const fc = CATEGORIES.find(c => c.id === f);
+                          return fc ? <span key={f} style={{ fontSize:10, padding:"2px 8px", borderRadius:3, background:`${fc.color}12`, color: fc.color }}>{fc.id} {fc.label.split(" ").slice(0,2).join(" ")}</span> : null;
+                        })}
+                      </div>
+                      <div style={{ fontSize:11 }}>
+                        <div style={{ color:"#10b981", marginBottom:2 }}>✓ {t.strengths}</div>
+                        <div style={{ color:"#ef4444" }}>△ {t.gaps}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Compare Picker */}
+            {compareScores === "pick" && (
+              <div className="fade-in" style={{ background:"#141210", border:"1px solid rgba(139,92,246,0.15)", borderRadius:6, padding:"14px 18px", marginBottom:16 }}>
+                <div style={{ fontSize:11, color:"#8b5cf6", textTransform:"uppercase", letterSpacing:"0.06em", fontWeight:600, marginBottom:10 }}>Compare against:</div>
+                <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+                  {INSTITUTIONAL_TEMPLATES.map(t => (
+                    <button key={t.id} onClick={() => { setCompareScores(t.scores); setCompareName(t.name); }}
+                      style={{ background:`${t.color}10`, border:`1px solid ${t.color}25`, borderRadius:4, padding:"5px 12px", color: t.color, fontSize:11, fontWeight:500, cursor:"pointer" }}>
+                      {t.icon} {t.name}
+                    </button>
+                  ))}
+                  <button onClick={() => { setCompareScores(null); setCompareName(null); }}
+                    style={{ background:"rgba(120,113,108,0.06)", border:"1px solid rgba(120,113,108,0.12)", borderRadius:4, padding:"5px 12px", color:"#78716c", fontSize:11, cursor:"pointer" }}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Sub-navigation */}
             <div style={{ display:"flex", gap:4, marginBottom:20, borderBottom:"1px solid rgba(245,158,11,0.06)", paddingBottom:10, flexWrap:"wrap" }}>
@@ -1101,20 +1240,31 @@ function App() {
                         {MATURITY_DIMENSIONS.map(d => {
                           const score = getScore(c.id, d.key);
                           const bc = bandColor(score);
+                          const compScore = compareScores && compareScores !== "pick" ? (compareScores[`${c.id}|${d.key}`] || 0) : 0;
+                          const delta = (score > 0 && compScore > 0) ? score - compScore : null;
                           return (
                             <div key={d.key} style={{
                               display:"flex", alignItems:"center", justifyContent:"center",
                               background: score > 0 ? bc.bg : "rgba(120,113,108,0.04)",
                               borderRadius:3, cursor:"pointer", transition:"all 0.15s", minHeight:32,
-                              border: "1px solid transparent", position:"relative"
+                              border: delta !== null && delta !== 0 ? `1px solid ${delta > 0 ? "rgba(16,185,129,0.3)" : "rgba(239,68,68,0.3)"}` : "1px solid transparent",
+                              position:"relative"
                             }}
                               onClick={() => setScore(c.id, d.key, score < 5 ? score + 1 : 0)}
                               onContextMenu={e => { e.preventDefault(); setScore(c.id, d.key, score > 1 ? score - 1 : 5); }}
-                              title={score > 0 ? `${d.label}: Level ${score} — ${d.rubric[score - 1]}\n\nClick: +1 | Right-click: -1` : `Click to score ${d.label}`}>
+                              title={score > 0 ? `${d.label}: Level ${score} — ${d.rubric[score - 1]}${delta !== null ? `\nvs ${compareName}: ${compScore} (${delta > 0 ? "+" : ""}${delta})` : ""}\n\nClick: +1 | Right-click: -1` : `Click to score ${d.label}${compScore > 0 ? `\n${compareName}: ${compScore}` : ""}`}>
                               {score > 0 ? (
                                 <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:14, fontWeight:600, color: bc.text }}>{score}</span>
+                              ) : compScore > 0 ? (
+                                <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:11, color:"#8b5cf6", opacity:0.5 }}>{compScore}</span>
                               ) : (
                                 <span style={{ fontSize:16, color:"#363230", opacity:0.5 }}>·</span>
+                              )}
+                              {delta !== null && delta !== 0 && (
+                                <span style={{ position:"absolute", top:1, right:2, fontSize:8, fontWeight:600, fontFamily:"'JetBrains Mono', monospace",
+                                  color: delta > 0 ? "#10b981" : "#ef4444" }}>
+                                  {delta > 0 ? "+" : ""}{delta}
+                                </span>
                               )}
                             </div>
                           );
