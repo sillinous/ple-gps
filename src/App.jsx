@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { CATEGORIES, VALUE_LOOPS, MATURITY_LEVELS, MATURITY_TARGETS, TRANSLATION } from "./data.js";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { CATEGORIES, VALUE_LOOPS, MATURITY_LEVELS, MATURITY_TARGETS, MATURITY_DIMENSIONS, IMPROVEMENT_ROADMAP, MATURITY_BAND_COLORS, TRANSLATION } from "./data.js";
 
 function App() {
   const [view, setView] = useState("overview");
@@ -8,6 +8,9 @@ function App() {
   const [expandedLoop, setExpandedLoop] = useState(null);
   const [hoveredCat, setHoveredCat] = useState(null);
   const [animateIn, setAnimateIn] = useState(true);
+  const [maturityScores, setMaturityScores] = useState({});
+  const [maturityFocus, setMaturityFocus] = useState(null);
+  const [maturityTab, setMaturityTab] = useState("assess");
   const mainRef = useRef(null);
 
   useEffect(() => {
@@ -26,6 +29,57 @@ function App() {
 
   const domainLabel = d => d === "civic" ? "Civic Operating" : d === "support" ? "Institutional Support" : "PLE-Specific";
   const domainColor = d => d === "civic" ? "#f59e0b" : d === "support" ? "#10b981" : "#ef4444";
+
+  const setScore = useCallback((catId, dimKey, val) => {
+    setMaturityScores(prev => {
+      const key = `${catId}|${dimKey}`;
+      const cur = prev[key];
+      return { ...prev, [key]: cur === val ? 0 : val };
+    });
+  }, []);
+
+  const getScore = (catId, dimKey) => maturityScores[`${catId}|${dimKey}`] || 0;
+
+  const getCatAvg = (catId) => {
+    const scores = MATURITY_DIMENSIONS.map(d => getScore(catId, d.key)).filter(s => s > 0);
+    return scores.length === 0 ? 0 : scores.reduce((a, b) => a + b, 0) / scores.length;
+  };
+
+  const getDimAvg = (dimKey) => {
+    const scores = CATEGORIES.map(c => getScore(c.id, dimKey)).filter(s => s > 0);
+    return scores.length === 0 ? 0 : scores.reduce((a, b) => a + b, 0) / scores.length;
+  };
+
+  const getOverallAvg = () => {
+    const allScores = Object.values(maturityScores).filter(s => s > 0);
+    return allScores.length === 0 ? 0 : allScores.reduce((a, b) => a + b, 0) / allScores.length;
+  };
+
+  const getTotalScored = () => Object.values(maturityScores).filter(s => s > 0).length;
+  const getTotalCells = () => CATEGORIES.length * MATURITY_DIMENSIONS.length;
+
+  const getGap = (catId) => {
+    const avg = getCatAvg(catId);
+    const target = MATURITY_TARGETS[catId] || 3;
+    return avg === 0 ? null : target - avg;
+  };
+
+  const getGapLabel = (gap) => {
+    if (gap === null) return { label: "—", color: "#57534e" };
+    if (gap <= -0.5) return { label: "Exceeds", color: "#8b5cf6" };
+    if (gap <= 0.25) return { label: "On target", color: "#10b981" };
+    if (gap <= 1) return { label: "Near gap", color: "#f59e0b" };
+    return { label: "Critical gap", color: "#ef4444" };
+  };
+
+  const getImprovementKey = (current) => {
+    const floor = Math.floor(current);
+    if (floor < 1) return null;
+    if (floor >= 5) return null;
+    return `${floor}→${floor + 1}`;
+  };
+
+  const bandColor = (v) => MATURITY_BAND_COLORS[Math.round(v)] || MATURITY_BAND_COLORS[0];
 
   return (
     <div style={{
@@ -352,71 +406,439 @@ function App() {
           </div>
         )}
 
-        {/* MATURITY MODEL */}
+        {/* MATURITY ASSESSMENT TOOL */}
         {view === "maturity" && (
           <div className="fade-in">
-            <h2 style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, marginBottom:6 }}>Institutional Maturity Model</h2>
-            <p style={{ color:"#a8a29e", marginBottom:24, fontSize:14 }}>Five levels of institutional development, adapted from APQC PEMM and CMMI for post-labor governance context.</p>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:16, flexWrap:"wrap", gap:12 }}>
+              <div>
+                <h2 style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, marginBottom:4 }}>Maturity Assessment</h2>
+                <p style={{ color:"#a8a29e", fontSize:13, maxWidth:520 }}>Score your institution across 5 dimensions for each of the 16 process categories. Click cells to rate 1–5. The tool computes gaps against recommended targets and generates improvement priorities.</p>
+              </div>
+              {getTotalScored() > 0 && (
+                <button onClick={() => { setMaturityScores({}); setMaturityFocus(null); }}
+                  style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.2)", borderRadius:4, padding:"6px 14px", color:"#ef4444", fontSize:11, fontWeight:600, cursor:"pointer", letterSpacing:"0.03em" }}>
+                  Reset All Scores
+                </button>
+              )}
+            </div>
 
-            <div style={{ display:"grid", gap:10, marginBottom:32 }}>
-              {MATURITY_LEVELS.map((m, i) => (
-                <div key={i} className={`fade-in stagger-${(i%4)+1}`} style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"16px 20px", display:"flex", alignItems:"flex-start", gap:16 }}>
-                  <div style={{
-                    width:44, height:44, borderRadius:6, display:"flex", alignItems:"center", justifyContent:"center",
-                    fontFamily:"'Cormorant Garamond', serif", fontSize:22, fontWeight:700, flexShrink:0,
-                    background: `rgba(${i === 0 ? "239,68,68" : i === 1 ? "245,158,11" : i === 2 ? "16,185,129" : i === 3 ? "99,102,241" : "139,92,246"},0.12)`,
-                    color: i === 0 ? "#ef4444" : i === 1 ? "#f59e0b" : i === 2 ? "#10b981" : i === 3 ? "#6366f1" : "#8b5cf6"
-                  }}>{m.level}</div>
-                  <div>
-                    <div style={{ fontWeight:600, fontSize:15, marginBottom:2 }}>{m.name}</div>
-                    <div style={{ fontSize:13, color:"#a8a29e", marginBottom:4 }}>{m.desc}</div>
-                    <div style={{ fontSize:11, color:"#78716c", fontStyle:"italic" }}>Key characteristic: {m.char}</div>
-                  </div>
-                </div>
+            {/* Sub-navigation */}
+            <div style={{ display:"flex", gap:4, marginBottom:20, borderBottom:"1px solid rgba(245,158,11,0.06)", paddingBottom:10 }}>
+              {[["assess","Assessment Grid"],["gaps","Gap Analysis"],["roadmap","Improvement Roadmap"],["reference","Level Reference"]].map(([k,l]) => (
+                <div key={k} onClick={() => setMaturityTab(k)} className={`nav-pill ${maturityTab === k ? "active" : ""}`}>{l}</div>
               ))}
             </div>
 
-            <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.08em", textTransform:"uppercase", fontWeight:600, marginBottom:12 }}>Recommended Targets by Category</div>
-            <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, overflow:"hidden" }}>
-              {CATEGORIES.map((c, i) => {
-                const t = MATURITY_TARGETS[c.id] || 3;
-                return (
-                  <div key={c.id}
-                    style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 18px", borderBottom: i < CATEGORIES.length - 1 ? "1px solid rgba(245,158,11,0.03)" : "none", cursor:"pointer", transition:"background 0.15s" }}
-                    onClick={() => navigateTo("detail", c.id)}
-                    onMouseEnter={e => e.currentTarget.style.background = "rgba(245,158,11,0.03)"}
-                    onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                    <span style={{ fontSize:14, color: c.color, width:22, textAlign:"center" }}>{c.icon}</span>
-                    <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:11, color:"#57534e", width:32 }}>{c.id}</span>
-                    <span style={{ fontSize:13, fontWeight:500, flex:1, minWidth:0, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.label}</span>
-                    <div className="maturity-bar" style={{ width:100, flexShrink:0 }}>
-                      {[1,2,3,4,5].map(l => (
-                        <div key={l} className="maturity-seg" style={{
-                          background: l <= Math.floor(t)
-                            ? (l <= 2 ? "#ef4444" : l <= 3 ? "#f59e0b" : l <= 4 ? "#10b981" : "#8b5cf6")
-                            : l === Math.ceil(t) && t % 1 > 0
-                            ? `${l <= 2 ? "#ef4444" : l <= 3 ? "#f59e0b" : l <= 4 ? "#10b981" : "#8b5cf6"}80`
-                            : "rgba(245,158,11,0.06)"
-                        }} />
-                      ))}
-                    </div>
-                    <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color: t >= 4 ? "#10b981" : t >= 3 ? "#f59e0b" : "#ef4444", width:28, textAlign:"right" }}>{t % 1 === 0 ? t : t.toFixed(0)+"-"+(t+0.5).toFixed(0)}</span>
+            {/* Summary bar */}
+            {getTotalScored() > 0 && (
+              <div className="fade-in" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(150px, 1fr))", gap:8, marginBottom:20 }}>
+                <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"12px 14px" }}>
+                  <div style={{ fontSize:10, color:"#57534e", textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:4 }}>Overall Score</div>
+                  <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, color: bandColor(getOverallAvg()).text }}>{getOverallAvg().toFixed(1)}</div>
+                  <div style={{ fontSize:11, color: bandColor(getOverallAvg()).text }}>{bandColor(getOverallAvg()).label}</div>
+                </div>
+                <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"12px 14px" }}>
+                  <div style={{ fontSize:10, color:"#57534e", textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:4 }}>Cells Scored</div>
+                  <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, color:"#f5f0eb" }}>{getTotalScored()}<span style={{ fontSize:14, color:"#57534e" }}>/{getTotalCells()}</span></div>
+                  <div style={{ fontSize:11, color:"#78716c" }}>{Math.round(getTotalScored()/getTotalCells()*100)}% complete</div>
+                </div>
+                <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"12px 14px" }}>
+                  <div style={{ fontSize:10, color:"#57534e", textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:4 }}>Critical Gaps</div>
+                  <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, color:"#ef4444" }}>
+                    {CATEGORIES.filter(c => { const g = getGap(c.id); return g !== null && g > 1; }).length}
                   </div>
-                );
-              })}
-            </div>
-
-            <div style={{ marginTop:24, background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:18 }}>
-              <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>Reading the Maturity Bars</div>
-              <div style={{ display:"flex", gap:16, flexWrap:"wrap", fontSize:12 }}>
-                {[["#ef4444","1-2 Critical Gap"],["#f59e0b","3 Developing"],["#10b981","4 Capable"],["#8b5cf6","5 Excellence"]].map(([c,l]) => (
-                  <div key={l} style={{ display:"flex", alignItems:"center", gap:6 }}>
-                    <div style={{ width:12, height:6, borderRadius:2, background:c }} />
-                    <span style={{ color:"#a8a29e" }}>{l}</span>
-                  </div>
-                ))}
+                  <div style={{ fontSize:11, color:"#78716c" }}>categories &gt;1 below target</div>
+                </div>
+                <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"12px 14px" }}>
+                  <div style={{ fontSize:10, color:"#57534e", textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:4 }}>Weakest Dimension</div>
+                  {(() => {
+                    const dims = MATURITY_DIMENSIONS.map(d => ({ ...d, avg: getDimAvg(d.key) })).filter(d => d.avg > 0);
+                    const weakest = dims.length > 0 ? dims.reduce((a, b) => a.avg < b.avg ? a : b) : null;
+                    return weakest ? (
+                      <>
+                        <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:20, fontWeight:700, color: bandColor(weakest.avg).text }}>{weakest.label}</div>
+                        <div style={{ fontSize:11, color:"#78716c" }}>avg {weakest.avg.toFixed(1)}</div>
+                      </>
+                    ) : <div style={{ fontSize:13, color:"#57534e" }}>—</div>;
+                  })()}
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* TAB: Assessment Grid */}
+            {maturityTab === "assess" && (
+              <div className="fade-in">
+                {/* Heatmap header */}
+                <div style={{ overflowX:"auto", paddingBottom:8 }}>
+                <div style={{ minWidth:680 }}>
+                  <div style={{ display:"grid", gridTemplateColumns:"200px repeat(5, 1fr) 60px", gap:2, marginBottom:2 }}>
+                    <div style={{ fontSize:10, color:"#57534e", padding:"4px 8px" }} />
+                    {MATURITY_DIMENSIONS.map(d => (
+                      <div key={d.key} style={{ fontSize:10, color:"#78716c", textAlign:"center", padding:"4px 2px", letterSpacing:"0.04em", fontWeight:600 }} title={d.desc}>
+                        {d.label}
+                      </div>
+                    ))}
+                    <div style={{ fontSize:10, color:"#78716c", textAlign:"center", padding:"4px 2px", fontWeight:600 }}>Avg</div>
+                  </div>
+
+                  {/* Category rows */}
+                  {CATEGORIES.map((c) => {
+                    const avg = getCatAvg(c.id);
+                    const gap = getGap(c.id);
+                    const gapInfo = getGapLabel(gap);
+                    return (
+                      <div key={c.id} style={{ display:"grid", gridTemplateColumns:"200px repeat(5, 1fr) 60px", gap:2, marginBottom:2 }}>
+                        {/* Category label */}
+                        <div style={{
+                          display:"flex", alignItems:"center", gap:6, padding:"6px 8px", fontSize:12,
+                          background: maturityFocus === c.id ? "rgba(245,158,11,0.06)" : "transparent",
+                          borderRadius:3, cursor:"pointer", transition:"background 0.15s"
+                        }}
+                          onClick={() => setMaturityFocus(maturityFocus === c.id ? null : c.id)}
+                          title={`Target: ${MATURITY_TARGETS[c.id]}`}>
+                          <span style={{ color: c.color, fontSize:12, flexShrink:0 }}>{c.icon}</span>
+                          <span style={{ fontWeight:500, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", fontSize:11 }}>{c.id} {c.label}</span>
+                        </div>
+
+                        {/* Dimension cells */}
+                        {MATURITY_DIMENSIONS.map(d => {
+                          const score = getScore(c.id, d.key);
+                          const bc = bandColor(score);
+                          return (
+                            <div key={d.key} style={{
+                              display:"flex", alignItems:"center", justifyContent:"center",
+                              background: score > 0 ? bc.bg : "rgba(120,113,108,0.04)",
+                              borderRadius:3, cursor:"pointer", transition:"all 0.15s", minHeight:32,
+                              border: "1px solid transparent", position:"relative"
+                            }}
+                              onClick={() => setScore(c.id, d.key, score < 5 ? score + 1 : 0)}
+                              onContextMenu={e => { e.preventDefault(); setScore(c.id, d.key, score > 1 ? score - 1 : 5); }}
+                              title={score > 0 ? `${d.label}: Level ${score} — ${d.rubric[score - 1]}\n\nClick: +1 | Right-click: -1` : `Click to score ${d.label}`}>
+                              {score > 0 ? (
+                                <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:14, fontWeight:600, color: bc.text }}>{score}</span>
+                              ) : (
+                                <span style={{ fontSize:16, color:"#363230", opacity:0.5 }}>·</span>
+                              )}
+                            </div>
+                          );
+                        })}
+
+                        {/* Average cell */}
+                        <div style={{
+                          display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
+                          background: avg > 0 ? bandColor(avg).bg : "transparent",
+                          borderRadius:3, minHeight:32
+                        }}>
+                          {avg > 0 ? (
+                            <>
+                              <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:13, fontWeight:600, color: bandColor(avg).text }}>{avg.toFixed(1)}</span>
+                            </>
+                          ) : <span style={{ color:"#363230", fontSize:10 }}>—</span>}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {/* Dimension averages row */}
+                  <div style={{ display:"grid", gridTemplateColumns:"200px repeat(5, 1fr) 60px", gap:2, marginTop:6, paddingTop:6, borderTop:"1px solid rgba(245,158,11,0.06)" }}>
+                    <div style={{ fontSize:10, color:"#57534e", padding:"4px 8px", fontWeight:600 }}>DIM. AVERAGE</div>
+                    {MATURITY_DIMENSIONS.map(d => {
+                      const avg = getDimAvg(d.key);
+                      return (
+                        <div key={d.key} style={{ display:"flex", alignItems:"center", justifyContent:"center", borderRadius:3, minHeight:28, background: avg > 0 ? bandColor(avg).bg : "transparent" }}>
+                          {avg > 0 ? <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, fontWeight:600, color: bandColor(avg).text }}>{avg.toFixed(1)}</span> : <span style={{ color:"#363230", fontSize:10 }}>—</span>}
+                        </div>
+                      );
+                    })}
+                    <div style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
+                      {getOverallAvg() > 0 ? <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:13, fontWeight:700, color: bandColor(getOverallAvg()).text }}>{getOverallAvg().toFixed(1)}</span> : <span style={{ color:"#363230", fontSize:10 }}>—</span>}
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                {/* Interaction hint */}
+                <div style={{ marginTop:12, fontSize:11, color:"#57534e", display:"flex", gap:16, flexWrap:"wrap" }}>
+                  <span>Click cell: cycle score up (1→2→3→4→5→clear)</span>
+                  <span>Right-click: cycle down</span>
+                  <span>Click category name: focus detail</span>
+                </div>
+
+                {/* Focus detail panel */}
+                {maturityFocus && (() => {
+                  const fc = CATEGORIES.find(c => c.id === maturityFocus);
+                  if (!fc) return null;
+                  const avg = getCatAvg(fc.id);
+                  const target = MATURITY_TARGETS[fc.id] || 3;
+                  const gap = getGap(fc.id);
+                  const gapInfo = getGapLabel(gap);
+                  return (
+                    <div className="fade-in" style={{ marginTop:16, background:"#141210", border:"1px solid rgba(245,158,11,0.08)", borderRadius:6, padding:18 }}>
+                      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14, flexWrap:"wrap", gap:8 }}>
+                        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                          <span style={{ fontSize:18, color: fc.color }}>{fc.icon}</span>
+                          <span style={{ fontWeight:600, fontSize:15 }}>{fc.id} {fc.label}</span>
+                        </div>
+                        <span onClick={() => setMaturityFocus(null)} style={{ cursor:"pointer", color:"#57534e", fontSize:18 }}>×</span>
+                      </div>
+
+                      {/* Dimension breakdown with rubric */}
+                      <div style={{ display:"grid", gap:8 }}>
+                        {MATURITY_DIMENSIONS.map(d => {
+                          const score = getScore(fc.id, d.key);
+                          return (
+                            <div key={d.key} style={{ display:"flex", alignItems:"flex-start", gap:12 }}>
+                              <div style={{ width:90, flexShrink:0 }}>
+                                <div style={{ fontSize:11, color:"#78716c", marginBottom:2 }}>{d.label}</div>
+                                <div style={{ display:"flex", gap:3 }}>
+                                  {[1,2,3,4,5].map(v => (
+                                    <div key={v} onClick={() => setScore(fc.id, d.key, v)}
+                                      style={{
+                                        width:14, height:14, borderRadius:3, cursor:"pointer",
+                                        display:"flex", alignItems:"center", justifyContent:"center",
+                                        fontSize:9, fontWeight:600, transition:"all 0.15s",
+                                        background: v === score ? bandColor(v).bg : "rgba(120,113,108,0.06)",
+                                        color: v === score ? bandColor(v).text : "#57534e",
+                                        border: v === score ? `1px solid ${bandColor(v).text}30` : "1px solid transparent"
+                                      }}>{v}</div>
+                                  ))}
+                                </div>
+                              </div>
+                              <div style={{ flex:1, fontSize:12, color: score > 0 ? "#a8a29e" : "#57534e", lineHeight:1.5 }}>
+                                {score > 0 ? d.rubric[score - 1] : d.rubric.map((r, i) => (
+                                  <span key={i} style={{ color:"#57534e" }}>{i > 0 ? " → " : ""}<span style={{ color:"#78716c" }}>{i+1}:</span> {r}</span>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Gap summary for this category */}
+                      {avg > 0 && (
+                        <div style={{ marginTop:14, paddingTop:14, borderTop:"1px solid rgba(245,158,11,0.06)", display:"flex", gap:20, flexWrap:"wrap", fontSize:12 }}>
+                          <div><span style={{ color:"#57534e" }}>Current: </span><span style={{ color: bandColor(avg).text, fontWeight:600 }}>{avg.toFixed(1)}</span></div>
+                          <div><span style={{ color:"#57534e" }}>Target: </span><span style={{ color:"#f5f0eb", fontWeight:600 }}>{target}</span></div>
+                          <div><span style={{ color:"#57534e" }}>Gap: </span><span style={{ color: gapInfo.color, fontWeight:600 }}>{gap !== null ? (gap > 0 ? `−${gap.toFixed(1)}` : `+${Math.abs(gap).toFixed(1)}`) : "—"} ({gapInfo.label})</span></div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+
+            {/* TAB: Gap Analysis */}
+            {maturityTab === "gaps" && (
+              <div className="fade-in">
+                {getTotalScored() === 0 ? (
+                  <div style={{ textAlign:"center", padding:"48px 24px", color:"#57534e" }}>
+                    <div style={{ fontSize:24, marginBottom:8 }}>◈</div>
+                    <div style={{ fontSize:14, marginBottom:4 }}>No scores yet</div>
+                    <div style={{ fontSize:12 }}>Use the Assessment Grid tab to score your institution first.</div>
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>Gap Analysis: Current vs. Target</div>
+                    <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, overflow:"hidden" }}>
+                      <div style={{ display:"grid", gridTemplateColumns:"30px 32px 1fr 60px 60px 80px 100px", gap:0, padding:"8px 14px", fontSize:10, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, borderBottom:"1px solid rgba(245,158,11,0.06)", background:"#1c1917" }}>
+                        <div></div><div></div><div>Category</div><div style={{textAlign:"center"}}>Current</div><div style={{textAlign:"center"}}>Target</div><div style={{textAlign:"center"}}>Gap</div><div style={{textAlign:"center"}}>Status</div>
+                      </div>
+                      {CATEGORIES
+                        .map(c => ({ ...c, avg: getCatAvg(c.id), gap: getGap(c.id), target: MATURITY_TARGETS[c.id] || 3 }))
+                        .sort((a, b) => {
+                          if (a.gap === null && b.gap === null) return 0;
+                          if (a.gap === null) return 1;
+                          if (b.gap === null) return -1;
+                          return b.gap - a.gap;
+                        })
+                        .map((c, i) => {
+                          const gapInfo = getGapLabel(c.gap);
+                          return (
+                            <div key={c.id} style={{ display:"grid", gridTemplateColumns:"30px 32px 1fr 60px 60px 80px 100px", gap:0, padding:"8px 14px", borderBottom: i < CATEGORIES.length - 1 ? "1px solid rgba(245,158,11,0.03)" : "none", alignItems:"center", transition:"background 0.15s" }}
+                              onMouseEnter={e => e.currentTarget.style.background = "rgba(245,158,11,0.03)"}
+                              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                              <span style={{ fontSize:13, color: c.color }}>{c.icon}</span>
+                              <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:10, color:"#57534e" }}>{c.id}</span>
+                              <span style={{ fontSize:12, fontWeight:500, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.label}</span>
+                              <div style={{ textAlign:"center" }}>
+                                {c.avg > 0 ? <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:13, fontWeight:600, color: bandColor(c.avg).text }}>{c.avg.toFixed(1)}</span> : <span style={{ color:"#57534e", fontSize:11 }}>—</span>}
+                              </div>
+                              <div style={{ textAlign:"center" }}>
+                                <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color:"#78716c" }}>{c.target}</span>
+                              </div>
+                              <div style={{ textAlign:"center" }}>
+                                {c.gap !== null ? (
+                                  <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, fontWeight:600, color: gapInfo.color }}>
+                                    {c.gap > 0 ? `−${c.gap.toFixed(1)}` : `+${Math.abs(c.gap).toFixed(1)}`}
+                                  </span>
+                                ) : <span style={{ color:"#57534e", fontSize:11 }}>—</span>}
+                              </div>
+                              <div style={{ textAlign:"center" }}>
+                                {c.gap !== null ? (
+                                  <span style={{ fontSize:10, padding:"2px 8px", borderRadius:3, background: `${gapInfo.color}15`, color: gapInfo.color, fontWeight:600 }}>{gapInfo.label}</span>
+                                ) : <span style={{ color:"#57534e", fontSize:10 }}>Unscored</span>}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+
+                    {/* Dimension gap summary */}
+                    <div style={{ marginTop:20, fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>Dimension Averages Across All Categories</div>
+                    <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(180px, 1fr))", gap:8 }}>
+                      {MATURITY_DIMENSIONS.map(d => {
+                        const avg = getDimAvg(d.key);
+                        return (
+                          <div key={d.key} style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"14px 16px" }}>
+                            <div style={{ fontSize:11, color:"#78716c", marginBottom:4 }}>{d.label}</div>
+                            <div style={{ fontSize:12, color:"#57534e", marginBottom:8, lineHeight:1.4 }}>{d.desc}</div>
+                            {avg > 0 ? (
+                              <>
+                                <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:26, fontWeight:700, color: bandColor(avg).text }}>{avg.toFixed(1)}</div>
+                                <div style={{ fontSize:10, color: bandColor(avg).text }}>{bandColor(avg).label}</div>
+                              </>
+                            ) : <div style={{ fontSize:13, color:"#57534e" }}>—</div>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* TAB: Improvement Roadmap */}
+            {maturityTab === "roadmap" && (
+              <div className="fade-in">
+                {getTotalScored() === 0 ? (
+                  <div style={{ textAlign:"center", padding:"48px 24px", color:"#57534e" }}>
+                    <div style={{ fontSize:24, marginBottom:8 }}>◈</div>
+                    <div style={{ fontSize:14, marginBottom:4 }}>No scores yet</div>
+                    <div style={{ fontSize:12 }}>Score your institution in the Assessment Grid first to generate improvement recommendations.</div>
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>Priority Improvements by Category</div>
+                    {CATEGORIES
+                      .map(c => ({ ...c, avg: getCatAvg(c.id), gap: getGap(c.id), target: MATURITY_TARGETS[c.id] || 3 }))
+                      .filter(c => c.avg > 0 && c.gap !== null && c.gap > 0.25)
+                      .sort((a, b) => b.gap - a.gap)
+                      .map(c => {
+                        const impKey = getImprovementKey(c.avg);
+                        const imp = impKey ? IMPROVEMENT_ROADMAP[impKey] : null;
+                        const gapInfo = getGapLabel(c.gap);
+                        return (
+                          <div key={c.id} className="fade-in" style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:18, marginBottom:10, borderLeftWidth:3, borderLeftStyle:"solid", borderLeftColor: gapInfo.color }}>
+                            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10, flexWrap:"wrap", gap:8 }}>
+                              <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                                <span style={{ fontSize:16, color: c.color }}>{c.icon}</span>
+                                <span style={{ fontWeight:600, fontSize:14 }}>{c.id} {c.label}</span>
+                              </div>
+                              <div style={{ display:"flex", gap:10, fontSize:11 }}>
+                                <span>Current: <span style={{ color: bandColor(c.avg).text, fontWeight:600 }}>{c.avg.toFixed(1)}</span></span>
+                                <span>Target: <span style={{ fontWeight:600 }}>{c.target}</span></span>
+                                <span style={{ padding:"1px 8px", borderRadius:3, background:`${gapInfo.color}15`, color: gapInfo.color, fontWeight:600 }}>{gapInfo.label}</span>
+                              </div>
+                            </div>
+                            {imp && (
+                              <div>
+                                <div style={{ fontSize:12, color:"#f59e0b", fontWeight:600, marginBottom:4 }}>{imp.label}: {imp.priority}</div>
+                                <div style={{ display:"grid", gap:4, marginTop:8 }}>
+                                  {imp.actions.map((a, i) => (
+                                    <div key={i} style={{ display:"flex", gap:8, fontSize:12, color:"#a8a29e", lineHeight:1.5 }}>
+                                      <span style={{ color:"#57534e", flexShrink:0 }}>{i+1}.</span>
+                                      <span>{a}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Dimension-level detail */}
+                            <div style={{ marginTop:12, paddingTop:10, borderTop:"1px solid rgba(245,158,11,0.04)", display:"flex", gap:12, flexWrap:"wrap" }}>
+                              {MATURITY_DIMENSIONS.map(d => {
+                                const score = getScore(c.id, d.key);
+                                return score > 0 ? (
+                                  <div key={d.key} style={{ fontSize:10, color:"#78716c" }}>
+                                    {d.label}: <span style={{ color: bandColor(score).text, fontWeight:600 }}>{score}</span>
+                                    {score < Math.ceil(c.target) && <span style={{ color:"#ef4444" }}> ↑</span>}
+                                  </div>
+                                ) : null;
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                    {/* Categories meeting or exceeding targets */}
+                    {(() => {
+                      const onTarget = CATEGORIES
+                        .map(c => ({ ...c, avg: getCatAvg(c.id), gap: getGap(c.id) }))
+                        .filter(c => c.avg > 0 && c.gap !== null && c.gap <= 0.25);
+                      return onTarget.length > 0 ? (
+                        <div style={{ marginTop:16 }}>
+                          <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>On Target or Exceeding ({onTarget.length})</div>
+                          <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+                            {onTarget.map(c => (
+                              <span key={c.id} style={{ fontSize:11, padding:"4px 10px", borderRadius:4, background: bandColor(c.avg).bg, color: bandColor(c.avg).text, fontWeight:500 }}>
+                                {c.icon} {c.id} {c.avg.toFixed(1)}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null;
+                    })()}
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* TAB: Level Reference */}
+            {maturityTab === "reference" && (
+              <div className="fade-in">
+                <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:12 }}>Five Maturity Levels</div>
+                <div style={{ display:"grid", gap:8, marginBottom:28 }}>
+                  {MATURITY_LEVELS.map((m, i) => (
+                    <div key={i} style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"14px 18px", display:"flex", alignItems:"flex-start", gap:14 }}>
+                      <div style={{ width:38, height:38, borderRadius:6, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'Cormorant Garamond', serif", fontSize:20, fontWeight:700, flexShrink:0, background: bandColor(m.level).bg, color: bandColor(m.level).text }}>{m.level}</div>
+                      <div style={{ flex:1 }}>
+                        <div style={{ fontWeight:600, fontSize:14, marginBottom:2 }}>{m.name}</div>
+                        <div style={{ fontSize:12, color:"#a8a29e", marginBottom:6 }}>{m.desc}</div>
+                        <div style={{ fontSize:11, color:"#78716c", fontStyle:"italic", marginBottom:8 }}>Key: {m.char}</div>
+                        <div style={{ display:"grid", gap:3 }}>
+                          {MATURITY_DIMENSIONS.map(d => (
+                            <div key={d.key} style={{ fontSize:11, color:"#78716c", display:"flex", gap:6 }}>
+                              <span style={{ color:"#57534e", width:80, flexShrink:0, fontWeight:500 }}>{d.label}:</span>
+                              <span>{d.rubric[m.level - 1]}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:12 }}>Improvement Transitions</div>
+                <div style={{ display:"grid", gap:8 }}>
+                  {Object.entries(IMPROVEMENT_ROADMAP).map(([key, imp]) => (
+                    <div key={key} style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"14px 18px" }}>
+                      <div style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color:"#f59e0b", marginBottom:2 }}>{key}</div>
+                      <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>{imp.label}</div>
+                      <div style={{ fontSize:12, color:"#f59e0b", marginBottom:8 }}>Priority: {imp.priority}</div>
+                      <div style={{ display:"grid", gap:3 }}>
+                        {imp.actions.map((a, i) => (
+                          <div key={i} style={{ fontSize:12, color:"#a8a29e", display:"flex", gap:6, lineHeight:1.5 }}>
+                            <span style={{ color:"#57534e" }}>{i+1}.</span>
+                            <span>{a}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

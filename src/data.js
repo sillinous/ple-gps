@@ -272,6 +272,69 @@ export const MATURITY_TARGETS = {
   "13.0": 3.5, "14.0": 4.5, "15.0": 3, "16.0": 3.5
 };
 
+export const MATURITY_DIMENSIONS = [
+  { key: "design", label: "Design", desc: "How well is the process designed?",
+    rubric: [
+      "Undocumented; steps vary by person",
+      "Documented in basic SOP/workflow",
+      "Designed to best practice; equity-reviewed",
+      "Designed using data and simulation",
+      "Continuously redesigned from performance feedback"
+    ]},
+  { key: "performers", label: "Performers", desc: "Who executes, and how capable are they?",
+    rubric: [
+      "Staff improvise; no standard knowledge required",
+      "Staff have basic training; can follow SOP",
+      "Specialized and certified; performance measured",
+      "Use decision support tools; output predictable",
+      "AI augments staff; automation handles routine"
+    ]},
+  { key: "owner", label: "Owner", desc: "Is there clear accountability?",
+    rubric: [
+      "No process steward exists",
+      "Steward identified but role is informal",
+      "Steward has formal authority and accountability",
+      "Steward manages with KPIs and governance cadence",
+      "Steward drives continuous improvement using AI insights"
+    ]},
+  { key: "infrastructure", label: "Infrastructure", desc: "What systems and tools support it?",
+    rubric: [
+      "No system support; fully manual",
+      "Basic tools (spreadsheets, email, docs)",
+      "Dedicated systems deployed (purpose-built)",
+      "Systems integrated; data flows automatically",
+      "AI/ML embedded; predictive and prescriptive"
+    ]},
+  { key: "metrics", label: "Metrics", desc: "How is performance measured?",
+    rubric: [
+      "No metrics tracked",
+      "Basic output metrics tracked periodically",
+      "Balanced KPIs with targets; reviewed regularly",
+      "Predictive metrics and leading indicators used",
+      "Real-time metrics feed AI that auto-optimizes"
+    ]}
+];
+
+export const IMPROVEMENT_ROADMAP = {
+  "1→2": { label: "Founding → Structured", priority: "Document and standardize",
+    actions: ["Map the current as-is process","Write the basic SOP","Assign a process steward (even informal)","Train performers on documented process","Start tracking one basic output metric"] },
+  "2→3": { label: "Structured → Equitable", priority: "Optimize and align for equity",
+    actions: ["Benchmark against best practice","Redesign to eliminate waste and bias","Formalize steward role with authority","Deploy dedicated tools/systems","Implement balanced KPI scorecard with equity metrics","Establish regular review cadence with community input"] },
+  "3→4": { label: "Equitable → Adaptive", priority: "Instrument and predict",
+    actions: ["Instrument with real-time data collection","Build predictive models for key outputs","Integrate with adjacent processes (fix handoff gaps)","Automate routine decisions with rules engines","Implement continuous monitoring with alerting","Apply statistical process control where applicable"] },
+  "4→5": { label: "Adaptive → Flourishing", priority: "Automate and learn",
+    actions: ["Embed AI/ML into process execution","Automate all routine steps end-to-end","Build feedback loops for continuous self-improvement","Use AI to identify improvement opportunities proactively","Shift human role to exception handling and strategy","Create self-healing process design"] }
+};
+
+export const MATURITY_BAND_COLORS = {
+  0: { bg: "rgba(120,113,108,0.08)", text: "#57534e", label: "Not scored" },
+  1: { bg: "rgba(239,68,68,0.12)", text: "#ef4444", label: "Ad Hoc" },
+  2: { bg: "rgba(245,158,11,0.12)", text: "#f59e0b", label: "Structured" },
+  3: { bg: "rgba(16,185,129,0.12)", text: "#10b981", label: "Equitable" },
+  4: { bg: "rgba(99,102,241,0.12)", text: "#6366f1", label: "Adaptive" },
+  5: { bg: "rgba(139,92,246,0.12)", text: "#8b5cf6", label: "Flourishing" }
+};
+
 export const TRANSLATION = [
   ["Revenue", "Resource inflows (automated production, taxes, commons yield)"],
   ["Customers", "Community members, citizens, participants"],
