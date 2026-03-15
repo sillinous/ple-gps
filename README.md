@@ -23,7 +23,7 @@ It adapts the [APQC Process Classification Framework](https://www.apqc.org/pcf) 
 | Process Groups (L2) | 78 |
 | L3 Processes | 272 |
 | KPIs Defined | 229 |
-| Integration Flows | 31 cross-process dependencies |
+| Integration Flows | 77 cross-process dependencies |
 | Maturity Dimensions | 5 × 5 levels |
 | Value Loops | 6 circular feedback systems |
 

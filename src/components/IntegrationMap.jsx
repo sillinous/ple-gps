@@ -107,15 +107,18 @@ export default function IntegrationMap({ onCategoryClick }) {
             const dx = f.toPos.x - f.fromPos.x;
             const dy = f.toPos.y - f.fromPos.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 1) return null;
             const nx = dx / dist;
             const ny = dy / dist;
             const x1 = f.fromPos.x + nx * 26;
             const y1 = f.fromPos.y + ny * 26;
             const x2 = f.toPos.x - nx * 26;
             const y2 = f.toPos.y - ny * 26;
-            // Curve control point perpendicular to line
-            const mx = (x1 + x2) / 2 + ny * 20 * ((i % 2) * 2 - 1);
-            const my = (y1 + y2) / 2 - nx * 20 * ((i % 2) * 2 - 1);
+            // Vary curve offset based on flow index to separate parallel edges
+            const curveAmt = 15 + (i % 5) * 6;
+            const curveSide = (i % 2) * 2 - 1;
+            const mx = (x1 + x2) / 2 + ny * curveAmt * curveSide;
+            const my = (y1 + y2) / 2 - nx * curveAmt * curveSide;
 
             return (
               <g key={i}>
@@ -123,8 +126,8 @@ export default function IntegrationMap({ onCategoryClick }) {
                   d={`M${x1},${y1} Q${mx},${my} ${x2},${y2}`}
                   fill="none"
                   stroke={ft.color}
-                  strokeWidth={hovered ? 1.5 : 1}
-                  opacity={hovered ? 0.7 : 0.35}
+                  strokeWidth={hovered ? 1.5 : 0.75}
+                  opacity={hovered ? 0.8 : (activeType ? 0.3 : 0.18)}
                   markerEnd={`url(#arrow-${f.type})`}
                 />
               </g>
@@ -240,8 +243,9 @@ export default function IntegrationMap({ onCategoryClick }) {
         );
       })()}
 
-      <div style={{ marginTop: 10, fontSize: 11, color: "#57534e" }}>
-        Hover a category to see its connections. Click to navigate. Dashed rings indicate broadcast flows (→ all categories).
+      <div style={{ marginTop: 10, fontSize: 11, color: "#57534e", display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:8 }}>
+        <span>Hover a category to isolate its connections. Filter by type. Click to navigate.</span>
+        <span style={{ fontFamily:"'JetBrains Mono', monospace" }}>{flows.length + broadcastFlows.length} direct + {broadcastFlows.length} broadcast flows</span>
       </div>
     </div>
   );

@@ -670,37 +670,114 @@ export const TRANSLATION = [
 ];
 
 export const INTEGRATION_FLOWS = [
-  { from: "1.2", to: "2.1", label: "Strategy cascade", type: "governance" },
-  { from: "1.2", to: "3.2", label: "Revenue targets", type: "governance" },
-  { from: "1.2", to: "7.1", label: "Workforce requirements", type: "governance" },
-  { from: "1.2", to: "8.1", label: "Technology priorities", type: "governance" },
-  { from: "1.2", to: "9.1", label: "Financial targets", type: "governance" },
-  { from: "1.2", to: "14.0", label: "AI governance alignment", type: "governance" },
+  // ═══ 1.0 STRATEGY outbound ═══
+  { from: "1.2", to: "2.1", label: "Strategy cascade to public goods", type: "governance" },
+  { from: "1.2", to: "3.2", label: "Engagement targets and priorities", type: "governance" },
+  { from: "1.2", to: "7.1", label: "Workforce and contributor requirements", type: "governance" },
+  { from: "1.2", to: "8.1", label: "Technology investment priorities", type: "governance" },
+  { from: "1.2", to: "9.1", label: "Resource allocation targets", type: "governance" },
+  { from: "1.2", to: "10.1", label: "Commons investment priorities", type: "governance" },
   { from: "1.2", to: "13.4", label: "Transformation roadmap", type: "governance" },
-  { from: "3.1", to: "1.1", label: "Community intelligence", type: "feedback" },
-  { from: "3.1", to: "2.2", label: "Needs drive design", type: "information" },
-  { from: "3.6", to: "5.2", label: "Service demand", type: "trigger" },
-  { from: "3.6", to: "9.2", label: "Revenue trigger", type: "trigger" },
-  { from: "5.4", to: "6.3", label: "Support handoff", type: "trigger" },
-  { from: "5.4", to: "9.2", label: "Milestone billing", type: "trigger" },
-  { from: "6.3", to: "2.2", label: "Feedback loop", type: "feedback" },
-  { from: "6.3", to: "2.6", label: "Retention signal", type: "feedback" },
-  { from: "6.4", to: "1.1", label: "Strategic insight", type: "feedback" },
-  { from: "6.4", to: "3.1", label: "Customer intelligence", type: "feedback" },
-  { from: "7.2", to: "8.5", label: "Access provisioning", type: "trigger" },
-  { from: "7.2", to: "9.5", label: "Enrollment", type: "trigger" },
-  { from: "9.1", to: "ALL", label: "Budget governance", type: "governance" },
-  { from: "11.1", to: "1.2", label: "Risk-informed strategy", type: "feedback" },
-  { from: "11.3", to: "2.2", label: "Equity gaps drive design", type: "feedback" },
-  { from: "11.3", to: "3.4", label: "Barrier removal", type: "trigger" },
-  { from: "13.6", to: "ALL", label: "Improvement flow", type: "feedback" },
-  { from: "13.7", to: "1.3", label: "Performance signal", type: "feedback" },
-  { from: "13.7", to: "13.6", label: "CI targeting", type: "feedback" },
-  { from: "14.3", to: "14.1", label: "Governance update", type: "feedback" },
-  { from: "15.4", to: "1.1", label: "Flourishing informs vision", type: "feedback" },
+  { from: "1.2", to: "14.1", label: "AI governance alignment", type: "governance" },
+  { from: "1.2", to: "15.1", label: "Flourishing targets", type: "governance" },
+  { from: "1.4", to: "12.1", label: "Partnership requirements from value model", type: "information" },
+
+  // ═══ 2.0 PUBLIC GOODS outbound ═══
+  { from: "2.3", to: "4.1", label: "Resource requirements for physical goods", type: "trigger" },
+  { from: "2.3", to: "5.1", label: "Service specs to delivery governance", type: "trigger" },
+  { from: "2.3", to: "8.2", label: "Technology requirements for new goods", type: "information" },
+  { from: "2.4", to: "3.3", label: "Deployment needs awareness campaigns", type: "trigger" },
+  { from: "2.2", to: "15.1", label: "Goods designed for flourishing impact", type: "information" },
+  { from: "2.6", to: "13.7", label: "Service performance feeds measurement", type: "information" },
+
+  // ═══ 3.0 ACCESS & ENGAGEMENT outbound ═══
+  { from: "3.1", to: "1.1", label: "Community intelligence to vision", type: "feedback" },
+  { from: "3.1", to: "2.2", label: "Needs drive public goods design", type: "information" },
+  { from: "3.4", to: "5.2", label: "Enrollment triggers service demand", type: "trigger" },
+  { from: "3.4", to: "7.2", label: "Contributor referrals", type: "trigger" },
+  { from: "3.4", to: "9.2", label: "Access triggers resource inflow", type: "trigger" },
+
+  // ═══ 4.0 PHYSICAL RESOURCES outbound ═══
+  { from: "4.4", to: "6.3", label: "Delivery issues to community support", type: "trigger" },
+  { from: "4.4", to: "9.3", label: "Cost and inventory to accounting", type: "information" },
+  { from: "4.4", to: "11.3", label: "Distribution equity data", type: "information" },
+  { from: "4.2", to: "12.1", label: "Supply chain partnerships", type: "trigger" },
+  { from: "4.1", to: "10.3", label: "Logistics uses commons infrastructure", type: "information" },
+
+  // ═══ 5.0 SERVICES outbound ═══
+  { from: "5.4", to: "6.3", label: "Service issues to support", type: "trigger" },
+  { from: "5.4", to: "9.2", label: "Service milestones trigger accounting", type: "trigger" },
+  { from: "5.4", to: "15.4", label: "Service outcomes feed flourishing", type: "information" },
+  { from: "5.3", to: "12.1", label: "Partner coordination", type: "trigger" },
+
+  // ═══ 6.0 SUPPORT outbound ═══
+  { from: "6.3", to: "2.2", label: "Feedback loop to goods design", type: "feedback" },
+  { from: "6.3", to: "2.6", label: "Retention signals to lifecycle mgmt", type: "feedback" },
+  { from: "6.3", to: "11.3", label: "Complaint patterns reveal inequity", type: "information" },
+  { from: "6.4", to: "1.1", label: "Support insights inform vision", type: "feedback" },
+  { from: "6.4", to: "3.1", label: "Community intelligence from support", type: "feedback" },
+
+  // ═══ 7.0 HUMAN DEVELOPMENT outbound ═══
+  { from: "7.2", to: "8.5", label: "New contributors need access provisioning", type: "trigger" },
+  { from: "7.2", to: "9.5", label: "New contributors trigger stipend enrollment", type: "trigger" },
+  { from: "7.3", to: "13.5", label: "Contributor learning feeds knowledge base", type: "information" },
+  { from: "7.1", to: "15.2", label: "Development strategy aligns with purpose programs", type: "information" },
+  { from: "7.4", to: "15.4", label: "Engagement data feeds flourishing measurement", type: "information" },
+
+  // ═══ 8.0 TECHNOLOGY outbound ═══
+  { from: "8.8", to: "11.3", label: "Data platform enables equity monitoring", type: "resource" },
+  { from: "8.1", to: "14.1", label: "Technology platform enables AI governance", type: "resource" },
+  { from: "8.8", to: "13.7", label: "Analytics enables performance measurement", type: "resource" },
+  { from: "8.4", to: "13.1", label: "Architecture guides process design", type: "information" },
+  { from: "8.5", to: "ALL", label: "Technology support to all categories", type: "resource" },
+
+  // ═══ 9.0 RESOURCES outbound ═══
+  { from: "9.1", to: "ALL", label: "Budget governance to all categories", type: "governance" },
+  { from: "9.5", to: "7.4", label: "Stipend processing sustains engagement", type: "trigger" },
+  { from: "9.8", to: "12.2", label: "Financial transparency to accountability", type: "information" },
+
+  // ═══ 10.0 COMMONS outbound ═══
+  { from: "10.3", to: "15.3", label: "Community spaces enable social connection", type: "resource" },
+  { from: "10.1", to: "9.1", label: "Asset costs to resource planning", type: "information" },
+  { from: "10.3", to: "11.4", label: "Infrastructure health to resilience", type: "information" },
+  { from: "10.2", to: "4.1", label: "Facility capacity to logistics planning", type: "information" },
+
+  // ═══ 11.0 INTEGRITY & EQUITY outbound ═══
+  { from: "11.1", to: "1.2", label: "Risk intelligence informs strategy", type: "feedback" },
+  { from: "11.3", to: "2.2", label: "Equity gaps drive goods redesign", type: "feedback" },
+  { from: "11.3", to: "3.4", label: "Barrier identification triggers removal", type: "trigger" },
+  { from: "11.2", to: "16.1", label: "Ethics review informs constitutional scope", type: "governance" },
+  { from: "11.4", to: "8.3", label: "Resilience requirements drive infrastructure", type: "trigger" },
+
+  // ═══ 12.0 EXTERNAL RELATIONS outbound ═══
+  { from: "12.1", to: "1.1", label: "External landscape intelligence to vision", type: "information" },
+  { from: "12.2", to: "16.2", label: "Accountability reports to democratic process", type: "trigger" },
+  { from: "12.3", to: "3.2", label: "Public communication informs engagement", type: "information" },
+  { from: "12.5", to: "10.3", label: "Environmental stewardship of commons", type: "trigger" },
+
+  // ═══ 13.0 CAPABILITIES outbound ═══
+  { from: "13.7", to: "1.3", label: "Performance signals to strategy initiatives", type: "feedback" },
+  { from: "13.7", to: "13.6", label: "Performance gaps target CI efforts", type: "feedback" },
+  { from: "13.5", to: "7.3", label: "Knowledge base feeds contributor development", type: "resource" },
+  { from: "13.6", to: "ALL", label: "Continuous improvement to all categories", type: "feedback" },
+
+  // ═══ 14.0 AI GOVERNANCE outbound ═══
+  { from: "14.3", to: "14.1", label: "Monitoring findings update governance", type: "feedback" },
+  { from: "14.4", to: "7.1", label: "AI allocation shapes human development needs", type: "information" },
+  { from: "14.2", to: "8.2", label: "Agent requirements to technology portfolio", type: "trigger" },
+  { from: "14.5", to: "11.1", label: "Safety incidents to risk management", type: "trigger" },
+
+  // ═══ 15.0 FLOURISHING outbound ═══
+  { from: "15.4", to: "1.1", label: "Flourishing data informs vision", type: "feedback" },
   { from: "15.4", to: "13.7", label: "Primary institutional metric", type: "information" },
-  { from: "16.0", to: "1.2", label: "Democratic mandate", type: "governance" },
-  { from: "16.3", to: "16.2", label: "Democratic health cycle", type: "feedback" },
+  { from: "15.2", to: "7.3", label: "Purpose programs feed contributor growth", type: "resource" },
+  { from: "15.3", to: "10.1", label: "Space needs inform commons strategy", type: "information" },
+
+  // ═══ 16.0 DEMOCRACY outbound ═══
+  { from: "16.0", to: "1.2", label: "Democratic mandate to strategy", type: "governance" },
+  { from: "16.1", to: "11.2", label: "Constitutional framework defines compliance scope", type: "governance" },
+  { from: "16.2", to: "12.2", label: "Democratic process generates accountability", type: "trigger" },
+  { from: "16.3", to: "16.2", label: "Health assessment improves processes", type: "feedback" },
 ];
 
 export const FLOW_TYPES = {

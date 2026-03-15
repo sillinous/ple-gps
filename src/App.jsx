@@ -349,7 +349,7 @@ function App() {
                 { n:"16", l:"Process Categories", sub:"13 adapted + 3 new", view:"categories" },
                 { n:"272", l:"L3 Processes", sub:"Across 78 process groups", view:"categories" },
                 { n:"229", l:"KPIs Defined", sub:"Measurable performance indicators", view:"categories" },
-                { n:"31", l:"Integration Flows", sub:"Cross-process dependencies", view:"integration" },
+                { n:"77", l:"Integration Flows", sub:"Cross-process dependencies", view:"integration" },
                 { n:"5", l:"Maturity Levels", sub:"Founding → Flourishing", view:"maturity" }
               ].map((s,i) => (
                 <div key={i} className={`fade-in stagger-${i+1}`}
@@ -732,7 +732,7 @@ function App() {
         {view === "integration" && (
           <div className="fade-in">
             <h2 style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, marginBottom:6 }}>Cross-Process Integration Map</h2>
-            <p style={{ color:"#a8a29e", marginBottom:20, fontSize:14, maxWidth:620 }}>Every significant process handoff, data flow, trigger, and dependency between the 16 categories. This is the intelligence layer — no process exists in isolation.</p>
+            <p style={{ color:"#a8a29e", marginBottom:20, fontSize:14, maxWidth:620 }}>77 cross-process flows connecting all 16 categories — governance cascades, operational triggers, data feeds, feedback loops, and shared resources. Every significant handoff, dependency, and data flow between process domains. No process exists in isolation.</p>
             <IntegrationMap onCategoryClick={(id) => navigateTo("detail", id)} />
           </div>
         )}
