@@ -245,10 +245,10 @@ function App() {
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:10, marginBottom:32 }}>
               {[
                 { n:"16", l:"Process Categories", sub:"13 adapted + 3 new", view:"categories" },
-                { n:"60+", l:"Process Groups", sub:"L2 organizational functions", view:"categories" },
+                { n:"272", l:"L3 Processes", sub:"Across 78 process groups", view:"categories" },
+                { n:"229", l:"KPIs Defined", sub:"Measurable performance indicators", view:"categories" },
                 { n:"31", l:"Integration Flows", sub:"Cross-process dependencies", view:"integration" },
-                { n:"5", l:"Maturity Levels", sub:"Founding → Flourishing", view:"maturity" },
-                { n:"6", l:"Value Loops", sub:"Circular improvement cycles", view:"loops" }
+                { n:"5", l:"Maturity Levels", sub:"Founding → Flourishing", view:"maturity" }
               ].map((s,i) => (
                 <div key={i} className={`fade-in stagger-${i+1}`}
                   onClick={() => navigateTo(s.view)}
