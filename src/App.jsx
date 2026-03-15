@@ -380,9 +380,9 @@ function App() {
 
             {/* Assessment summary if scores exist */}
             {getTotalScored() > 0 && (
-              <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.08)", borderRadius:6, padding:"16px 20px", marginBottom:20, cursor:"pointer" }}
-                onClick={() => navigateTo("maturity")}>
-                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:12 }}>
+              <div style={{ background:"#141210", border:"1px solid rgba(245,158,11,0.08)", borderRadius:6, padding:"16px 20px", marginBottom:20 }}>
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:12, marginBottom:14, cursor:"pointer" }}
+                  onClick={() => navigateTo("maturity")}>
                   <div style={{ display:"flex", alignItems:"center", gap:16 }}>
                     <div>
                       <div style={{ fontSize:10, color:"#57534e", textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:2 }}>Your Assessment</div>
@@ -396,6 +396,35 @@ function App() {
                     </div>
                   </div>
                   <span style={{ fontSize:12, color:"#f59e0b", fontWeight:500 }}>Open Assessment →</span>
+                </div>
+                {/* Mini heatmap */}
+                <div style={{ display:"grid", gridTemplateColumns:"repeat(16, 1fr)", gap:3 }}>
+                  {CATEGORIES.map(c => {
+                    const avg = getCatAvg(c.id);
+                    const bc = avg > 0 ? bandColor(avg) : null;
+                    return (
+                      <div key={c.id}
+                        onClick={() => navigateTo("detail", c.id)}
+                        title={`${c.id} ${c.label}: ${avg > 0 ? avg.toFixed(1) : "Not scored"}`}
+                        style={{
+                          height:28, borderRadius:3, cursor:"pointer", transition:"all 0.15s",
+                          display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
+                          background: bc ? bc.bg : "rgba(120,113,108,0.04)",
+                          border: `1px solid ${bc ? `${bc.text}20` : "rgba(120,113,108,0.06)"}`,
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.transform = "scale(1.15)"}
+                        onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>
+                        <span style={{ fontSize:7, color: bc ? bc.text : "#57534e", fontFamily:"'JetBrains Mono', monospace", fontWeight:600 }}>
+                          {avg > 0 ? avg.toFixed(1) : "—"}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{ display:"flex", justifyContent:"space-between", marginTop:4 }}>
+                  <span style={{ fontSize:8, color:"#57534e", fontFamily:"'JetBrains Mono', monospace" }}>1.0</span>
+                  <span style={{ fontSize:8, color:"#57534e" }}>← Civic · Support · PLE →</span>
+                  <span style={{ fontSize:8, color:"#57534e", fontFamily:"'JetBrains Mono', monospace" }}>16.0</span>
                 </div>
               </div>
             )}

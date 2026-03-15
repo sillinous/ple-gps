@@ -484,26 +484,26 @@ export const CATEGORIES = [
         { id: "14.1.5", label: "Define transparency and explainability requirements", activities: ["Define explainability requirements by decision category"] }
       ], kpis: [] },
       { id: "14.2", label: "Manage AI Agent Portfolio", purpose: "Inventory, classify, lifecycle manage, and evaluate all autonomous systems.", processes: [
-        { id: "14.2.1", label: "Maintain AI agent inventory and classification", activities: [] },
-        { id: "14.2.2", label: "Manage AI agent lifecycle (deploy, monitor, retire)", activities: [] },
-        { id: "14.2.3", label: "Evaluate AI agent performance and value", activities: [] }
+        { id: "14.2.1", label: "Maintain AI agent inventory and classification", activities: ["Catalog all AI systems with capability descriptions","Classify agents by decision authority level (advisory, semi-autonomous, fully autonomous)","Map each agent to the processes and community segments it affects","Maintain version history and change logs per agent"] },
+        { id: "14.2.2", label: "Manage AI agent lifecycle (deploy, monitor, retire)", activities: ["Define deployment gates requiring governance approval","Operate staging and shadow-mode testing before production","Monitor agent health, drift, and degradation","Execute graceful retirement with community notification and alternative provision"] },
+        { id: "14.2.3", label: "Evaluate AI agent performance and value", activities: ["Measure agent outcomes against community benefit criteria","Compare agent decisions to human baseline decisions","Calculate cost-to-serve vs community value created","Conduct quarterly agent portfolio review with community observers"] }
       ], kpis: ["Inventory completeness","Lifecycle compliance"] },
       { id: "14.3", label: "Monitor AI Decision Quality and Fairness", purpose: "Bias monitoring, algorithmic audits, incident response, transparent reporting.", processes: [
-        { id: "14.3.1", label: "Operate continuous bias monitoring systems", activities: [] },
-        { id: "14.3.2", label: "Conduct periodic algorithmic audits", activities: [] },
-        { id: "14.3.3", label: "Manage AI incident response and remediation", activities: [] },
-        { id: "14.3.4", label: "Publish AI decision quality reports to community", activities: [] }
+        { id: "14.3.1", label: "Operate continuous bias monitoring systems", activities: ["Deploy statistical bias detection across all protected attributes","Monitor outcome distribution equity in real-time","Alert on bias threshold breaches with automatic escalation","Maintain bias monitoring dashboards accessible to community"] },
+        { id: "14.3.2", label: "Conduct periodic algorithmic audits", activities: ["Engage independent auditors with community oversight","Audit against fairness, accuracy, transparency, and accountability criteria","Publish audit findings in plain language for community review","Track remediation of audit findings to closure"] },
+        { id: "14.3.3", label: "Manage AI incident response and remediation", activities: ["Define AI incident severity levels and response protocols","Operate 24/7 AI incident detection and triage","Execute immediate containment (pause, rollback, human takeover)","Conduct post-incident review with root cause analysis and community report"] },
+        { id: "14.3.4", label: "Publish AI decision quality reports to community", activities: ["Produce monthly AI transparency reports","Include decision volume, accuracy, reversal rate, and equity metrics","Publish in accessible formats (summary, full data, interactive dashboard)","Host quarterly community forums to discuss AI governance"] }
       ], kpis: ["Bias detection rate","Decision reversal rate","Transparency score","Incident response time","Community trust in AI","Governance compliance"] },
       { id: "14.4", label: "Human-AI Work Allocation", purpose: "Define, monitor, and adjust how work is distributed between humans and AI.", processes: [
-        { id: "14.4.1", label: "Define human-AI work allocation principles", activities: [] },
-        { id: "14.4.2", label: "Monitor work allocation balance and community impact", activities: [] },
-        { id: "14.4.3", label: "Adjust allocation based on outcomes and community input", activities: [] }
+        { id: "14.4.1", label: "Define human-AI work allocation principles", activities: ["Establish 'always human' decision categories (constitutional rights, irreversible life impact)","Define 'AI-appropriate' categories (routine, high-volume, data-intensive)","Design human-in-the-loop protocols for contested decisions","Publish allocation principles as community-accessible policy"] },
+        { id: "14.4.2", label: "Monitor work allocation balance and community impact", activities: ["Track percentage of decisions made by AI vs human by category","Measure community satisfaction with AI-made vs human-made decisions","Monitor for skill atrophy in human decision-makers","Assess impact on contributor engagement and purpose"] },
+        { id: "14.4.3", label: "Adjust allocation based on outcomes and community input", activities: ["Conduct periodic community surveys on AI delegation comfort","Shift allocation boundaries based on outcome data","Ensure human capacity remains sufficient for AI override scenarios"] }
       ], kpis: ["Allocation balance score","Community satisfaction with AI delegation"] },
       { id: "14.5", label: "AI Safety and Alignment", purpose: "Alignment drift monitoring, safety protocols, capability boundaries.", processes: [
-        { id: "14.5.1", label: "Monitor AI alignment drift and value consistency", activities: [] },
-        { id: "14.5.2", label: "Maintain AI safety protocols and kill switches", activities: [] },
-        { id: "14.5.3", label: "Define and enforce AI capability boundaries", activities: [] },
-        { id: "14.5.4", label: "Conduct adversarial testing and red-teaming", activities: [] }
+        { id: "14.5.1", label: "Monitor AI alignment drift and value consistency", activities: ["Compare AI decisions against institutional values baseline monthly","Detect subtle drift through statistical distribution analysis","Measure consistency between AI explanations and actual decision logic","Flag misalignment to governance body with severity rating"] },
+        { id: "14.5.2", label: "Maintain AI safety protocols and kill switches", activities: ["Maintain tested kill switches for every autonomous system","Conduct quarterly kill switch drills","Define graduated response (throttle, pause, isolate, terminate)","Ensure human override capability is always available within 60 seconds"] },
+        { id: "14.5.3", label: "Define and enforce AI capability boundaries", activities: ["Define maximum scope of authority per AI system","Implement technical guardrails preventing boundary violations","Monitor and log all boundary-adjacent decisions","Review boundaries annually with community input"] },
+        { id: "14.5.4", label: "Conduct adversarial testing and red-teaming", activities: ["Operate internal red team for AI system testing","Contract external adversarial testing annually","Test for manipulation, exploitation, and edge-case failures","Publish red team findings (redacted for security) to community"] }
       ], kpis: ["Alignment drift score","Safety protocol test pass rate","Capability boundary violations"] }
     ]
   },
@@ -513,31 +513,31 @@ export const CATEGORIES = [
     delta: "When labor no longer provides identity, purpose, social connection, and status, these functions must be deliberately designed for. This is not HR. This is the systemic conditions for meaningful, purposeful, connected lives.",
     groups: [
       { id: "15.1", label: "Develop Flourishing Strategy", purpose: "Define framework, dimensions (purpose, connection, growth, contribution, health, creativity, autonomy, belonging), and targets.", processes: [
-        { id: "15.1.1", label: "Define flourishing dimensions and measurement framework", activities: [] },
-        { id: "15.1.2", label: "Set flourishing targets by dimension and demographic", activities: [] },
-        { id: "15.1.3", label: "Design flourishing intervention strategy", activities: [] },
-        { id: "15.1.4", label: "Integrate flourishing into all institutional strategy", activities: [] }
+        { id: "15.1.1", label: "Define flourishing dimensions and measurement framework", activities: ["Research and adopt evidence-based flourishing model (e.g., PERMA+, eudaimonic wellbeing)","Define 8 institutional dimensions: purpose, connection, growth, contribution, health, creativity, autonomy, belonging","Design validated measurement instruments per dimension","Establish data collection cadence (quarterly community surveys, continuous passive indicators)"] },
+        { id: "15.1.2", label: "Set flourishing targets by dimension and demographic", activities: ["Establish baseline measurements across all demographics","Set minimum floor targets (no community segment below threshold)","Set aspirational targets per dimension with 3-year horizon","Disaggregate targets by age, location, ability, and background"] },
+        { id: "15.1.3", label: "Design flourishing intervention strategy", activities: ["Map existing programs to flourishing dimensions they serve","Identify dimension gaps with no institutional coverage","Design intervention portfolio covering all 8 dimensions","Prioritize interventions by equity impact and feasibility"] },
+        { id: "15.1.4", label: "Integrate flourishing into all institutional strategy", activities: ["Require flourishing impact assessment for all new initiatives","Add flourishing metrics to every category's KPI framework","Train all process stewards on flourishing integration","Make flourishing the tiebreaker in all resource allocation decisions"] }
       ], kpis: ["Framework completeness","Target coverage by dimension"] },
       { id: "15.2", label: "Purpose and Meaning Infrastructure", purpose: "Purpose-discovery programs, contribution opportunities, creative expression, intellectual exploration, intergenerational connection.", processes: [
-        { id: "15.2.1", label: "Operate purpose-discovery and exploration programs", activities: [] },
-        { id: "15.2.2", label: "Match community members to contribution opportunities", activities: [] },
-        { id: "15.2.3", label: "Facilitate creative expression programs and spaces", activities: [] },
-        { id: "15.2.4", label: "Organize intellectual exploration and learning communities", activities: [] },
-        { id: "15.2.5", label: "Design intergenerational connection programs", activities: [] }
+        { id: "15.2.1", label: "Operate purpose-discovery and exploration programs", activities: ["Offer structured purpose-exploration workshops (multi-week cohorts)","Provide individual purpose coaching and reflection tools","Create 'purpose sabbaticals' for deep exploration periods","Maintain purpose resource library (assessments, guides, mentors)"] },
+        { id: "15.2.2", label: "Match community members to contribution opportunities", activities: ["Maintain real-time opportunity board across all institutional functions","Operate AI-assisted matching based on interests, skills, and purpose goals","Enable trial periods and role rotation without commitment","Track match satisfaction and iterate matching algorithms"] },
+        { id: "15.2.3", label: "Facilitate creative expression programs and spaces", activities: ["Operate maker spaces, studios, performance venues, and digital labs","Fund community arts grants and creative residencies","Organize exhibitions, performances, and creative showcases","Support creative collaboration tools and platforms"] },
+        { id: "15.2.4", label: "Organize intellectual exploration and learning communities", activities: ["Operate community university with open enrollment (no prerequisites)","Facilitate study circles, reading groups, and discussion salons","Support citizen science and community research projects","Host lecture series, debates, and intellectual exchange events"] },
+        { id: "15.2.5", label: "Design intergenerational connection programs", activities: ["Create structured mentorship pairings across generations","Operate intergenerational living and working spaces","Design shared projects that require multi-generational collaboration","Preserve and transmit community stories and institutional memory through elders"] }
       ], kpis: ["Purpose alignment score","Creative participation rate","Contribution match satisfaction"] },
       { id: "15.3", label: "Social Connection Infrastructure", purpose: "Community spaces, interest-based groups, mentorship, isolation monitoring, shared experiences.", processes: [
-        { id: "15.3.1", label: "Design and operate community gathering spaces", activities: [] },
-        { id: "15.3.2", label: "Facilitate interest-based groups and communities", activities: [] },
-        { id: "15.3.3", label: "Operate mentorship and peer connection programs", activities: [] },
-        { id: "15.3.4", label: "Monitor isolation risk and intervene proactively", activities: [] },
-        { id: "15.3.5", label: "Organize shared experiences (festivals, celebrations, projects)", activities: [] }
+        { id: "15.3.1", label: "Design and operate community gathering spaces", activities: ["Maintain network of community centers, parks, and 'third places'","Design spaces for different interaction modes (quiet, active, collaborative)","Ensure geographic equity in space access","Operate digital community platforms for remote connection"] },
+        { id: "15.3.2", label: "Facilitate interest-based groups and communities", activities: ["Provide infrastructure (space, tools, funding) for self-organizing groups","Maintain group directory with easy discovery and joining","Offer group facilitation training for community leaders","Connect groups working on similar themes across communities"] },
+        { id: "15.3.3", label: "Operate mentorship and peer connection programs", activities: ["Match mentors and mentees across experience domains","Train mentors in active listening and supportive guidance","Facilitate peer support circles for life transitions","Monitor relationship health and provide mediation if needed"] },
+        { id: "15.3.4", label: "Monitor isolation risk and intervene proactively", activities: ["Develop ethical early warning indicators for social isolation","Train community connectors to notice and reach out","Provide low-barrier entry points for isolated individuals","Partner with health services for complex cases","Respect autonomy — offer connection, never mandate it"] },
+        { id: "15.3.5", label: "Organize shared experiences (festivals, celebrations, projects)", activities: ["Calendar annual community celebrations and festivals","Organize community-wide collaborative projects (murals, gardens, builds)","Create rituals for community milestones (arrivals, transitions, losses)","Ensure cultural diversity in celebration design"] }
       ], kpis: ["Social connectedness index","Isolation rate","Group participation rate","Shared experience attendance"] },
       { id: "15.4", label: "Measure and Improve Flourishing", purpose: "PRIMARY institutional KPI. Collect, analyze, identify gaps, report transparently.", processes: [
-        { id: "15.4.1", label: "Collect flourishing data across all dimensions", activities: [] },
-        { id: "15.4.2", label: "Analyze flourishing gaps by demographic and region", activities: [] },
-        { id: "15.4.3", label: "Design and implement targeted improvement interventions", activities: [] },
-        { id: "15.4.4", label: "Report flourishing metrics to community transparently", activities: [] },
-        { id: "15.4.5", label: "Feed flourishing data into institutional strategy", activities: [] }
+        { id: "15.4.1", label: "Collect flourishing data across all dimensions", activities: ["Administer quarterly flourishing survey (validated instrument)","Collect passive wellbeing indicators (space usage, group participation, health data with consent)","Operate real-time flourishing pulse checks at community touchpoints","Ensure data collection itself does not burden community members"] },
+        { id: "15.4.2", label: "Analyze flourishing gaps by demographic and region", activities: ["Disaggregate all data by protected attributes and geography","Identify statistical outliers and at-risk segments","Compare segments against floor targets","Conduct root cause analysis for persistent gaps"] },
+        { id: "15.4.3", label: "Design and implement targeted improvement interventions", activities: ["Design interventions targeting identified gaps with community co-design","Implement with measurable success criteria and timeline","Monitor intervention effectiveness with control comparisons","Scale successful interventions and sunset ineffective ones"] },
+        { id: "15.4.4", label: "Report flourishing metrics to community transparently", activities: ["Publish quarterly Flourishing Report as primary institutional output","Present data in accessible visual formats with plain-language narrative","Host community forums to discuss findings and priorities","Make raw (anonymized) data available for community researchers"] },
+        { id: "15.4.5", label: "Feed flourishing data into institutional strategy", activities: ["Present flourishing findings at every strategy review","Use flourishing trends to inform resource reallocation","Require flourishing impact projection for all major decisions","Track correlation between institutional actions and flourishing outcomes"] }
       ], kpis: ["Flourishing index (composite)","Purpose alignment score","Social connectedness index","Creative participation rate","Isolation rate","Life satisfaction","Meaning and belonging","Intergenerational engagement"] }
     ]
   },
@@ -547,24 +547,24 @@ export const CATEGORIES = [
     delta: "PLE institutions derive legitimacy from participatory governance. The mechanisms of collective decision-making are not informal culture — they are processes that must be designed, operated, measured, and improved with the same rigor as any other function.",
     groups: [
       { id: "16.1", label: "Establish Democratic Governance Framework", purpose: "Constitutional structure, decision mechanisms, decision rights, representation standards.", processes: [
-        { id: "16.1.1", label: "Draft and ratify institutional constitution", activities: [] },
-        { id: "16.1.2", label: "Define decision-making mechanisms (consensus, vote, delegate)", activities: [] },
-        { id: "16.1.3", label: "Establish representation standards and quotas", activities: [] },
-        { id: "16.1.4", label: "Define constitutional amendment process", activities: [] }
+        { id: "16.1.1", label: "Draft and ratify institutional constitution", activities: ["Convene constitutional convention with representative participation","Draft founding document with community rights, decision processes, and amendment procedures","Conduct public comment period with multilingual access","Ratify through supermajority community vote"] },
+        { id: "16.1.2", label: "Define decision-making mechanisms (consensus, vote, delegate)", activities: ["Map all institutional decisions by type and impact level","Assign appropriate mechanism per decision type (consensus for values, vote for allocation, delegate for operational)","Design fallback mechanisms when primary process fails","Document and publish decision process directory"] },
+        { id: "16.1.3", label: "Establish representation standards and quotas", activities: ["Define protected attribute categories for representation tracking","Set minimum representation thresholds for all governance bodies","Design rotation and term limits to prevent entrenchment","Create pathways for underrepresented groups to build governance capacity"] },
+        { id: "16.1.4", label: "Define constitutional amendment process", activities: ["Require supermajority for constitutional changes","Mandate public deliberation period before amendment votes","Establish judicial review mechanism for constitutional questions","Protect foundational rights from amendment (entrenchment clauses)"] }
       ], kpis: ["Constitutional ratification","Representation standard compliance"] },
       { id: "16.2", label: "Operate Democratic Processes", purpose: "Elections, assemblies, referenda, delegated authority, governance cadence.", processes: [
-        { id: "16.2.1", label: "Manage elections and leadership selection", activities: [] },
-        { id: "16.2.2", label: "Operate community assemblies and town halls", activities: [] },
-        { id: "16.2.3", label: "Facilitate referenda on major decisions", activities: [] },
-        { id: "16.2.4", label: "Manage delegated authority and recall mechanisms", activities: [] },
-        { id: "16.2.5", label: "Maintain governance calendar and decision cadence", activities: [] }
+        { id: "16.2.1", label: "Manage elections and leadership selection", activities: ["Design election systems resistant to capture (ranked choice, sortition options)","Operate secure, transparent, verifiable voting infrastructure","Ensure universal ballot access (physical, digital, assisted)","Publish results with full transparency and audit trail"] },
+        { id: "16.2.2", label: "Operate community assemblies and town halls", activities: ["Schedule regular assemblies with sufficient advance notice","Provide childcare, transportation, and accessibility accommodations","Use structured deliberation methods (citizens' assembly, fishbowl, World Café)","Record and publish proceedings with action item tracking"] },
+        { id: "16.2.3", label: "Facilitate referenda on major decisions", activities: ["Define criteria that trigger mandatory referendum (budget threshold, constitutional change, new AI deployment)","Design ballot language in plain, accessible terms","Provide balanced information packets for and against each proposition","Set participation quorum requirements for binding results"] },
+        { id: "16.2.4", label: "Manage delegated authority and recall mechanisms", activities: ["Define clear scope and duration for all delegated authority","Require regular reporting from delegates to community","Operate recall petition and vote process with reasonable thresholds","Ensure smooth transition when delegates are recalled or terms end"] },
+        { id: "16.2.5", label: "Maintain governance calendar and decision cadence", activities: ["Publish annual governance calendar with all scheduled decisions","Maintain decision backlog with prioritization","Ensure sufficient time between proposal and decision for deliberation","Track decision-making velocity and identify bottlenecks"] }
       ], kpis: ["Election participation rate","Assembly attendance","Referenda frequency","Decision cadence adherence"] },
       { id: "16.3", label: "Ensure Democratic Health", purpose: "Participation monitoring, capture detection, civic education, dispute resolution.", processes: [
-        { id: "16.3.1", label: "Monitor participation rates and representation equity", activities: [] },
-        { id: "16.3.2", label: "Detect and respond to institutional capture risks", activities: [] },
-        { id: "16.3.3", label: "Operate civic education and democratic literacy programs", activities: [] },
-        { id: "16.3.4", label: "Manage democratic dispute resolution and appeals", activities: [] },
-        { id: "16.3.5", label: "Assess and report democratic health metrics", activities: [] }
+        { id: "16.3.1", label: "Monitor participation rates and representation equity", activities: ["Track participation by demographic, geography, and engagement level","Identify declining participation trends early","Analyze barriers to participation through community research","Publish participation equity reports quarterly"] },
+        { id: "16.3.2", label: "Detect and respond to institutional capture risks", activities: ["Define capture indicators (concentration of influence, revolving doors, information asymmetry)","Monitor governance body composition and voting patterns for capture signals","Operate anonymous tip line for capture concerns","Investigate and remediate confirmed capture with transparency"] },
+        { id: "16.3.3", label: "Operate civic education and democratic literacy programs", activities: ["Offer governance literacy curriculum for all community members","Train community members in deliberation, facilitation, and conflict resolution","Simulate governance processes for practice and learning","Integrate civic education into youth development programs"] },
+        { id: "16.3.4", label: "Manage democratic dispute resolution and appeals", activities: ["Operate multi-tier dispute resolution (mediation → arbitration → adjudication)","Ensure neutral, trained mediators and arbitrators","Provide appeals process for all governance decisions","Publish anonymized case law for institutional learning"] },
+        { id: "16.3.5", label: "Assess and report democratic health metrics", activities: ["Administer annual democratic health survey","Calculate composite democratic health index","Compare against peer institutions and historical baseline","Present findings to community with proposed improvements"] }
       ], kpis: ["Participation rate","Representation equity","Decision quality score","Governance satisfaction","Proposal-to-decision time","Democratic literacy","Capture detection rate"] }
     ]
   }
