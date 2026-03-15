@@ -202,6 +202,14 @@ function App() {
   const cat = selectedCat ? CATEGORIES.find(c => c.id === selectedCat) : null;
   const grp = selectedGroup && cat ? cat.groups.find(g => g.id === selectedGroup) : null;
 
+  // Pre-compute navigation for detail views (avoids IIFEs in JSX)
+  const catIdx = cat ? CATEGORIES.findIndex(c => c.id === cat.id) : -1;
+  const prevCat = catIdx > 0 ? CATEGORIES[catIdx - 1] : null;
+  const nextCat = catIdx >= 0 && catIdx < CATEGORIES.length - 1 ? CATEGORIES[catIdx + 1] : null;
+  const grpIdx = cat && grp ? cat.groups.findIndex(g => g.id === grp.id) : -1;
+  const prevGrp = grpIdx > 0 ? cat.groups[grpIdx - 1] : null;
+  const nextGrp = cat && grpIdx >= 0 && grpIdx < cat.groups.length - 1 ? cat.groups[grpIdx + 1] : null;
+
   const domainLabel = d => d === "civic" ? "Civic Operating" : d === "support" ? "Institutional Support" : "PLE-Specific";
   const domainColor = d => d === "civic" ? "#f59e0b" : d === "support" ? "#10b981" : "#ef4444";
 
@@ -537,11 +545,7 @@ function App() {
         )}
 
         {/* CATEGORY DETAIL */}
-        {view === "detail" && cat && !grp && (() => {
-          const catIdx = CATEGORIES.findIndex(c => c.id === cat.id);
-          const prevCat = catIdx > 0 ? CATEGORIES[catIdx - 1] : null;
-          const nextCat = catIdx < CATEGORIES.length - 1 ? CATEGORIES[catIdx + 1] : null;
-          return (
+        {view === "detail" && cat && !grp && (
           <div className="fade-in">
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
               <div className="breadcrumb" style={{ marginBottom:0 }}>
@@ -732,14 +736,10 @@ function App() {
               </div>
             </div>
           </div>
-        );})()}
+        )}
 
         {/* GROUP DETAIL */}
-        {view === "group" && cat && grp && (() => {
-          const grpIdx = cat.groups.findIndex(g => g.id === grp.id);
-          const prevGrp = grpIdx > 0 ? cat.groups[grpIdx - 1] : null;
-          const nextGrp = grpIdx < cat.groups.length - 1 ? cat.groups[grpIdx + 1] : null;
-          return (
+        {view === "group" && cat && grp && (
           <div className="fade-in">
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
               <div className="breadcrumb" style={{ marginBottom:0 }}>
@@ -831,7 +831,7 @@ function App() {
               <span>Esc → Back to category</span>
             </div>
           </div>
-        );})()}
+        )}
 
         {/* TRANSLATION TABLE */}
         {view === "translation" && (
