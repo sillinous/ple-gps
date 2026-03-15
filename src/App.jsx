@@ -660,6 +660,31 @@ function App() {
             </div>
 
             {/* Process Groups */}
+            {/* Value loops through this category */}
+            {(() => {
+              const prefix = cat.id.split(".")[0];
+              const loopsThrough = VALUE_LOOPS.map((loop, idx) => {
+                const hasRef = loop.steps.some(s => {
+                  const m = s.match(/\((\d+)\./g);
+                  return m && m.some(ref => ref.replace("(","").replace(".","") === prefix);
+                });
+                return hasRef ? { ...loop, idx } : null;
+              }).filter(Boolean);
+              return loopsThrough.length > 0 ? (
+                <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:16 }}>
+                  <span style={{ fontSize:10, color:"#57534e", textTransform:"uppercase", letterSpacing:"0.06em", fontWeight:600, alignSelf:"center" }}>Value loops:</span>
+                  {loopsThrough.map(l => (
+                    <span key={l.idx} onClick={() => { navigateTo("loops"); setTimeout(() => setExpandedLoop(l.idx), 100); }}
+                      style={{ fontSize:11, padding:"3px 10px", borderRadius:3, background:`${l.color}12`, color: l.color, fontWeight:500, cursor:"pointer", transition:"opacity 0.15s" }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
+                      onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+                      {l.name}
+                    </span>
+                  ))}
+                </div>
+              ) : null;
+            })()}
+
             <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.08em", textTransform:"uppercase", fontWeight:600, marginBottom:10, marginTop:24 }}>Process Groups ({cat.groups.length})</div>
             {cat.groups.map((g, i) => (
               <div key={g.id} className={`fade-in stagger-${(i%4)+1}`}
@@ -843,13 +868,13 @@ function App() {
         {view === "loops" && (
           <div className="fade-in">
             <h2 style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, marginBottom:6 }}>Value Loops</h2>
-            <p style={{ color:"#a8a29e", marginBottom:24, fontSize:14 }}>The circular feedback systems that make PLE institutions self-improving. Each loop shows how outputs from one process feed back as inputs to improve the system.</p>
+            <p style={{ color:"#a8a29e", marginBottom:24, fontSize:14 }}>Six circular feedback systems that make PLE institutions self-improving. Click any category reference to navigate directly.</p>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(320px, 1fr))", gap:12 }}>
               {VALUE_LOOPS.map((loop, i) => (
                 <div key={i} className={`loop-card fade-in stagger-${(i%4)+1}`}
-                  style={{ borderLeftWidth:3, borderLeftStyle:"solid", borderLeftColor: loop.color }}
-                  onClick={() => setExpandedLoop(expandedLoop === i ? null : i)}>
-                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom: expandedLoop === i ? 14 : 0 }}>
+                  style={{ borderLeftWidth:3, borderLeftStyle:"solid", borderLeftColor: loop.color }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom: expandedLoop === i ? 14 : 0, cursor:"pointer" }}
+                    onClick={() => setExpandedLoop(expandedLoop === i ? null : i)}>
                     <div>
                       <div style={{ fontSize:10, color: loop.color, letterSpacing:"0.06em", textTransform:"uppercase", fontWeight:600, marginBottom:2 }}>Loop {i+1}</div>
                       <div style={{ fontSize:15, fontWeight:600 }}>{loop.name}</div>
@@ -859,13 +884,34 @@ function App() {
                   {expandedLoop === i && (
                     <div style={{ position:"relative", paddingLeft:16 }}>
                       <div style={{ position:"absolute", left:4, top:4, bottom:4, width:2, background:`${loop.color}25`, borderRadius:1 }} />
-                      {loop.steps.map((step, j) => (
-                        <div key={j} style={{ position:"relative", padding:"6px 0 6px 12px", fontSize:13, color: j === 0 || j === loop.steps.length - 1 ? "#f5f0eb" : "#a8a29e" }}>
-                          <div style={{ position:"absolute", left:-2, top:"50%", transform:"translateY(-50%)", width:8, height:8, borderRadius:"50%", background: loop.color, opacity: j === 0 ? 1 : 0.4 }} />
-                          {step}
-                          {j < loop.steps.length - 1 && <span style={{ color:"#57534e", marginLeft:6, fontSize:11 }}>↓</span>}
-                        </div>
-                      ))}
+                      {loop.steps.map((step, j) => {
+                        // Parse category references from step text like "Community interaction (6.3)"
+                        const parts = step.split(/(\(\d+\.\d+(?:\.\d+)?\)|\(\d+\.\d+\)|\(all ops\)|\(\d+\/\d+\))/g);
+                        return (
+                          <div key={j} style={{ position:"relative", padding:"6px 0 6px 12px", fontSize:13, color: j === 0 || j === loop.steps.length - 1 ? "#f5f0eb" : "#a8a29e" }}>
+                            <div style={{ position:"absolute", left:-2, top:"50%", transform:"translateY(-50%)", width:8, height:8, borderRadius:"50%", background: loop.color, opacity: j === 0 ? 1 : 0.4 }} />
+                            {parts.map((part, k) => {
+                              const catMatch = part.match(/\((\d+)\.\d+/);
+                              if (catMatch) {
+                                const catId = catMatch[1] + ".0";
+                                const foundCat = CATEGORIES.find(c => c.id === catId);
+                                return (
+                                  <span key={k}
+                                    onClick={e => { e.stopPropagation(); navigateTo("detail", catId); }}
+                                    style={{ color: foundCat?.color || loop.color, cursor:"pointer", fontWeight:500, borderBottom:`1px dashed ${foundCat?.color || loop.color}40`, transition:"opacity 0.15s" }}
+                                    onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
+                                    onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                                    title={foundCat ? `→ ${foundCat.id} ${foundCat.label}` : part}>
+                                    {part}
+                                  </span>
+                                );
+                              }
+                              return <span key={k}>{part}</span>;
+                            })}
+                            {j < loop.steps.length - 1 && <span style={{ color:"#57534e", marginLeft:6, fontSize:11 }}>↓</span>}
+                          </div>
+                        );
+                      })}
                       <div style={{ fontSize:11, color: loop.color, marginTop:6, fontStyle:"italic", paddingLeft:12 }}>↻ Cycle repeats</div>
                     </div>
                   )}
@@ -1493,6 +1539,13 @@ function App() {
         <span>The Foundation for Global Progress</span>
         <span style={{ margin:"0 10px", color:"#363230" }}>·</span>
         <span style={{ fontStyle:"italic" }}>Design. Anything. EVERYTHING. Better.</span>
+        <div style={{ marginTop:6, fontSize:10, color:"#363230" }}>
+          {CATEGORIES.length} categories · {CATEGORIES.reduce((s,c) => s+c.groups.length, 0)} groups · {CATEGORIES.reduce((s,c) => s+c.groups.reduce((s2,g) => s2+(g.processes?.length||0), 0), 0)} processes · {CATEGORIES.reduce((s,c) => s+c.groups.reduce((s2,g) => s2+(g.kpis?.length||0), 0), 0)} KPIs
+          <span style={{ margin:"0 6px" }}>·</span>
+          <a href="https://github.com/sillinous/ple-gps" target="_blank" rel="noopener noreferrer" style={{ color:"#57534e", textDecoration:"none" }}>GitHub ↗</a>
+          <span style={{ margin:"0 6px" }}>·</span>
+          CC BY-SA 4.0
+        </div>
       </div>
 
       {/* Search Overlay */}
