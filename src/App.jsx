@@ -127,6 +127,9 @@ function App() {
   const [compareName, setCompareName] = useState(null);
   const [showTemplates, setShowTemplates] = useState(false);
   const [activePlaybook, setActivePlaybook] = useState(null);
+  const [trackerItems, setTrackerItems] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("ple-gps-tracker") || "{}"); } catch { return {}; }
+  });
   const fileInputRef = useRef(null);
   const mainRef = useRef(null);
 
@@ -147,6 +150,25 @@ function App() {
       saveAssessment(assessmentName, maturityScores);
     }
   }, [maturityScores, assessmentName]);
+
+  // Persist tracker items
+  useEffect(() => {
+    if (Object.keys(trackerItems).length > 0) {
+      try { localStorage.setItem("ple-gps-tracker", JSON.stringify(trackerItems)); } catch {}
+    }
+  }, [trackerItems]);
+
+  const toggleTrackerItem = (key) => {
+    setTrackerItems(prev => {
+      const next = { ...prev };
+      if (!next[key]) next[key] = { status: "in-progress", ts: Date.now() };
+      else if (next[key].status === "in-progress") next[key] = { status: "done", ts: Date.now() };
+      else delete next[key];
+      return next;
+    });
+  };
+
+  const getTrackerStatus = (key) => trackerItems[key]?.status || "not-started";
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -361,7 +383,7 @@ function App() {
           <span style={{ fontSize:"11px", color:"#57534e", fontFamily:"'JetBrains Mono', monospace", letterSpacing:"0.04em" }}>GOVERNANCE PROCESS STANDARD v1.0</span>
         </div>
         <div style={{ display:"flex", gap:6, flexWrap:"wrap", alignItems:"center" }}>
-          {[["overview","Framework"],["categories","Categories"],["integration","Integration Map"],["translation","Translation"],["loops","Value Loops"],["maturity","Maturity"]].map(([v,l]) => (
+          {[["overview","Framework"],["categories","Categories"],["integration","Integration Map"],["translation","Translation"],["loops","Value Loops"],["playbooks","Playbooks"],["maturity","Maturity"]].map(([v,l]) => (
             <div key={v} className={`nav-pill ${view===v?"active":""}`} onClick={() => navigateTo(v)}>
               {l}
             </div>
@@ -989,6 +1011,123 @@ function App() {
           </div>
         )}
 
+        {/* PLAYBOOKS VIEW */}
+        {view === "playbooks" && (
+          <div className="fade-in">
+            <h2 style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:28, fontWeight:700, marginBottom:6 }}>Implementation Playbooks</h2>
+            <p style={{ color:"#a8a29e", marginBottom:10, fontSize:14, maxWidth:620 }}>Step-by-step implementation guides for the three PLE-specific governance categories. Each playbook covers phased implementation, prerequisites, first actions, and common failure modes.</p>
+
+            {/* Template cards */}
+            <div style={{ marginBottom:24 }}>
+              <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.08em", textTransform:"uppercase", fontWeight:600, marginBottom:10, marginTop:16 }}>Institutional Starting Points</div>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:8 }}>
+                {INSTITUTIONAL_TEMPLATES.map(t => (
+                  <div key={t.id}
+                    onClick={() => {
+                      if (confirm(`Load "${t.name}" template into the Maturity Assessment?`)) {
+                        setMaturityScores({ ...t.scores });
+                        setAssessmentName(t.name);
+                        navigateTo("maturity");
+                      }
+                    }}
+                    style={{ background:"#141210", border:`1px solid ${t.color}15`, borderRadius:6, padding:"12px 14px", cursor:"pointer", transition:"all 0.2s", borderLeftWidth:3, borderLeftStyle:"solid", borderLeftColor: t.color }}
+                    onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
+                    onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4 }}>
+                      <span style={{ fontSize:18 }}>{t.icon}</span>
+                      <span style={{ fontSize:13, fontWeight:600 }}>{t.name}</span>
+                    </div>
+                    <div style={{ fontSize:11, color:"#78716c", lineHeight:1.4 }}>{t.desc.substring(0, 100)}…</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Playbook sections */}
+            <div style={{ fontSize:11, color:"#57534e", letterSpacing:"0.08em", textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>PLE-Specific Implementation Guides</div>
+            {Object.entries(PLAYBOOKS).map(([catId, pb]) => {
+              const cat = CATEGORIES.find(c => c.id === catId);
+              if (!cat) return null;
+              const isOpen = activePlaybook === catId;
+              return (
+                <div key={catId} style={{ marginBottom:12 }}>
+                  <div
+                    onClick={() => setActivePlaybook(isOpen ? null : catId)}
+                    style={{ background:"#141210", border:`1px solid ${cat.color}15`, borderRadius:6, padding:"16px 20px", cursor:"pointer", transition:"all 0.15s", borderLeftWidth:3, borderLeftStyle:"solid", borderLeftColor: cat.color }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = `${cat.color}30`}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = `${cat.color}15`}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                        <span style={{ fontSize:24, color: cat.color }}>{cat.icon}</span>
+                        <div>
+                          <div style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:11, color: cat.color }}>{cat.id}</div>
+                          <div style={{ fontSize:16, fontWeight:600 }}>{pb.title}</div>
+                          <div style={{ fontSize:12, color:"#78716c", marginTop:2 }}>{pb.timeframe}</div>
+                        </div>
+                      </div>
+                      <span style={{ color:"#57534e", fontSize:18, transition:"transform 0.2s", transform: isOpen ? "rotate(90deg)" : "none" }}>›</span>
+                    </div>
+                  </div>
+
+                  {isOpen && (
+                    <div className="fade-in" style={{ background:"#141210", borderLeft:`3px solid ${cat.color}25`, borderRadius:"0 0 6px 6px", padding:"20px 20px 20px 24px", marginTop:-4 }}>
+                      {/* First 3 Actions */}
+                      <div style={{ background:"rgba(245,158,11,0.06)", border:"1px solid rgba(245,158,11,0.1)", borderRadius:6, padding:"14px 16px", marginBottom:16 }}>
+                        <div style={{ fontSize:11, color:"#f59e0b", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:8 }}>Start Here — First 3 Actions</div>
+                        {pb.firstThreeActions.map((a, i) => (
+                          <div key={i} style={{ display:"flex", gap:10, marginBottom:6, fontSize:13, lineHeight:1.5 }}>
+                            <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:12, color:"#f59e0b", fontWeight:600, flexShrink:0 }}>{i+1}.</span>
+                            <span style={{ color:"#f5f0eb" }}>{a}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Prerequisites */}
+                      <div style={{ marginBottom:16 }}>
+                        <div style={{ fontSize:11, color:"#57534e", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:6 }}>Prerequisites</div>
+                        <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+                          {pb.prerequisites.map((p, i) => (
+                            <span key={i} style={{ fontSize:11, padding:"3px 10px", borderRadius:3, background:"rgba(99,102,241,0.08)", color:"#818cf8" }}>{p}</span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Phases */}
+                      {pb.phases.map((phase, pi) => (
+                        <div key={pi} style={{ marginBottom:16, paddingLeft:14, borderLeft:`2px solid ${cat.color}25` }}>
+                          <div style={{ fontSize:13, fontWeight:600, color: cat.color, marginBottom:8 }}>{phase.name}</div>
+                          {phase.actions.map((a, ai) => (
+                            <div key={ai} style={{ display:"flex", gap:8, marginBottom:4, fontSize:12, color:"#a8a29e", lineHeight:1.5 }}>
+                              <span style={{ color:"#57534e", flexShrink:0 }}>•</span>
+                              <span>{a}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+
+                      {/* Failure Modes */}
+                      <div style={{ background:"rgba(239,68,68,0.04)", border:"1px solid rgba(239,68,68,0.1)", borderRadius:6, padding:"12px 16px", marginBottom:12 }}>
+                        <div style={{ fontSize:11, color:"#ef4444", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:8 }}>Common Failure Modes</div>
+                        {pb.failureModes.map((f, i) => (
+                          <div key={i} style={{ fontSize:12, color:"#a8a29e", marginBottom:4, display:"flex", gap:8, lineHeight:1.5 }}>
+                            <span style={{ color:"#ef4444", flexShrink:0 }}>⚠</span>
+                            <span>{f}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Navigate to category */}
+                      <div onClick={() => navigateTo("detail", catId)} style={{ fontSize:12, color: cat.color, cursor:"pointer", fontWeight:500 }}>
+                        → View full {cat.id} category detail
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         {/* MATURITY ASSESSMENT TOOL */}
         {view === "maturity" && (
           <div className="fade-in">
@@ -1103,7 +1242,7 @@ function App() {
 
             {/* Sub-navigation */}
             <div style={{ display:"flex", gap:4, marginBottom:20, borderBottom:"1px solid rgba(245,158,11,0.06)", paddingBottom:10, flexWrap:"wrap" }}>
-              {[["assess","Assessment Grid"],["visual","Visual Profile"],["gaps","Gap Analysis"],["roadmap","Improvement Roadmap"],["reference","Level Reference"]].map(([k,l]) => (
+              {[["assess","Assessment Grid"],["visual","Visual Profile"],["gaps","Gap Analysis"],["roadmap","Improvement Roadmap"],["tracker","Tracker"],["reference","Level Reference"]].map(([k,l]) => (
                 <div key={k} onClick={() => setMaturityTab(k)} className={`nav-pill ${maturityTab === k ? "active" : ""}`}>{l}</div>
               ))}
             </div>
@@ -1630,6 +1769,104 @@ function App() {
                     })()}
                   </>
                 )}
+              </div>
+            )}
+
+            {/* TAB: Implementation Tracker */}
+            {maturityTab === "tracker" && (
+              <div className="fade-in">
+                {getTotalScored() === 0 ? (
+                  <div style={{ textAlign:"center", padding:40, color:"#57534e" }}>
+                    <div style={{ fontSize:24, marginBottom:8 }}>📋</div>
+                    <div style={{ fontSize:14 }}>Score your assessment first to generate trackable improvement actions.</div>
+                    <div style={{ fontSize:12, color:"#78716c", marginTop:4 }}>Switch to the Assessment Grid tab to begin scoring.</div>
+                  </div>
+                ) : (() => {
+                  // Generate tracker items from gap analysis
+                  const items = CATEGORIES
+                    .map(c => ({ ...c, avg: getCatAvg(c.id), gap: getGap(c.id) }))
+                    .filter(c => c.avg > 0 && c.gap !== null && c.gap > 0)
+                    .sort((a,b) => b.gap - a.gap)
+                    .flatMap(c => {
+                      const impKey = `${Math.floor(c.avg)}→${Math.floor(c.avg)+1}`;
+                      const imp = IMPROVEMENT_ROADMAP[impKey];
+                      if (!imp) return [];
+                      return imp.actions.map((action, i) => ({
+                        key: `${c.id}-${impKey}-${i}`,
+                        catId: c.id,
+                        catLabel: c.label,
+                        catColor: c.color,
+                        gap: c.gap,
+                        transition: imp.label,
+                        action,
+                        priority: i === 0 ? "high" : i < 3 ? "medium" : "low"
+                      }));
+                    });
+
+                  const done = items.filter(it => getTrackerStatus(it.key) === "done").length;
+                  const inProgress = items.filter(it => getTrackerStatus(it.key) === "in-progress").length;
+                  const total = items.length;
+
+                  return (
+                    <>
+                      {/* Progress bar */}
+                      <div style={{ marginBottom:16 }}>
+                        <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
+                          <span style={{ fontSize:12, color:"#a8a29e" }}>{done} done · {inProgress} in progress · {total - done - inProgress} not started</span>
+                          <span style={{ fontSize:12, fontFamily:"'JetBrains Mono', monospace", color:"#10b981" }}>{total > 0 ? Math.round(done/total*100) : 0}%</span>
+                        </div>
+                        <div style={{ height:6, background:"rgba(120,113,108,0.08)", borderRadius:3, overflow:"hidden" }}>
+                          <div style={{ height:"100%", borderRadius:3, background:"linear-gradient(90deg, #10b981 0%, #10b981 " + (done/total*100) + "%, #f59e0b " + (done/total*100) + "%, #f59e0b " + ((done+inProgress)/total*100) + "%, transparent " + ((done+inProgress)/total*100) + "%)", transition:"all 0.3s" }} />
+                        </div>
+                      </div>
+
+                      {/* Action items grouped by category */}
+                      {(() => {
+                        const grouped = {};
+                        items.forEach(it => {
+                          if (!grouped[it.catId]) grouped[it.catId] = { cat: it, items: [] };
+                          grouped[it.catId].items.push(it);
+                        });
+                        return Object.entries(grouped).map(([catId, group]) => (
+                          <div key={catId} style={{ marginBottom:16 }}>
+                            <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:8 }}>
+                              <span style={{ fontFamily:"'JetBrains Mono', monospace", fontSize:11, color: group.cat.catColor }}>{catId}</span>
+                              <span style={{ fontSize:13, fontWeight:600 }}>{group.cat.catLabel}</span>
+                              <span style={{ fontSize:10, color:"#ef4444", fontFamily:"'JetBrains Mono', monospace" }}>−{group.cat.gap.toFixed(1)}</span>
+                              <span style={{ fontSize:10, color:"#57534e" }}>{group.cat.transition}</span>
+                            </div>
+                            {group.items.map(it => {
+                              const st = getTrackerStatus(it.key);
+                              return (
+                                <div key={it.key}
+                                  onClick={() => toggleTrackerItem(it.key)}
+                                  style={{
+                                    display:"flex", alignItems:"flex-start", gap:10, padding:"8px 12px", marginBottom:3,
+                                    background: st === "done" ? "rgba(16,185,129,0.04)" : st === "in-progress" ? "rgba(245,158,11,0.04)" : "#141210",
+                                    border: `1px solid ${st === "done" ? "rgba(16,185,129,0.12)" : st === "in-progress" ? "rgba(245,158,11,0.12)" : "rgba(245,158,11,0.04)"}`,
+                                    borderRadius:4, cursor:"pointer", transition:"all 0.15s"
+                                  }}>
+                                  <span style={{ fontSize:14, flexShrink:0, width:20, textAlign:"center" }}>
+                                    {st === "done" ? "✓" : st === "in-progress" ? "◐" : "○"}
+                                  </span>
+                                  <span style={{ fontSize:12, color: st === "done" ? "#57534e" : "#a8a29e", lineHeight:1.5, textDecoration: st === "done" ? "line-through" : "none" }}>{it.action}</span>
+                                  <span style={{ fontSize:9, flexShrink:0, padding:"2px 6px", borderRadius:2, marginLeft:"auto",
+                                    background: it.priority === "high" ? "rgba(239,68,68,0.08)" : it.priority === "medium" ? "rgba(245,158,11,0.08)" : "rgba(120,113,108,0.06)",
+                                    color: it.priority === "high" ? "#ef4444" : it.priority === "medium" ? "#f59e0b" : "#78716c"
+                                  }}>{it.priority}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ));
+                      })()}
+
+                      <div style={{ fontSize:10, color:"#57534e", marginTop:12 }}>
+                        Click: ○ not started → ◐ in progress → ✓ done → ○ (cycle). Progress persists in your browser.
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             )}
 
