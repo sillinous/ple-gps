@@ -227,39 +227,39 @@ export const CATEGORIES = [
     delta: "THE MOST TRANSFORMED CATEGORY. 'Human Resources' is obsolete. People are not 'capital' to be managed. Replaced by Human Development — cultivation of potential, purpose, and civic participation. Contribution is voluntary and intrinsically motivated.",
     groups: [
       { id: "7.1", label: "Human Development Strategy", purpose: "Align human development to institutional vision and community flourishing.", processes: [
-        { id: "7.1.1", label: "Define human development philosophy and principles", activities: [] },
-        { id: "7.1.2", label: "Plan contributor development needs by capability area", activities: [] },
-        { id: "7.1.3", label: "Design contributor experience journey", activities: [] }
+        { id: "7.1.1", label: "Define human development philosophy and principles", activities: ["Establish that contribution is voluntary and resource access is unconditional","Define growth dimensions: skill, purpose, connection, autonomy, mastery","Align development philosophy with flourishing strategy (15.1)","Publish principles in accessible language for all community members"] },
+        { id: "7.1.2", label: "Plan contributor development needs by capability area", activities: ["Assess institutional capability needs against strategic plan","Map current contributor capabilities to identify gaps","Design development pathways for emerging institutional needs (AI governance, facilitation, mediation)","Coordinate with human-AI work allocation (14.4) to focus human development on uniquely human capabilities"] },
+        { id: "7.1.3", label: "Design contributor experience journey", activities: ["Map the full contributor lifecycle: discovery → invitation → activation → growth → recognition → transition","Design each touchpoint for dignity, choice, and growth","Ensure journey accommodates diverse life circumstances and abilities","Build feedback loops at each stage to continuously improve the experience"] }
       ], kpis: ["Strategy alignment score","Development plan coverage"] },
       { id: "7.2", label: "Invite and Activate Contributors", purpose: "The institution does not 'hire' — it invites. Match contributors to roles by interest and capability.", processes: [
-        { id: "7.2.1", label: "Define contribution opportunities and role descriptions", activities: [] },
-        { id: "7.2.2", label: "Attract contributors through mission-aligned channels", activities: [] },
-        { id: "7.2.3", label: "Match contributors to roles by interest and capability", activities: [] },
-        { id: "7.2.4", label: "Onboard and orient new contributors", activities: [] }
+        { id: "7.2.1", label: "Define contribution opportunities and role descriptions", activities: ["Describe roles by purpose and impact, not just tasks","Include flexibility: part-time, project-based, seasonal, rotating","Define minimum commitments and maximum expectations transparently","Connect each role to the category and process group it serves"] },
+        { id: "7.2.2", label: "Attract contributors through mission-aligned channels", activities: ["Share stories of contribution impact, not job postings","Reach underrepresented communities through trusted intermediaries","Make the invitation process accessible (no resume required, multiple languages)"] },
+        { id: "7.2.3", label: "Match contributors to roles by interest and capability", activities: ["Prioritize interest and purpose alignment over credential matching","Offer trial periods with no commitment required","Use AI-assisted matching (via 15.2) with human override for final decisions","Track match satisfaction and iterate matching criteria"] },
+        { id: "7.2.4", label: "Onboard and orient new contributors", activities: ["Introduce institutional values, constitution, and governance structure","Assign an onboarding buddy for the first 90 days","Provide immediate access to all tools, spaces, and resources","Check in at 30/60/90 days to assess fit and address barriers"] }
       ], kpis: ["Time to activate","Role match satisfaction","Onboarding completion"] },
       { id: "7.3", label: "Develop and Support Contributors", purpose: "Growth, learning, career evolution, mentorship, sustainable engagement.", processes: [
-        { id: "7.3.1", label: "Deliver learning and skill development programs", activities: [] },
-        { id: "7.3.2", label: "Operate mentorship and peer learning networks", activities: [] },
-        { id: "7.3.3", label: "Support personal growth and career evolution", activities: [] },
-        { id: "7.3.4", label: "Monitor contributor wellbeing and sustainability", activities: [] }
+        { id: "7.3.1", label: "Deliver learning and skill development programs", activities: ["Offer self-directed learning resources accessible to all","Run cohort-based skill programs for institutional priority areas","Fund external learning and certification with no strings attached","Track capability growth without punitive performance metrics"] },
+        { id: "7.3.2", label: "Operate mentorship and peer learning networks", activities: ["Match mentors and mentees across experience levels and domains","Train mentors in supportive guidance (not performance management)","Create peer learning circles for shared challenges","Recognize mentoring as a valued contribution, not an add-on"] },
+        { id: "7.3.3", label: "Support personal growth and career evolution", activities: ["Offer purpose coaching integrated with flourishing programs (15.2)","Support role rotation for exploration without career penalty","Create growth conversations (not performance reviews)","Enable contributors to design their own development paths"] },
+        { id: "7.3.4", label: "Monitor contributor wellbeing and sustainability", activities: ["Track burnout indicators with consent-based check-ins","Intervene proactively when workload or engagement patterns suggest unsustainability","Ensure no contributor works beyond sustainable hours (culture, not just policy)","Feed wellbeing data to flourishing measurement (15.4)"] }
       ], kpis: ["Capability development rate","Mentorship participation","Wellbeing score"] },
       { id: "7.4", label: "Recognize and Sustain Engagement", purpose: "Universal resource access as a right. Recognition without coercive dependency.", processes: [
-        { id: "7.4.1", label: "Operate recognition and appreciation programs", activities: [] },
-        { id: "7.4.2", label: "Ensure universal resource access for all contributors", activities: [] },
-        { id: "7.4.3", label: "Monitor engagement and address disengagement early", activities: [] }
+        { id: "7.4.1", label: "Operate recognition and appreciation programs", activities: ["Design recognition that celebrates contribution without creating competition","Ensure recognition is peer-driven, not only top-down","Celebrate diverse forms of contribution (not just visible or measurable)","Make recognition culturally appropriate and personally meaningful"] },
+        { id: "7.4.2", label: "Ensure universal resource access for all contributors", activities: ["Guarantee that resource access is unconditional — not tied to performance","Process stipends through Category 9.5 with dignity and privacy","Ensure no contributor faces resource insecurity as a result of institutional design"] },
+        { id: "7.4.3", label: "Monitor engagement and address disengagement early", activities: ["Track engagement indicators (participation, satisfaction, connection)","Reach out with care — not performance management — when engagement drops","Explore root causes: is it the role, the workload, the culture, or life circumstances?","Offer alternatives: different role, reduced commitment, sabbatical, or graceful exit"] }
       ], kpis: ["Community participation rate","Contributor satisfaction","Capability development rate","Pathway diversity","Role transition satisfaction"] },
       { id: "7.5", label: "Support Role Transitions", purpose: "Transitions, sabbaticals, knowledge handoff, life changes — not 'termination.'", processes: [
-        { id: "7.5.1", label: "Manage role transitions and knowledge handoff", activities: [] },
-        { id: "7.5.2", label: "Support sabbaticals and life changes", activities: [] },
-        { id: "7.5.3", label: "Maintain contributor relationships post-transition", activities: [] }
+        { id: "7.5.1", label: "Manage role transitions and knowledge handoff", activities: ["Treat all transitions as valid choices deserving institutional support","Conduct structured knowledge transfer over adequate transition period","Document institutional knowledge in accessible shared systems","Celebrate contributions during transition, not just at entry"] },
+        { id: "7.5.2", label: "Support sabbaticals and life changes", activities: ["Offer sabbaticals with continued resource access","Support life transitions (parenthood, caregiving, health, education) with flexible arrangements","Maintain contributor connection during extended absence if desired"] },
+        { id: "7.5.3", label: "Maintain contributor relationships post-transition", activities: ["Invite alumni to community events and knowledge sharing","Create alumni network for peer support and re-engagement options","Track and celebrate alumni impact in broader community"] }
       ], kpis: ["Transition satisfaction","Knowledge retention rate"] },
       { id: "7.6", label: "Manage Contributor Information", purpose: "Privacy-protected records, community information systems.", processes: [
-        { id: "7.6.1", label: "Maintain privacy-protected contributor records", activities: [] },
-        { id: "7.6.2", label: "Manage contributor self-service information access", activities: [] }
+        { id: "7.6.1", label: "Maintain privacy-protected contributor records", activities: ["Apply data minimization: collect only what's needed for the contributor relationship","Give contributors full ownership and portability of their data","Comply with community data rights framework (8.8)","Conduct annual privacy audit of contributor data practices"] },
+        { id: "7.6.2", label: "Manage contributor self-service information access", activities: ["Provide portal for contributors to view and update their own information","Enable contributors to control what's shared with whom","Publish transparency report on how contributor data is used"] }
       ], kpis: ["Data accuracy","Privacy compliance rate"] },
       { id: "7.7", label: "Community Communication", purpose: "Radically transparent communication and dialogue mechanisms.", processes: [
-        { id: "7.7.1", label: "Operate transparent internal communication channels", activities: [] },
-        { id: "7.7.2", label: "Facilitate two-way dialogue between contributors and governance", activities: [] }
+        { id: "7.7.1", label: "Operate transparent internal communication channels", activities: ["Default to open: all institutional decisions and rationale published unless privacy-sensitive","Maintain multiple channels (digital, physical, async, synchronous) for different preferences","Ensure communication is accessible (plain language, multilingual, multiple formats)"] },
+        { id: "7.7.2", label: "Facilitate two-way dialogue between contributors and governance", activities: ["Hold regular town halls with structured Q&A and response commitments","Operate anonymous feedback channel with published responses","Track dialogue quality: are governance responses substantive, timely, and actionable?"] }
       ], kpis: ["Communication satisfaction","Dialogue participation rate"] }
     ]
   },
@@ -269,36 +269,36 @@ export const CATEGORIES = [
     delta: "IT management expands to include AI agent governance, autonomous system oversight, algorithmic transparency. Category 8 manages the technology platform; Category 14 manages the autonomous decision-making systems on it.",
     groups: [
       { id: "8.1", label: "Technology Strategy and Governance", purpose: "Mission-aligned technology strategy with community oversight.", processes: [
-        { id: "8.1.1", label: "Develop technology strategy aligned to institutional mission", activities: [] },
-        { id: "8.1.2", label: "Establish technology governance with community input", activities: [] },
-        { id: "8.1.3", label: "Manage technology investment portfolio", activities: [] }
+        { id: "8.1.1", label: "Develop technology strategy aligned to institutional mission", activities: ["Derive technology priorities from institutional strategy (1.2)","Assess technology's role in each of the 16 process categories","Design technology roadmap with 1-year and 3-year horizons","Ensure strategy supports, never undermines, community autonomy and democratic control"] },
+        { id: "8.1.2", label: "Establish technology governance with community input", activities: ["Form technology advisory council with community representation","Define decision rights: what requires community approval vs. technical authority","Require equity and accessibility impact assessment for all technology decisions","Publish technology governance decisions and rationale transparently"] },
+        { id: "8.1.3", label: "Manage technology investment portfolio", activities: ["Evaluate investments on mission alignment, equity impact, and technical merit","Maintain portfolio balance: operational stability, innovation, and debt reduction","Review investment outcomes annually against projected community benefit"] }
       ], kpis: ["Strategy-mission alignment","Investment ROI"] },
       { id: "8.2", label: "Technology Portfolio", purpose: "Application and technology portfolio management.", processes: [
-        { id: "8.2.1", label: "Manage application portfolio (build, buy, retire)", activities: [] },
-        { id: "8.2.2", label: "Evaluate and adopt emerging technologies", activities: [] },
-        { id: "8.2.3", label: "Manage technology debt and modernization", activities: [] }
+        { id: "8.2.1", label: "Manage application portfolio (build, buy, retire)", activities: ["Maintain application inventory with business owner, user count, and cost","Prefer open-source and community-owned solutions where viable","Evaluate vendor lock-in risk for all buy decisions","Retire applications that no longer serve community needs"] },
+        { id: "8.2.2", label: "Evaluate and adopt emerging technologies", activities: ["Scan for technologies that could improve equity, access, or flourishing","Pilot emerging tech with structured evaluation criteria","Assess ethical implications before adoption (not after)","Coordinate with AI governance (14.0) for any AI/ML technology adoption"] },
+        { id: "8.2.3", label: "Manage technology debt and modernization", activities: ["Inventory technical debt with community-impact rating","Allocate minimum 20% of technology budget to debt reduction","Prioritize debt that creates security, equity, or accessibility risks"] }
       ], kpis: ["Portfolio health score","Tech debt ratio"] },
       { id: "8.3", label: "Infrastructure", purpose: "Network, cloud, workplace, security infrastructure.", processes: [
-        { id: "8.3.1", label: "Manage cloud and compute infrastructure", activities: [] },
-        { id: "8.3.2", label: "Operate network and communications", activities: [] },
-        { id: "8.3.3", label: "Manage cybersecurity and threat response", activities: [] }
+        { id: "8.3.1", label: "Manage cloud and compute infrastructure", activities: ["Design for resilience: no single cloud provider dependency","Evaluate data sovereignty and community data rights in hosting decisions","Monitor cost efficiency and scale appropriately"] },
+        { id: "8.3.2", label: "Operate network and communications", activities: ["Ensure connectivity reaches all community members and facilities","Maintain communication redundancy for crisis resilience (11.4)","Monitor for digital divide and address access gaps"] },
+        { id: "8.3.3", label: "Manage cybersecurity and threat response", activities: ["Operate defense-in-depth security architecture","Conduct regular vulnerability assessments and penetration testing","Maintain incident response plan tested quarterly","Protect community member data as a sacred trust, not just a compliance requirement"] }
       ], kpis: ["System availability","Security incident rate"] },
       { id: "8.4", label: "Institutional Architecture", purpose: "Business, information, application, technology architecture.", processes: [
-        { id: "8.4.1", label: "Maintain enterprise architecture models", activities: [] },
-        { id: "8.4.2", label: "Guide solution design to architecture standards", activities: [] },
-        { id: "8.4.3", label: "Manage data architecture and integration patterns", activities: [] }
+        { id: "8.4.1", label: "Maintain enterprise architecture models", activities: ["Document process, data, application, and technology layers","Map architecture to the 16 PLE-GPS process categories","Keep architecture models current and accessible (not shelf-ware)"] },
+        { id: "8.4.2", label: "Guide solution design to architecture standards", activities: ["Review all new solutions against architecture standards before approval","Provide architecture consulting to project teams","Balance standardization with innovation — standards enable, not constrain"] },
+        { id: "8.4.3", label: "Manage data architecture and integration patterns", activities: ["Define canonical data models for cross-category integration","Establish API-first integration patterns","Ensure data flows respect community data rights framework (8.8.1)"] }
       ], kpis: ["Architecture compliance","Integration maturity"] },
       { id: "8.5", label: "Technology Services and Support", purpose: "Service desk, incident, problem, change, access management.", processes: [
-        { id: "8.5.1", label: "Operate service desk and incident management", activities: [] },
-        { id: "8.5.2", label: "Manage problem identification and resolution", activities: [] },
-        { id: "8.5.3", label: "Govern change and release management", activities: [] },
-        { id: "8.5.4", label: "Manage access provisioning and identity", activities: [] }
+        { id: "8.5.1", label: "Operate service desk and incident management", activities: ["Provide multi-channel support (digital, phone, in-person, community facilitator)","Resolve incidents with equity awareness: prioritize by community impact, not just severity","Track resolution equity across community segments"] },
+        { id: "8.5.2", label: "Manage problem identification and resolution", activities: ["Conduct root cause analysis for recurring incidents","Prioritize problems that disproportionately affect vulnerable populations","Feed problem patterns to technology strategy for systemic fixes"] },
+        { id: "8.5.3", label: "Govern change and release management", activities: ["Require impact assessment for all changes affecting community-facing services","Test changes with representative user panels before broad release","Maintain rollback capability for all production changes"] },
+        { id: "8.5.4", label: "Manage access provisioning and identity", activities: ["Provision access based on role and need with minimum friction","Ensure identity systems accommodate diverse community members","Audit access rights quarterly and remove stale permissions"] }
       ], kpis: ["Incident resolution time","Change success rate"] },
       { id: "8.8", label: "Institutional Data", purpose: "Open-by-default data strategy, community data rights, transparency obligations.", processes: [
-        { id: "8.8.1", label: "Define data governance and community data rights", activities: [] },
-        { id: "8.8.2", label: "Manage master data and data quality", activities: [] },
-        { id: "8.8.3", label: "Operate analytics and business intelligence", activities: [] },
-        { id: "8.8.4", label: "Publish open data per transparency obligations", activities: [] }
+        { id: "8.8.1", label: "Define data governance and community data rights", activities: ["Establish community data bill of rights: ownership, portability, deletion, consent","Define data classification: public, internal, restricted, personal","Require explicit consent for all personal data collection","Publish data governance policies in plain language"] },
+        { id: "8.8.2", label: "Manage master data and data quality", activities: ["Assign data stewards per domain (people, services, resources, facilities)","Measure data quality: accuracy, completeness, timeliness, consistency","Remediate quality issues proactively, not just when they cause problems"] },
+        { id: "8.8.3", label: "Operate analytics and business intelligence", activities: ["Provide self-service analytics to all institutional functions","Ensure analytics respect privacy boundaries and consent framework","Build equity dashboards as first-class analytics products","Feed analytics to flourishing (15.4) and performance measurement (13.7)"] },
+        { id: "8.8.4", label: "Publish open data per transparency obligations", activities: ["Default to open: publish all non-personal institutional data","Maintain open data portal with API access","Ensure published data is machine-readable and well-documented","Track community usage of open data and respond to data requests"] }
       ], kpis: ["System availability","Data quality score","Analytics adoption","Privacy compliance","Open data coverage"] }
     ]
   },
@@ -308,30 +308,30 @@ export const CATEGORIES = [
     delta: "'Revenue' transforms into resource inflows from automated production, taxation, commons yields. 'Expenses' become resource allocation to services. Accounting serves transparency and stewardship, not shareholder returns.",
     groups: [
       { id: "9.1", label: "Resource Planning and Stewardship", purpose: "Annual plans, long-range models, forecasting, cost allocation.", processes: [
-        { id: "9.1.1", label: "Develop annual resource plan with community input", activities: [] },
-        { id: "9.1.2", label: "Build long-range resource models", activities: [] },
-        { id: "9.1.3", label: "Allocate resources to services with equity criteria", activities: [] },
-        { id: "9.1.4", label: "Forecast resource needs and surplus", activities: [] }
+        { id: "9.1.1", label: "Develop annual resource plan with community input", activities: ["Hold participatory budgeting sessions open to all community members","Present resource plan options with trade-offs clearly explained","Vote or reach consensus on allocation priorities through democratic process (16.2)","Publish approved plan with full rationale for all allocations"] },
+        { id: "9.1.2", label: "Build long-range resource models", activities: ["Model 5-year and 10-year resource trajectories under multiple scenarios","Include automation yield growth, demographic shifts, and climate risks","Stress-test models against economic disruption scenarios","Update models quarterly with actual performance data"] },
+        { id: "9.1.3", label: "Allocate resources to services with equity criteria", activities: ["Apply equity-weighted allocation formula: need × impact × underservice factor","Ensure no community segment receives per-capita allocation below equity floor","Publish allocation methodology and per-category budgets transparently","Track actual spending vs. allocation and explain variances publicly"] },
+        { id: "9.1.4", label: "Forecast resource needs and surplus", activities: ["Produce rolling 12-month forecasts with monthly updates","Flag projected shortfalls 6 months in advance for governance action","Identify surplus opportunities for strategic investment or reserve building"] }
       ], kpis: ["Resource plan accuracy","Allocation equity","Transparency score","Audit findings","Resource utilization efficiency"] },
       { id: "9.2", label: "Manage Resource Inflows", purpose: "Automated production yields, taxation, grants, transfers.", processes: [
-        { id: "9.2.1", label: "Manage automated production revenue collection", activities: [] },
-        { id: "9.2.2", label: "Process taxation and community contributions", activities: [] },
-        { id: "9.2.3", label: "Manage grants, transfers, and external inflows", activities: [] }
+        { id: "9.2.1", label: "Manage automated production revenue collection", activities: ["Operate collection systems for AI/automation-generated production value","Track yield by production source and automation category","Report collection rates and any shortfalls to governance"] },
+        { id: "9.2.2", label: "Process taxation and community contributions", activities: ["Administer fair and transparent taxation framework","Provide self-service tax calculation and payment tools","Ensure taxation burden is progressive and equity-aligned"] },
+        { id: "9.2.3", label: "Manage grants, transfers, and external inflows", activities: ["Track all external funding with source, purpose, and conditions","Ensure no external funding creates undue influence on institutional decisions","Report external funding to community via transparency dashboard (9.8.3)"] }
       ], kpis: ["Inflow forecast accuracy","Collection efficiency"] },
       { id: "9.3", label: "General Accounting and Reporting", purpose: "Ledger, period close, reconciliation, financial statements.", processes: [
-        { id: "9.3.1", label: "Maintain general ledger and chart of accounts", activities: [] },
-        { id: "9.3.2", label: "Perform period close and reconciliation", activities: [] },
-        { id: "9.3.3", label: "Produce transparent financial statements", activities: [] }
+        { id: "9.3.1", label: "Maintain general ledger and chart of accounts", activities: ["Design chart of accounts aligned to PLE-GPS categories for clear reporting","Ensure every transaction is traceable to a service category and community benefit","Maintain audit trail for all financial transactions"] },
+        { id: "9.3.2", label: "Perform period close and reconciliation", activities: ["Close monthly within 5 business days","Reconcile all accounts with automated matching where possible","Investigate and resolve all discrepancies before publishing"] },
+        { id: "9.3.3", label: "Produce transparent financial statements", activities: ["Publish financial statements in both technical and plain-language formats","Show resource flow from inflows through allocation to community outcomes","Compare actuals to plan with variance explanations","Make all financial data available for community researcher analysis"] }
       ], kpis: ["Close cycle time","Reconciliation accuracy"] },
       { id: "9.5", label: "Contributor Stipends and Universal Access", purpose: "Replaces 'payroll' — process universal access and contributor stipends.", processes: [
-        { id: "9.5.1", label: "Process universal resource access disbursements", activities: [] },
-        { id: "9.5.2", label: "Manage contributor stipend calculations", activities: [] },
-        { id: "9.5.3", label: "Operate self-service resource access portal", activities: [] }
+        { id: "9.5.1", label: "Process universal resource access disbursements", activities: ["Disburse universal basic resources on consistent schedule with zero friction","Ensure disbursement is unconditional — no means testing, no compliance requirements","Support multiple disbursement methods (digital, physical, prepaid)","Monitor for any access barriers and resolve within 48 hours"] },
+        { id: "9.5.2", label: "Manage contributor stipend calculations", activities: ["Calculate stipends based on transparent, published criteria","Ensure stipend methodology does not create coercive dependency","Process stipends with dignity: no public disclosure of individual amounts","Coordinate with engagement tracking (7.4) to separate recognition from compensation"] },
+        { id: "9.5.3", label: "Operate self-service resource access portal", activities: ["Provide real-time balance, transaction history, and disbursement schedule","Enable community members to manage their own resource access preferences","Ensure portal is accessible across all devices, languages, and ability levels"] }
       ], kpis: ["Disbursement accuracy","Processing timeliness"] },
       { id: "9.8", label: "Fiduciary Controls and Transparency", purpose: "Public accountability, not just compliance.", processes: [
-        { id: "9.8.1", label: "Operate internal controls and segregation of duties", activities: [] },
-        { id: "9.8.2", label: "Manage external audit and public reporting", activities: [] },
-        { id: "9.8.3", label: "Publish real-time resource dashboards for community", activities: [] }
+        { id: "9.8.1", label: "Operate internal controls and segregation of duties", activities: ["Implement dual-approval for all transactions above threshold","Segregate duties: no single person controls end-to-end financial flows","Conduct quarterly controls testing with results reported to governance","Rotate control responsibilities periodically to prevent entrenchment"] },
+        { id: "9.8.2", label: "Manage external audit and public reporting", activities: ["Engage independent auditors annually with community-selected audit committee","Publish full audit reports to community without redaction","Respond to all audit findings with remediation plan and timeline","Compare financial performance against peer institutions where possible"] },
+        { id: "9.8.3", label: "Publish real-time resource dashboards for community", activities: ["Operate live dashboard showing inflows, allocations, spending, and balances","Disaggregate dashboard by service category and community segment","Enable drill-down from high-level totals to individual line items","Track dashboard usage to ensure community is actually engaging with financial data"] }
       ], kpis: ["Control effectiveness","Transparency dashboard uptime"] }
     ]
   },
