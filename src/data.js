@@ -68,37 +68,37 @@ export const CATEGORIES = [
     delta: "'Products' become public goods. Design criteria shift from market viability to community impact, universal access, and sustainability. No 'product-market fit' — there is 'service-community fit.'",
     groups: [
       { id: "2.1", label: "Govern Public Goods Development", purpose: "Establish governance with community representation for all public goods development.", processes: [
-        { id: "2.1.1", label: "Establish public goods governance charter", activities: [] },
-        { id: "2.1.2", label: "Form community design councils per service domain", activities: [] },
-        { id: "2.1.3", label: "Define prioritization criteria (equity, impact, feasibility)", activities: [] }
+        { id: "2.1.1", label: "Establish public goods governance charter", activities: ["Draft charter defining public goods scope, decision rights, and community accountability","Conduct community ratification vote on charter","Establish amendment process requiring supermajority","Publish charter in accessible formats (plain language, multilingual)"] },
+        { id: "2.1.2", label: "Form community design councils per service domain", activities: ["Define service domains (health, education, housing, food, energy, digital)","Recruit council members ensuring demographic representation","Train councils in participatory design methods","Set council authority: recommend, approve, or veto design decisions"] },
+        { id: "2.1.3", label: "Define prioritization criteria (equity, impact, feasibility)", activities: ["Weight equity impact as highest criterion (minimum 40% of decision score)","Define impact measurement: number affected × depth of need × duration","Assess feasibility across resource, technical, and political dimensions","Publish prioritization rubric and apply transparently to all proposals"] }
       ], kpis: ["Community representation on councils","Decision transparency score"] },
       { id: "2.2", label: "Identify and Define New Public Goods", purpose: "Research community needs and translate them into service requirements using equity-centered design.", processes: [
-        { id: "2.2.1", label: "Conduct ongoing community needs sensing", activities: [] },
-        { id: "2.2.2", label: "Translate needs into service concepts", activities: [] },
-        { id: "2.2.3", label: "Validate concepts through community co-design", activities: [] },
-        { id: "2.2.4", label: "Develop service requirements with equity criteria", activities: [] }
+        { id: "2.2.1", label: "Conduct ongoing community needs sensing", activities: ["Deploy continuous needs survey with quarterly deep-dives","Analyze service gap data from support (6.3) and engagement (3.1) channels","Conduct ethnographic observation in underserved community segments","Maintain living needs map with heat mapping by geography and demographic"] },
+        { id: "2.2.2", label: "Translate needs into service concepts", activities: ["Hold structured ideation sessions with design councils","Generate multiple concept alternatives per identified need","Score concepts against prioritization criteria","Document concept briefs with target population, delivery model, and equity thesis"] },
+        { id: "2.2.3", label: "Validate concepts through community co-design", activities: ["Recruit validation panels representative of target populations","Run participatory design workshops (not just feedback sessions)","Test assumptions with rapid prototypes before full development","Iterate based on co-design findings, documenting changes and rationale"] },
+        { id: "2.2.4", label: "Develop service requirements with equity criteria", activities: ["Define functional requirements from co-design outputs","Add equity requirements: accessibility, language, cultural sensitivity, geographic reach","Define success metrics including equity-disaggregated outcomes","Conduct pre-mortem: what could make this service exclude the people who need it most?"] }
       ], kpis: ["Community needs coverage","Concept-to-deployment rate","Time from need to availability","Equity in service design","Community participation in design"] },
       { id: "2.3", label: "Develop Public Goods and Services", purpose: "Design, prototype, test, and prepare public goods for deployment.", processes: [
-        { id: "2.3.1", label: "Design service architecture and delivery model", activities: [] },
-        { id: "2.3.2", label: "Prototype and test with representative community members", activities: [] },
-        { id: "2.3.3", label: "Conduct accessibility and equity review", activities: [] },
-        { id: "2.3.4", label: "Prepare deployment plan and facilitator training", activities: [] }
+        { id: "2.3.1", label: "Design service architecture and delivery model", activities: ["Choose delivery model: direct, partnered, platform, or hybrid","Design for resilience: no single point of failure","Build feedback loops from day one","Document architecture decisions with community-accessible rationale"] },
+        { id: "2.3.2", label: "Prototype and test with representative community members", activities: ["Build minimum viable service with core equity features first","Test with hardest-to-serve populations, not easiest","Measure usability, comprehension, and perceived fairness"] },
+        { id: "2.3.3", label: "Conduct accessibility and equity review", activities: ["Audit against universal design principles","Test with assistive technologies and low-literacy users","Review for cultural bias in language, imagery, and assumptions","Certify equity review complete before deployment authorization"] },
+        { id: "2.3.4", label: "Prepare deployment plan and facilitator training", activities: ["Sequence deployment to reach highest-need areas first","Train facilitators in trauma-informed and culturally responsive delivery","Create facilitator resource kit with FAQ and escalation paths"] }
       ], kpis: ["Prototype test pass rate","Accessibility compliance","Time to develop"] },
       { id: "2.4", label: "Deploy Public Goods to Community", purpose: "Launch services with community awareness, education, and facilitator training.", processes: [
-        { id: "2.4.1", label: "Execute phased rollout with equity-priority sequencing", activities: [] },
-        { id: "2.4.2", label: "Train community facilitators and support staff", activities: [] },
-        { id: "2.4.3", label: "Monitor adoption and resolve deployment barriers", activities: [] }
+        { id: "2.4.1", label: "Execute phased rollout with equity-priority sequencing", activities: ["Deploy to highest-need segments in first phase","Monitor uptake by demographic in real-time","Adjust resources based on adoption patterns","Document deployment learnings across service domains"] },
+        { id: "2.4.2", label: "Train community facilitators and support staff", activities: ["Deliver competency-based training with assessment","Include equity scenarios and bias awareness in curriculum","Pair new facilitators with experienced mentors"] },
+        { id: "2.4.3", label: "Monitor adoption and resolve deployment barriers", activities: ["Track adoption rates disaggregated by all equity dimensions","Investigate any segment with adoption below 60% of average","Deploy barrier-removal interventions (language, location, hours, digital access)"] }
       ], kpis: ["Adoption rate by segment","Facilitator readiness","Deployment barrier resolution time"] },
       { id: "2.5", label: "Manage Service Tiers and Access", purpose: "Design universal access baseline and ensure no community member is excluded.", processes: [
-        { id: "2.5.1", label: "Define universal access baseline per service", activities: [] },
-        { id: "2.5.2", label: "Monitor access equity across segments", activities: [] },
-        { id: "2.5.3", label: "Remediate access gaps proactively", activities: [] }
+        { id: "2.5.1", label: "Define universal access baseline per service", activities: ["Establish minimum service level available to every community member","Define access dimensions: awareness, availability, usability, and outcomes","Ensure baseline requires no prerequisites (ID, technology, literacy)"] },
+        { id: "2.5.2", label: "Monitor access equity across segments", activities: ["Track access by geography, demographic, disability, and language","Flag any segment below 80% of baseline","Conduct quarterly access audits with mystery-shopper methodology"] },
+        { id: "2.5.3", label: "Remediate access gaps proactively", activities: ["Deploy mobile/outreach services to underserved areas","Add language and accessibility support based on gap data","Partner with trusted community organizations for hard-to-reach populations"] }
       ], kpis: ["Universal access rate","Access gap by demographic","Exclusion incidents"] },
       { id: "2.6", label: "Manage Public Goods Lifecycle", purpose: "Monitor performance, enhance, sunset, and rationalize the public goods portfolio.", processes: [
-        { id: "2.6.1", label: "Monitor service performance and community outcomes", activities: [] },
-        { id: "2.6.2", label: "Plan and execute service enhancements", activities: [] },
-        { id: "2.6.3", label: "Evaluate and sunset underperforming services", activities: [] },
-        { id: "2.6.4", label: "Rationalize portfolio against community needs map", activities: [] }
+        { id: "2.6.1", label: "Monitor service performance and community outcomes", activities: ["Track outcome metrics (not just outputs) per service","Compare outcomes across demographic segments for equity","Feed performance data to flourishing measurement (15.4)"] },
+        { id: "2.6.2", label: "Plan and execute service enhancements", activities: ["Prioritize enhancements using equity-weighted criteria","Involve current users in enhancement design","Test enhancements with affected populations before deployment"] },
+        { id: "2.6.3", label: "Evaluate and sunset underperforming services", activities: ["Define sunset criteria: low impact, high cost, better alternatives","Conduct community impact assessment before sunset","Ensure transition paths to alternatives for affected members"] },
+        { id: "2.6.4", label: "Rationalize portfolio against community needs map", activities: ["Annually map portfolio to current needs","Identify overlaps, gaps, and obsolete services","Present rationalization to governance with community input"] }
       ], kpis: ["Community outcome achievement","Access equity index","Service satisfaction by segment","Portfolio coverage vs. needs"] }
     ]
   },
@@ -367,31 +367,31 @@ export const CATEGORIES = [
     delta: "Risk expands to include AI bias, resource equity, institutional capture, democratic erosion, environmental justice. 'Compliance' transforms to adherence to community charter. NEW: Equity Monitoring (11.3) — ensuring the institution doesn't reproduce systemic inequities.",
     groups: [
       { id: "11.1", label: "Manage Institutional Risk", purpose: "Full risk framework including algorithmic bias, capture, democratic erosion, meaning crisis.", processes: [
-        { id: "11.1.1", label: "Identify and categorize institutional risks", activities: [] },
-        { id: "11.1.2", label: "Assess risk impact and probability", activities: [] },
-        { id: "11.1.3", label: "Develop and implement risk mitigation strategies", activities: [] },
-        { id: "11.1.4", label: "Monitor PLE-specific risks (capture, algorithmic bias, meaning crisis)", activities: [] }
+        { id: "11.1.1", label: "Identify and categorize institutional risks", activities: ["Maintain risk register covering operational, reputational, ethical, and existential risks","Add PLE-specific risk categories: AI alignment, democratic capture, flourishing deficit, purpose crisis","Conduct annual risk identification workshop with community participation","Track emerging risks from technology, demographic, and political environment changes"] },
+        { id: "11.1.2", label: "Assess risk impact and probability", activities: ["Score each risk on community impact (not just institutional impact)","Weight equity impact: risks that disproportionately affect vulnerable populations score higher","Model cascade effects using integration map dependencies","Review assessments quarterly and after any significant incident"] },
+        { id: "11.1.3", label: "Develop and implement risk mitigation strategies", activities: ["Design mitigation for top-20 risks with assigned stewards","Require equity impact assessment for all mitigation strategies","Test mitigations through tabletop exercises annually","Publish risk posture summary to community (redacted for sensitive details)"] },
+        { id: "11.1.4", label: "Monitor PLE-specific risks (capture, algorithmic bias, meaning crisis)", activities: ["Track institutional capture indicators monthly (influence concentration, revolving doors)","Monitor AI decision quality via Category 14.3 integration","Survey community meaning and purpose metrics via Category 15.4","Alert governance body when any PLE risk indicator crosses threshold"] }
       ], kpis: ["Risk identification rate","Mitigation plan coverage","PLE risk monitoring active"] },
       { id: "11.2", label: "Charter Compliance and Ethics", purpose: "Monitor adherence to founding principles and conduct ethics reviews.", processes: [
-        { id: "11.2.1", label: "Monitor compliance with founding charter", activities: [] },
-        { id: "11.2.2", label: "Conduct periodic ethics reviews", activities: [] },
-        { id: "11.2.3", label: "Operate whistleblower and ethics reporting channel", activities: [] }
+        { id: "11.2.1", label: "Monitor compliance with founding charter", activities: ["Map all institutional decisions to charter provisions they invoke","Conduct quarterly compliance review with community observers","Flag charter drift: when practices diverge from founding principles","Require charter compliance certification for major decisions"] },
+        { id: "11.2.2", label: "Conduct periodic ethics reviews", activities: ["Commission annual ethics review by independent panel","Review AI decision ethics via Category 14 integration","Assess equity of resource distribution and service access","Publish ethics findings in plain language to community"] },
+        { id: "11.2.3", label: "Operate whistleblower and ethics reporting channel", activities: ["Maintain anonymous reporting channel accessible to all community members","Guarantee protection from retaliation for good-faith reports","Investigate all reports within defined SLA (72 hours acknowledgment, 30 days resolution)","Report aggregate ethics channel statistics publicly (without identifying reporters)"] }
       ], kpis: ["Charter compliance score","Ethics review completion","Reporting channel usage"] },
       { id: "11.3", label: "Equity Monitoring and Remediation", purpose: "NEW — Define equity metrics, measure distribution, identify and remediate systemic inequities.", processes: [
-        { id: "11.3.1", label: "Define equity metrics across all service areas", activities: [] },
-        { id: "11.3.2", label: "Measure resource and outcome distribution equity", activities: [] },
-        { id: "11.3.3", label: "Identify systemic inequities through data analysis", activities: [] },
-        { id: "11.3.4", label: "Design and implement equity remediation programs", activities: [] }
+        { id: "11.3.1", label: "Define equity metrics across all service areas", activities: ["Establish equity dimensions: access, distribution, outcomes, voice, dignity","Define measurement methodology per dimension (quantitative + qualitative)","Set equity floor: minimum threshold below which any disparity triggers intervention","Disaggregate all metrics by protected attributes, geography, and economic status"] },
+        { id: "11.3.2", label: "Measure resource and outcome distribution equity", activities: ["Track resource allocation per capita by community segment","Measure service outcomes (not just outputs) disaggregated by demographics","Calculate Gini coefficient for key resource distributions","Publish equity dashboard accessible to all community members"] },
+        { id: "11.3.3", label: "Identify systemic inequities through data analysis", activities: ["Apply statistical testing to identify significant disparities","Distinguish systemic patterns from individual variation","Conduct root cause analysis for persistent inequities","Map inequity drivers to institutional processes (which process creates this disparity?)"] },
+        { id: "11.3.4", label: "Design and implement equity remediation programs", activities: ["Co-design remediation with affected communities (not for them, with them)","Target root causes identified in analysis, not just symptoms","Set measurable remediation targets with timeline","Monitor remediation effectiveness and adjust if disparity persists"] }
       ], kpis: ["Resource distribution equity","Service access equity","Outcome equity","Disparity identification rate","Remediation effectiveness"] },
       { id: "11.4", label: "Institutional Resilience", purpose: "Continuity, crisis response, resilience testing, mutual aid networks.", processes: [
-        { id: "11.4.1", label: "Develop business continuity and crisis response plans", activities: [] },
-        { id: "11.4.2", label: "Conduct resilience testing and tabletop exercises", activities: [] },
-        { id: "11.4.3", label: "Build and maintain mutual aid networks", activities: [] }
+        { id: "11.4.1", label: "Develop business continuity and crisis response plans", activities: ["Maintain continuity plans for all critical institutional functions","Include AI system failure scenarios in continuity planning","Define crisis governance: who decides what, with what authority, under what constraints","Ensure continuity plans preserve equity commitments (no triage that abandons vulnerable populations)"] },
+        { id: "11.4.2", label: "Conduct resilience testing and tabletop exercises", activities: ["Run quarterly tabletop exercises rotating through scenario types","Include community representatives in exercises (not just institutional staff)","Test AI governance fail-safes in coordination with Category 14.5","Document findings and update plans within 30 days"] },
+        { id: "11.4.3", label: "Build and maintain mutual aid networks", activities: ["Establish reciprocal support agreements with peer institutions","Define mutual aid protocols: what each institution provides and under what conditions","Test mutual aid activation annually","Maintain updated contact and capability lists for all network members"] }
       ], kpis: ["Continuity plan coverage","Exercise frequency","Recovery time objective adherence"] },
       { id: "11.5", label: "Legal and Constitutional Affairs", purpose: "Legal operations within constitutional governance framework.", processes: [
-        { id: "11.5.1", label: "Manage legal operations and counsel", activities: [] },
-        { id: "11.5.2", label: "Interpret and apply constitutional governance provisions", activities: [] },
-        { id: "11.5.3", label: "Manage contracts and agreements", activities: [] }
+        { id: "11.5.1", label: "Manage legal operations and counsel", activities: ["Maintain access to legal counsel experienced in cooperative/commons law","Proactively identify legal risks from new programs and technologies","Provide legal education to governance body on relevant frameworks"] },
+        { id: "11.5.2", label: "Interpret and apply constitutional governance provisions", activities: ["Maintain constitutional interpretation precedent log","Provide advisory opinions on constitutional questions to governance body","Refer contested interpretations to democratic dispute resolution (16.3)"] },
+        { id: "11.5.3", label: "Manage contracts and agreements", activities: ["Ensure all contracts align with charter values and equity commitments","Include equity and community benefit clauses in partner agreements","Review contract portfolio annually for alignment with institutional direction"] }
       ], kpis: ["Legal matter resolution time","Constitutional compliance"] }
     ]
   },
