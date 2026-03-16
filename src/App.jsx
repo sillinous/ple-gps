@@ -130,6 +130,9 @@ function App() {
   const [trackerItems, setTrackerItems] = useState(() => {
     try { return JSON.parse(localStorage.getItem("ple-gps-tracker") || "{}"); } catch { return {}; }
   });
+  const [showWelcome, setShowWelcome] = useState(() => {
+    try { return !localStorage.getItem("ple-gps-welcomed"); } catch { return true; }
+  });
   const fileInputRef = useRef(null);
   const mainRef = useRef(null);
 
@@ -414,8 +417,9 @@ function App() {
               {[
                 { n:"16", l:"Process Categories", sub:"13 adapted + 3 new", view:"categories" },
                 { n:"272", l:"L3 Processes", sub:"Across 78 process groups", view:"categories" },
-                { n:"229", l:"KPIs Defined", sub:"Measurable performance indicators", view:"categories" },
-                { n:"77", l:"Integration Flows", sub:"Cross-process dependencies", view:"integration" },
+                { n:"229", l:"KPIs Defined", sub:"Measurable outcomes", view:"categories" },
+                { n:"77", l:"Integration Flows", sub:"Cross-process links", view:"integration" },
+                { n:"6", l:"Value Loops", sub:"Self-improving feedback", view:"loops" },
                 { n:"5", l:"Maturity Levels", sub:"Founding → Flourishing", view:"maturity" }
               ].map((s,i) => (
                 <div key={i} className={`fade-in stagger-${i+1}`}
@@ -443,6 +447,27 @@ function App() {
                 </div>
               ))}
             </div>
+
+            {/* Quick Start (when no assessment yet) */}
+            {getTotalScored() === 0 && (
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(220px, 1fr))", gap:10, marginBottom:24 }}>
+                {[
+                  { icon:"🏛", label:"Start from Template", desc:"Choose an institution type and get realistic starting scores instantly", color:"#f59e0b", action:() => navigateTo("maturity") },
+                  { icon:"📋", label:"Read Playbooks", desc:"Implementation guides for AI governance, flourishing, and democracy", color:"#ec4899", action:() => navigateTo("playbooks") },
+                  { icon:"🔀", label:"Explore Connections", desc:"See how 77 cross-process flows link all 16 categories together", color:"#6366f1", action:() => navigateTo("integration") },
+                  { icon:"📊", label:"Blank Assessment", desc:"Score your institution from scratch across 80 dimension cells", color:"#10b981", action:() => navigateTo("maturity") }
+                ].map((card, i) => (
+                  <div key={i} className={`fade-in stagger-${i+1}`} onClick={card.action}
+                    style={{ background:"#141210", border:`1px solid ${card.color}15`, borderRadius:6, padding:"16px 18px", cursor:"pointer", transition:"all 0.2s", borderTopWidth:2, borderTopStyle:"solid", borderTopColor: card.color }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.borderColor = `${card.color}30`; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = `${card.color}15`; }}>
+                    <span style={{ fontSize:22, display:"block", marginBottom:8 }}>{card.icon}</span>
+                    <div style={{ fontSize:14, fontWeight:600, marginBottom:4, color: card.color }}>{card.label}</div>
+                    <div style={{ fontSize:12, color:"#78716c", lineHeight:1.5 }}>{card.desc}</div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Assessment summary if scores exist */}
             {getTotalScored() > 0 && (
@@ -1934,6 +1959,52 @@ function App() {
           CC BY-SA 4.0
         </div>
       </div>
+
+      {/* Welcome Overlay */}
+      {showWelcome && (
+        <div style={{ position:"fixed", inset:0, zIndex:1000, background:"rgba(12,10,9,0.9)", backdropFilter:"blur(20px)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}
+          onClick={() => { setShowWelcome(false); try { localStorage.setItem("ple-gps-welcomed","1"); } catch {} }}>
+          <div style={{ maxWidth:620, background:"#1a1816", border:"1px solid rgba(245,158,11,0.15)", borderRadius:10, padding:"36px 32px", position:"relative" }}
+            onClick={e => e.stopPropagation()}>
+            <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:32, fontWeight:700, lineHeight:1.15, marginBottom:12 }}>
+              Post-Labor Economics<br/><span style={{ color:"#f59e0b" }}>Governance Process Standard</span>
+            </div>
+            <p style={{ color:"#a8a29e", fontSize:14, lineHeight:1.7, marginBottom:20 }}>
+              A complete operational architecture for institutions that serve communities in a world where human labor is no longer the primary production input. 16 process categories, 272 processes, 229 KPIs, and implementation playbooks — all open-source.
+            </p>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:24 }}>
+              {[
+                { icon:"📊", label:"Assess Your Institution", desc:"Score maturity across 80 dimensions with templates for 5 institution types", action:() => { setShowWelcome(false); try { localStorage.setItem("ple-gps-welcomed","1"); } catch {} navigateTo("maturity"); }},
+                { icon:"📋", label:"Implementation Playbooks", desc:"Step-by-step guides for AI governance, flourishing, and democracy", action:() => { setShowWelcome(false); try { localStorage.setItem("ple-gps-welcomed","1"); } catch {} navigateTo("playbooks"); }},
+                { icon:"🔀", label:"Integration Map", desc:"77 cross-process flows connecting all 16 governance categories", action:() => { setShowWelcome(false); try { localStorage.setItem("ple-gps-welcomed","1"); } catch {} navigateTo("integration"); }},
+                { icon:"🌱", label:"Explore Framework", desc:"Browse all categories, processes, KPIs, and value loops", action:() => { setShowWelcome(false); try { localStorage.setItem("ple-gps-welcomed","1"); } catch {} navigateTo("categories"); }}
+              ].map((card, i) => (
+                <div key={i} onClick={card.action}
+                  style={{ background:"rgba(120,113,108,0.04)", border:"1px solid rgba(245,158,11,0.06)", borderRadius:6, padding:"14px 16px", cursor:"pointer", transition:"all 0.15s" }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(245,158,11,0.2)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(245,158,11,0.06)"; e.currentTarget.style.transform = "translateY(0)"; }}>
+                  <div style={{ fontSize:20, marginBottom:6 }}>{card.icon}</div>
+                  <div style={{ fontSize:13, fontWeight:600, marginBottom:3 }}>{card.label}</div>
+                  <div style={{ fontSize:11, color:"#78716c", lineHeight:1.4 }}>{card.desc}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+              <span style={{ fontSize:11, color:"#57534e" }}>
+                <a href="https://github.com/sillinous/ple-gps" target="_blank" rel="noopener noreferrer" style={{ color:"#57534e", textDecoration:"none" }}>GitHub ↗</a>
+                <span style={{ margin:"0 8px" }}>·</span>
+                CC BY-SA 4.0
+                <span style={{ margin:"0 8px" }}>·</span>
+                The Foundation for Global Progress
+              </span>
+              <button onClick={() => { setShowWelcome(false); try { localStorage.setItem("ple-gps-welcomed","1"); } catch {} }}
+                style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.25)", borderRadius:5, padding:"8px 20px", color:"#f59e0b", fontSize:12, fontWeight:600, cursor:"pointer" }}>
+                Enter →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Search Overlay */}
       <SearchBar isOpen={searchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} />
