@@ -22,10 +22,12 @@ It adapts the [APQC Process Classification Framework](https://www.apqc.org/pcf) 
 | Process Categories | 16 (13 adapted + 3 new) |
 | Process Groups (L2) | 78 |
 | L3 Processes | 272 |
+| L4 Activities | 65 |
 | KPIs Defined | 229 |
-| Integration Flows | 77 cross-process dependencies |
-| Maturity Dimensions | 5 × 5 levels |
+| Integration Flows | 77 (all 16 categories bidirectional) |
 | Value Loops | 6 circular feedback systems |
+| Institutional Templates | 5 pre-scored profiles |
+| Implementation Playbooks | 3 (AI governance, flourishing, democracy) |
 
 ## Framework Structure
 
@@ -46,48 +48,59 @@ It adapts the [APQC Process Classification Framework](https://www.apqc.org/pcf) 
 │   ├── 11.0 Institutional Integrity & Equity
 │   ├── 12.0 Inter-Institutional Relations
 │   └── 13.0 Evolve Institutional Capabilities
-└── PLE-Specific Governance (14.0–16.0) ← NEW
+└── PLE-Specific Governance (14.0–16.0)
     ├── 14.0 Algorithmic Governance
     ├── 15.0 Human Flourishing Infrastructure
     └── 16.0 Participatory Democracy
 ```
 
-### New PLE-Specific Categories
-
-| Category | What It Covers |
-|---|---|
-| **14.0 Algorithmic Governance** | AI decision rights, bias monitoring, agent portfolios, human-AI work allocation, safety protocols |
-| **15.0 Human Flourishing Infrastructure** | Purpose and meaning programs, social connection, creative expression, flourishing as PRIMARY institutional KPI |
-| **16.0 Participatory Democracy** | Democratic governance frameworks, elections, assemblies, capture detection, civic education |
-
 ## Interactive Explorer
 
-The framework ships as a full interactive web application with 7 views:
+The framework ships as a full interactive web application:
 
-### Views
-- **Overview** — Framework stats, assessment summary, all 16 category cards with maturity badges
+### 8 Views
+- **Overview** — Framework stats, quick-start cards, assessment heatmap, all 16 category cards
 - **Categories** — Domain-grouped taxonomy with inline maturity scores
-- **Category Detail** — PCF origin, post-labor delta, maturity radar chart, integration triggers, process groups
-- **Group Detail** — L3 processes, L4 activities, KPIs, parent category maturity context
-- **Integration Map** — SVG circular layout showing all 31 cross-process flows with type filtering
-- **Value Loops** — 6 circular feedback systems with expandable step sequences
-- **Maturity Assessment** — Full institutional assessment tool (see below)
+- **Category Detail** — PCF origin, maturity radar chart, integration triggers, process groups, playbook access
+- **Group Detail** — L3 processes, L4 activities, KPIs, parent maturity context
+- **Integration Map** — SVG circular layout showing all 77 cross-process flows
+- **Value Loops** — 6 circular feedback systems with clickable category references
+- **Playbooks** — Implementation guides with institutional templates
+- **Maturity Assessment** — Full institutional assessment tool (6 sub-tabs)
 
-### Maturity Assessment Tool
-
-- **Assessment Grid** — 16×5 interactive heatmap (categories × dimensions). Click to score 1–5.
-- **Visual Profile** — Per-domain radar chart grids with dimension strength bars
-- **Gap Analysis** — Current vs. target scores, sorted by severity
-- **Improvement Roadmap** — Prioritized actions per gap with transition playbooks
+### Maturity Assessment (6 Sub-Tabs)
+- **Assessment Grid** — 16×5 interactive heatmap with comparison mode
+- **Visual Profile** — Per-domain radar charts and dimension strength bars
+- **Gap Analysis** — Current vs. target, sorted by severity
+- **Improvement Roadmap** — Prioritized actions per gap
+- **Implementation Tracker** — Auto-generated trackable action items with 3-state cycle
 - **Level Reference** — Full rubrics for all 5 levels × 5 dimensions
 
+### 5 Institutional Templates
+Pre-scored maturity profiles for one-click start:
+- 🏛 Municipal Government (PLE Transition)
+- 🤝 Worker/Community Cooperative
+- 🌐 Digital Commons / Platform Cooperative
+- 💰 UBI Administration Body
+- 🌱 Greenfield PLE Institution
+
+### 3 Implementation Playbooks
+Phased guides for the novel PLE categories:
+- **14.0 Algorithmic Governance** — AI inventory → governance structure → monitoring operations (12 months)
+- **15.0 Human Flourishing** — Measurement baseline → program design → scaled infrastructure (18 months)
+- **16.0 Participatory Democracy** — Constitutional convention → governance operations → health monitoring (12 months)
+
+Each includes: "First 3 Actions" quickstart, prerequisites, phased timeline, and common failure modes.
+
 ### Additional Features
-- **Global Search** (⌘K) — Full-text search across 272 processes, 229 KPIs, 78 groups
-- **Assessment Persistence** — Auto-save to localStorage with named assessments
+- **Welcome overlay** for first-time visitors with guided entry points
+- **Comparison mode** — Benchmark assessment against any institutional template
+- **Global search** (⌘K) across 272 processes, 229 KPIs, 78 groups
+- **Keyboard navigation** (←→ between categories/groups, Esc back)
+- **Assessment persistence** — Auto-save to localStorage with named assessments
 - **Export/Import** — JSON assessment files
-- **Report Generator** — Downloads full Markdown assessment report
-- **Example Assessment** — Pre-scored data for immediate exploration
-- **SVG Radar Charts** — Pentagon charts for maturity visualization with target overlay
+- **Report generator** — Downloads full Markdown assessment report
+- **SVG radar charts** — Pentagon charts with target overlay
 
 ## Key Concepts
 
@@ -99,7 +112,6 @@ The framework ships as a full interactive web application with 7 views:
 | Customers | Community members, citizens, participants |
 | Employees | Contributors, stewards, participants |
 | Products | Public goods, shared services, commons |
-| Sales | Access facilitation, enrollment, matching |
 | ROI | Impact-to-resource ratio |
 | HR | Human Development |
 
@@ -113,32 +125,22 @@ The framework ships as a full interactive web application with 7 views:
 | 4 | Adaptive | Predictable outcomes |
 | 5 | Flourishing | Institutional intelligence |
 
-### Five Assessment Dimensions
-1. **Design** — How well is the process designed?
-2. **Performers** — Who executes, and how capable are they?
-3. **Owner** — Is there clear accountability?
-4. **Infrastructure** — What systems and tools support it?
-5. **Metrics** — How is performance measured?
-
-### Six Value Loops
-1. Community Intelligence → 2. Governance Performance → 3. Human Development → 4. AI Governance → 5. Equity Improvement → 6. Democratic Legitimacy
-
 ## Use Cases
 
 - **Designing a new PLE institution** — Walk all 16 categories as an operational checklist
-- **Assessing an existing institution** — Score across 5 dimensions, generate gap analysis and improvement roadmap
+- **Assessing an existing institution** — Load a template, score across 5 dimensions, generate gap analysis
+- **Community workshops** — Project the assessment, score together, discuss priorities
+- **Implementation planning** — Use playbooks and tracker to turn assessment into action
 - **Inter-institutional coordination** — Use the integration map to design handoff protocols
-- **Human-AI work allocation** — Category 14.0 process architecture
-- **Democratic accountability** — Category 16.0 governance layer
-- **Community workshops** — Load example assessment, walk the visual profile, discuss priorities
+- **Benchmarking** — Compare your institution against templates or peer exports
 
 ## Project Structure
 
 ```
 ple-gps/
 ├── src/
-│   ├── App.jsx                    # Main application (7 views)
-│   ├── data.js                    # Framework data (272 processes, 229 KPIs)
+│   ├── App.jsx                    # Main application (8 views, 6 maturity sub-tabs)
+│   ├── data.js                    # Framework data, templates, playbooks
 │   ├── main.jsx                   # React entry point
 │   └── components/
 │       ├── RadarChart.jsx         # SVG pentagon maturity visualization
@@ -155,18 +157,18 @@ ple-gps/
 
 ```bash
 npm install
-npm run dev      # Dev server
-npm run build    # Production build (~77KB gzipped)
+npm run dev      # Dev server at localhost:5173
+npm run build    # Production build (~91KB gzipped)
 ```
 
 ## Contributing
 
 This is a living standard. Contributions welcome:
-- **Deepen L4/L5 activities** — Most L3 processes have empty activity lists ready to populate
-- **Expand integration flows** — Add cross-category dependencies beyond the initial 31
+- **Deepen L4/L5 activities** for categories 2.0–13.0
+- **Add implementation playbooks** for categories beyond 14.0–16.0
 - **Domain-specific adaptations** (healthcare, education, housing, energy)
-- **Translate** into additional languages
-- **Build companion tools** — workshop guides, governance checklists
+- **Workshop facilitation guides**
+- **Translations** into additional languages
 
 ## Framework Lineage
 
