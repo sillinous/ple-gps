@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: "💬 Start a Discussion"
+    url: https://github.com/sillinous/ple-gps/discussions/new/choose
+    about: "Questions, ideas, and exploratory conversations belong in Discussions, not Issues."
+  - name: "📖 Read the Contributor Guide"
+    url: https://github.com/sillinous/ple-gps/blob/main/CONTRIBUTING.md
+    about: "New here? Start with the contributing guide."
+  - name: "🚀 Onboarding Guide"
+    url: https://github.com/sillinous/ple-gps/blob/main/docs/ONBOARDING.md
+    about: "Step-by-step guide to becoming an active contributor."

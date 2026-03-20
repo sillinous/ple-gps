@@ -1,0 +1,118 @@
+.wg-view { padding: 40px 48px; max-width: 960px; }
+
+.wg-hero { margin-bottom: 28px; }
+.wg-eyebrow {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--accent-dim); margin-bottom: 10px;
+}
+.wg-title {
+  font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 300; color: var(--text-primary); margin-bottom: 12px;
+}
+.wg-sub {
+  font-size: 0.88rem; color: var(--text-secondary);
+  line-height: 1.7; max-width: 560px;
+}
+
+/* Norms strip */
+.wg-norms {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 36px;
+}
+.wg-norm {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--bg-secondary); border: 1px solid var(--border-subtle);
+  border-radius: 6px; padding: 7px 12px;
+  font-size: 0.75rem; color: var(--text-muted);
+}
+.wg-norm-icon { color: var(--accent-dim); font-size: 0.8rem; }
+
+/* Section */
+.wg-section { margin-bottom: 36px; }
+.wg-section-title {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 400;
+  color: var(--text-muted); margin-bottom: 14px;
+}
+
+/* Cards */
+.wg-cards { display: flex; flex-direction: column; gap: 10px; }
+.wg-card {
+  background: var(--bg-secondary); border: 1px solid var(--border-subtle);
+  border-radius: 10px; padding: 22px 24px;
+  animation: fadeUp 0.3s ease both;
+  transition: border-color 0.18s;
+}
+.wg-card:hover { border-color: var(--border-visible); }
+
+.wg-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px; gap: 10px;
+}
+.wg-card-name {
+  font-size: 0.95rem; font-weight: 600; color: var(--text-primary);
+}
+.wg-card-desc {
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;
+  margin-bottom: 14px; max-width: 560px;
+}
+
+/* Priorities */
+.wg-card-priorities { margin-bottom: 14px; }
+.wg-priorities-label {
+  font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-ghost); margin-bottom: 7px;
+}
+.wg-priority-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.wg-priority-item {
+  display: flex; align-items: flex-start; gap: 9px;
+  font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;
+}
+.wg-priority-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--accent-dim); margin-top: 7px; flex-shrink: 0;
+}
+
+/* Meta */
+.wg-card-meta {
+  display: flex; gap: 24px; margin-bottom: 16px;
+  padding-top: 12px; border-top: 1px solid var(--border-subtle);
+}
+.wg-meta-item { display: flex; flex-direction: column; gap: 2px; }
+.wg-meta-label {
+  font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-ghost);
+}
+.wg-meta-val { font-size: 0.78rem; color: var(--text-secondary); }
+
+/* Join btn */
+.wg-join-btn {
+  display: inline-block; padding: 7px 16px;
+  background: var(--accent-glow); border: 1px solid var(--border-active);
+  border-radius: 6px; color: var(--accent-text);
+  font-size: 0.76rem; transition: all 0.15s; text-decoration: none;
+}
+.wg-join-btn:hover { background: rgba(52,211,153,0.14); color: var(--accent); }
+
+/* Propose */
+.wg-propose {
+  display: flex; gap: 18px; align-items: flex-start;
+  background: var(--bg-secondary); border: 1px solid var(--border-visible);
+  border-radius: 10px; padding: 24px 28px; margin-top: 8px;
+}
+.wg-propose-icon {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--accent-glow); border: 1px solid var(--border-active);
+  color: var(--accent-text); font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.wg-propose-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+.wg-propose-body { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; }
+.wg-propose-btn {
+  display: inline-block; padding: 8px 18px;
+  background: var(--accent-glow); border: 1px solid var(--border-active);
+  border-radius: 6px; color: var(--accent-text);
+  font-size: 0.78rem; transition: all 0.15s; text-decoration: none;
+}
+.wg-propose-btn:hover { background: rgba(52,211,153,0.14); color: var(--accent); }
+
+@media (max-width: 768px) { .wg-view { padding: 20px 16px; } }

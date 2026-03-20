@@ -1,0 +1,52 @@
+name: "🌐 Tool or Resource Request"
+description: "Request a new tool, dataset, visualization, or resource"
+title: "[Resource]: "
+labels: ["resource-request", "help-wanted"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tools and resources make the framework actionable. Use this to request something that doesn't exist yet.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: "Type of resource"
+      options:
+        - "Interactive tool / calculator"
+        - "Dataset or research compilation"
+        - "Visualization or infographic"
+        - "Educational resource (curriculum, explainer, video)"
+        - "Translation of existing content"
+        - "Template or framework document"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "What would this do?"
+      description: "Describe what the tool or resource would enable"
+    validations:
+      required: true
+
+  - type: textarea
+    id: audience
+    attributes:
+      label: "Who is it for?"
+      description: "Researchers? Policymakers? Community organizers? General public?"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: "Can you help build it?"
+      options:
+        - label: "Yes — I can build or write this"
+        - label: "Yes — I can contribute data or content"
+        - label: "Yes — I can test and provide feedback"
+        - label: "No — looking for someone with the skills"

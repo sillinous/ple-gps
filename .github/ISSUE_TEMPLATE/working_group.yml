@@ -1,0 +1,62 @@
+name: "🏗 Working Group Proposal"
+description: "Propose a new working group"
+title: "[Working Group]: "
+labels: ["working-group", "governance"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Working groups are how sustained work gets organized in this project. Use this template to propose a new one.
+        
+        **Requirements:** A working group needs at least 3 interested participants and a clearly defined scope that doesn't duplicate an existing group.
+
+  - type: input
+    id: name
+    attributes:
+      label: "Proposed working group name"
+      placeholder: "Local & Regional Resilience"
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: "Scope"
+      description: "What does this working group focus on? What's explicitly in and out of scope?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: "Why a dedicated working group?"
+      description: "Why doesn't this fit within an existing working group?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: participants
+    attributes:
+      label: "Initial participants"
+      description: "List GitHub usernames of people who have expressed interest (including yourself)"
+      placeholder: "@username1, @username2, @username3"
+    validations:
+      required: true
+
+  - type: input
+    id: lead
+    attributes:
+      label: "Proposed lead"
+      placeholder: "@username"
+    validations:
+      required: true
+
+  - type: textarea
+    id: initial_work
+    attributes:
+      label: "What would this group work on first?"
+      description: "Describe 2-3 concrete initial projects or deliverables"
+    validations:
+      required: true

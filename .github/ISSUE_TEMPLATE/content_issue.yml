@@ -1,0 +1,64 @@
+name: "📋 Content Issue"
+description: "Report an error, gap, or inconsistency in project documentation or framework content"
+title: "[Content]: "
+labels: ["content-issue", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to flag errors, factual inaccuracies, logical gaps, broken links, or missing citations in any project content.
+
+  - type: input
+    id: location
+    attributes:
+      label: "Where is the issue?"
+      description: "File path, section heading, or URL"
+      placeholder: "docs/frameworks/UBI.md — Section: Historical Examples"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "What's the issue?"
+      description: "Describe what's wrong or missing as specifically as possible"
+      placeholder: "The claim that Denmark's UBI pilot ran from 2015-2020 appears to be incorrect — I believe it was a smaller guaranteed income experiment, not a true UBI pilot."
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: "Supporting evidence (if any)"
+      description: "Links, citations, or reasoning that supports the correction"
+      placeholder: "https://source.example.com"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: "Severity"
+      options:
+        - "Minor (typo, formatting, clarity)"
+        - "Moderate (factual error or missing context)"
+        - "Significant (framework logic error or misleading claim)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: working_group
+    attributes:
+      label: "Relevant working group"
+      options:
+        - "Theory & Frameworks"
+        - "Technology & AI"
+        - "Policy & Governance"
+        - "Community Infrastructure"
+        - "Communications & Education"
+        - "Research & Evidence"
+        - "Not sure"
+    validations:
+      required: false
